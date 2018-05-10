@@ -1,0 +1,180 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<!-- Coins -->
+{% load static %}
+{% if marketdata %}
+<div class="row">
+    <div class="box">
+      <div class="col-lg-3">
+        <hr>
+        <h2 class="intro-text text-center">Cart <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item for a price that is smaller or bigger, keep an eye on your cart" id="cart-info"></i></h2>
+        <hr>
+{% if cart %}
+        <p class="text-right" style="font-size: 16px;">Remove</p>
+        <table class="table table-hover table-responsive" style="margin: 0 auto;">
+          <tbody>
+          {% for c in cart %}
+          <small class="lead">
+          <tr>
+            <td scope="row">{{ c.name }}</td>
+            <td scope="row" class="text-right">&hearts;{{ c.cost_permanent }}</td>
+            <td scope="row" class="text-center">
+                <form class="form-horizontal" action="{% url 'user:market' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post">
+                {% csrf_token %}
+                    <input type="hidden" name="checkers" value="{{ c.cost_permanent }}"/>
+                    <button type="submit" class="btn btn-default btn-xs" name="remove{{ c.id }}" value="{{ c.id }}">X</button>
+                </form>
+            </td>
+          </tr>
+          </small>
+          {% endfor %}
+          {% if total %}
+          <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td><td></td></tr>
+          {% endif %}
+          </tbody>
+        </table>
+{% elif market_enabled == "true" %}
+        <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
+{% endif %}
+        <hr>
+        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick" id="queue-info"></i></h2>
+        <hr>
+{% if market_enabled == "true" %}
+        <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items, please wait your turn{% endif %}</p>
+        <div id="students_list">
+        {% for u in top_players %}
+          <p class="lead">{{forloop.counter}}. {{u}}</p>
+        {% empty %}
+        <p class="lead text-center">No students are registered yet</p>
+        {% endfor %}
+        </div>
+{% endif %}
+      </div>
+      <div class="col-lg-9">
+          <hr>
+          <h2 class="intro-text text-center">Market</h2>
+          <hr>
+          {% if error_message %}<div class="lead text-center text-warning">{{ error_message }}</div>{% endif %}
+          {% if messages %}
+            {% for message in messages %}
+                <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+          <p class="lead text-center">Available Coins: &hearts;{{ available_coins }}</p>
+          {% if market_enabled == "false" %}<p class="text-center text-warning">The market items are not currently available to order.<br>We will open it at the end of the camp!</p>{% endif %}
+
+          {% for item in marketdata %}
+            {% if forloop.first %}
+            <div class="row">
+              <div class="box">
+            {% elif forloop.counter0|divisibleby:"4" %}
+              </div>
+            </div>
+            <div class="row">
+              <div class="box">
+            {% endif %}
+                <div class="col-md-3 text-center">
+
+                  {% if item.quantity == 0 %}
+                  <div class="container-sold text-center">
+                    <img src="{{ item.image_file.url }}" class="img-responsive img-rounded img-sold" alt="{{ item.name }}" />
+                    <p class="text-center lead"><s>{{ item.name }}</s> [&times;{{ item.quantity }}] </p>
+                    <div class="overlay-sold">
+                      <div class="text-sold"><img src="{% static 'user/img/sold.png' %}" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; max-width: 150px;" /></div>
+                    </div>
+                  </div>
+
+                  {% else %}
+                  <div class="text-center img-wrapper"><img src="{{ item.image_file.url }}" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto;" /></div>
+                  <p class="text-center lead">{{ item.name }} [&times;{{ item.quantity }}]</p>
+                  {% endif %}
+
+                  <small class="text-center">{{ item.description }}</small><hr>
+                  {% if market_enabled == "true" %}
+                  <form class="form-horizontal" {% if top_player == "true" and market_enabled == "true" and item.quantity != 0 %}action="{% url 'user:submit-cart' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post"{% endif %}>
+                  {% csrf_token %}
+                      <input type="hidden" name="checkers" value="{{ item.cost_permanent }}"/>
+                      <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
+                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}>Add to cart</button>
+                  </form>
+                  {% endif %}
+                </div>
+            {% if forloop.last %}
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+</div>
+
+    {% if pagination_enabled == "true" %}
+<div class="row">
+    <div class="box text-center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination pagination-lg">
+            <li{% if marketdata.has_previous %}{% else %} class="disabled"{% endif %}>
+              <a href="{% if marketdata.has_previous %}?page={{ marketdata.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% for i in "x"|rjust:marketdata.paginator.num_pages %}
+            <li{% if marketdata.number == forloop.counter %} class="active"{% endif %}><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endfor %}
+            <li{% if marketdata.has_next %}{% else %} class="disabled"{% endif %}>
+              <a href="{% if marketdata.has_next %}?page={{ marketdata.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+    </div>
+</div>
+    {% endif %}
+
+{% else %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+          <p class="lead text-center">No market items are available at this time. Swing by later!</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block customjs %}
+{% if market_enabled == "true" and ajax_enabled == "true" %}
+<script>
+    var seconds = 12000 - (Math.floor(Math.random() * 6) * 1000);
+    top_player = String({{ top_player }});
+    top_students_number = {{ top_students_number }};
+    cart_size = {{ cart|length }}
+    $(document).ready(function() {
+        setInterval(function() {
+            $.ajax({
+              url: "{% url 'user:market-queue' %}",
+              dataType: "json",
+              success: function(json) {
+                  if (top_player == "true" && top_player == json['top_player']) {
+                      /* do not update the page if the user is already a top player */
+                  }
+                  else if (top_player != json['top_player'] || top_students_number != json['top_students_number'] || cart_size != json['cart_size']) {
+                      window.location = window.location.href;
+                  }
+              }
+          });
+      }, seconds);
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("[data-toggle=tooltip]").tooltip({ placement: 'top'});
+        $('#queue-info').tooltip();
+        $('#cart-info').tooltip();
+    });
+</script>
+{% endif %}
+{% endblock %}

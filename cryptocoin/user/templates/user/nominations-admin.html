@@ -1,0 +1,119 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+
+{% block customcss %}
+<style>
+    select{
+        font-family: "Courier New", Courier, monospace;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Nominations -->
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Activity Nomination</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            <div class="normal-text">
+                <div class="text-center"><button type="button" class="btn btn-default btn-lg" data-toggle="collapse" data-target="#admin_activity_info" style="white-space: normal;">Important FYI, please read to be aware how the activity nomination works</button></div>
+                <div id="admin_activity_info" class="collapse">
+                    <p class="lead">Hold down "Ctrl", or "Command" on Mac, to select multiple entries. Hold down "Shift", or click-drag your mouse over the entries, to select a range of entries.</p>
+                    <p class="lead">Select students from the left and activities/achievements from the right. Then click on "Nominate". You can also select/unselect all by clicking on the corresponding buttons.</p>
+                    <p class="lead">Students will be able to see their activity history under the Account page, with all their activities and/or achievements that are nominated here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="box">
+        <form class="form-horizontal" action="{% url 'user:submit-nominations-admin' %}" method="post">
+            {% csrf_token %}
+        <!-- Select students -->
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label for="selectedStudents">List of all students <button type="button" class="btn btn-default" id="selectAllStudents">Select all</button></label>
+                    <select multiple class="form-control" name="selectedStudents" id="selectedStudents" size="{{ students|length }}">
+                        {% for s in students %}
+                        <option value="{{ s.id }}">{{ s.first_name }} {{ s.last_name }} (aka {{ s.username }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- End select students -->
+            <!-- Select activities -->
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <label for="selectedActivities">List of all activities <button type="button" class="btn btn-default" id="selectAllActivities">Select all</button></label>
+                    <select multiple class="form-control" name="selectedActivities" id="selectedActivities" size="{{ achievements|length }}">
+                        {% for a in achievements %}
+                        <option value="{{ a.id }}">{{ a.name }} ({{ a.description }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- End select activities -->
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary" name="nominate">Nominate</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block customjs %}
+<script>
+    selectedAllStudents = false;
+    selectedAllActivities = false;
+    $('#selectAllStudents').click(function() {
+        selectedAllStudents = !selectedAllStudents;
+        $('#selectedStudents option').prop('selected', selectedAllStudents);
+        if (selectedAllStudents) {
+            document.getElementById('selectAllStudents').innerText = "Unselect all";
+        }
+        else {
+            document.getElementById('selectAllStudents').innerText = "Select all";
+        }
+    });
+    $('#selectAllActivities').click(function() {
+        selectedAllActivities = !selectedAllActivities;
+        $('#selectedActivities option').prop('selected', selectedAllActivities);
+        if (selectedAllActivities) {
+            document.getElementById('selectAllActivities').innerText = "Unselect all";
+        }
+        else {
+            document.getElementById('selectAllActivities').innerText = "Select all";
+        }
+    });
+
+    /* Adding spaces between first and last names of students */
+    var spacesToAdd = 0;
+    var biggestLength = 0;
+    $("#selectedStudents option").each(function() {
+        var len = String($(this).text()).indexOf(" ") + 1;
+        if (len > biggestLength) {
+            biggestLength = len;
+        }
+    });
+    var padLength = biggestLength + spacesToAdd;
+    $("#selectedStudents option").each(function() {
+        var user = String($(this).text());
+        var firstNameLen = user.indexOf(" ");
+        var spaces = "";
+        for (var x = 0; x < (padLength - firstNameLen); x++) {
+            spaces = spaces + "\xa0";
+        }
+        $(this).text(user.slice(0, firstNameLen) + spaces + user.slice(firstNameLen));
+    });
+    /* End adding spaces between first and last names of students */
+</script>
+{% endblock %}

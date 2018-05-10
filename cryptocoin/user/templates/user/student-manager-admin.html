@@ -1,0 +1,126 @@
+{% extends "base_generic.html" %}
+
+{% load auth_extras %}
+{% block content %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Welcome to GenCyber Camp at {{ request.user|get_school }}</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            {% if userdata %}
+            <div class="table-responsive">
+              <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Username</th>
+                  <th class="text-center">Honorary<br>Coins</th>
+                  <th class="text-center">Earned<br>Coins</th>
+                  <th class="text-center">Items<br>Bought</th>
+                  <th class="text-center"><button type="button" class="btn btn-primary" id="show-hide-passwords">Show Passwords</button></th>
+                  <th class="text-center">
+                      <div id="deleteUsers" class="user-delete margin-bottom"><button type="button" class="btn btn-danger" name="deleteAll" value="all users except yourself" onclick="submitMe(this)" data-toggle="modal" data-target="#confirmModal">Delete All</button></div>
+                      <button type="button" class="btn btn-primary" id="show-hide-delete">Show "Delete User"</button>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for d in userdata %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{{ d.first_name }}</td>
+                  <td>{{ d.last_name }}</td>
+                  <td>{{ d.username }}</td>
+                  <td class="text-center">{{ d.honory_coins }}</td>
+                  <td class="text-center">{{ d.permanent_coins }}</td>
+                  <td class="text-center">{{ d.items_bought }}</td>
+                  <td class="text-center"><div id="passwords" class="user-password">{{ d.password }}</div></td>
+                  <td class="text-center">
+                      <div id="deleteUsers" class="user-delete"><button type="button" class="btn btn-default" name="delete{{ d.id }}" value="{{ d.username }}" onclick="submitMe(this)" data-toggle="modal" data-target="#confirmModal">Delete {{ d.username }}</button></div>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+              </table>
+            {% else %}
+              <p class="lead text-center">No students are registered yet</p>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirmation
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <span id="deleteThisUsername"></span>?
+            </div>
+            <div class="modal-footer">
+                <form class="form-horizontal" action="{% url 'user:submit-student-manager-admin' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="hiddenDelete" id="hiddenDelete">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" id="submit" class="btn btn-success success">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End confirm modal -->
+{% endblock %}
+
+{% block customjs %}
+<script>
+    $("#show-hide-passwords").click(function() {
+        var show_hide = document.getElementById('show-hide-passwords');
+        var passwords = document.getElementsByClassName('user-password');
+        if (show_hide.innerText == "Show Passwords") {
+            show_hide.innerText = "Hide Passwords";
+            for (var i = 0; i < passwords.length; i++) {
+                passwords[i].style.display = "block";
+            }
+        }
+        else {
+            show_hide.innerText = "Show Passwords";
+            for (var i = 0; i < passwords.length; i++) {
+                passwords[i].style.display = "none";
+            }
+        }
+    });
+    $("#show-hide-delete").click(function() {
+        var show_hide_del = document.getElementById('show-hide-delete');
+        var deleteUsers = document.getElementsByClassName('user-delete');
+        if (show_hide_del.innerText == "Show \"Delete User\"") {
+            show_hide_del.innerText = "Hide \"Delete User\"";
+            for (var i = 0; i < deleteUsers.length; i++) {
+                deleteUsers[i].style.display = "block";
+            }
+        }
+        else {
+            show_hide_del.innerText = "Show \"Delete User\"";
+            for (var i = 0; i < deleteUsers.length; i++) {
+                deleteUsers[i].style.display = "none";
+            }
+        }
+    });
+
+    function submitMe(currObject) {
+         $('#deleteThisUsername').text(currObject.value);
+         document.getElementById('hiddenDelete').value = currObject.name.replace("delete", "");
+         document.getElementById('submit').name = currObject.name;
+    }
+</script>
+{% endblock %}

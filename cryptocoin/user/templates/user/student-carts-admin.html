@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Student carts</h2>
+            <hr>
+            <div class="table-responsive">
+            <table class="table table-hover gctable">
+              <tbody>
+              <small class="lead">
+              {% for name, cart in carts.items %}
+                  <tr>
+                    <td scope="row">
+                        <p class="lead">{{ name }} ordered</p>
+                    </td>
+                    <td scope="row">
+                    {% for c in cart %}
+                        <p class="lead">{{ c }}</p>
+                    {% empty %}
+                        <p class="lead">nothing</p>
+                    {% endfor %}
+                    </td>
+                  </tr>
+                  <tr style="background-color: rgb(221,255,255,0.6);"><td></td><td></td></tr>
+              {% endfor %}
+              </small>
+              </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

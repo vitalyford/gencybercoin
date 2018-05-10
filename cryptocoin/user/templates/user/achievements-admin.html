@@ -1,0 +1,147 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+
+{% block customcss %}
+    <link href="{% static 'user/css/cropper/cropper.css' %}" rel="stylesheet">
+    <style>
+      .label {
+        cursor: pointer;
+      }
+      .img-container img {
+        max-width: 100%;
+      }
+      .tool-tip [disabled] {
+        pointer-events: none;
+      }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Achievements -->
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Activity Editor</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            <div class="normal-text">
+                <div class="text-center"><button type="button" class="btn btn-default btn-lg" data-toggle="collapse" data-target="#admin_activity_info" style="white-space: normal;">Important FYI, please read to be aware how achievements/activities work</button></div>
+                <div id="admin_activity_info" class="collapse">
+                    <p class="lead">You can add and assign achievements/badges (gamification piece) and activities (what students have accomplished in the camp) to all or only selected students.</p>
+                    <p class="lead">When you upload the image, you can crop it right on the spot (mobile-friendly) and the system will auto-resize the image for optimal saving so you do not have to worry about the its initial resolution.</p>
+                    <p class="lead">Supported image formats are: jpg, jpeg, png, and gif.</p>
+                </div>
+            </div>
+            <!-- Add a new activity -->
+            <form class="form-horizontal" action="{% url 'user:submit-achievements-admin' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row center-block" style="width: 300px;">
+                  <div class="form-group">
+                      <img src="{% static 'user/img/no-image.jpg' %}" id="imageNewPreview" alt="Image preview..." class="img-responsive img-rounded center-block">
+                  </div>
+                  <div class="input-group">
+                      <label class="input-group-btn">
+                          <span class="btn btn-success margin-bottom">
+                              Browse Image<input type="file" id="imageNew" name="imageNew" style="display: none;" onchange="previewFile(this)" accept="image/*"/>
+                              <input type="hidden" id="inputXNew" name="inputXNew" value="">
+                              <input type="hidden" id="inputYNew" name="inputYNew" value="">
+                              <input type="hidden" id="inputWidthNew" name="inputWidthNew" value="">
+                              <input type="hidden" id="inputHeightNew" name="inputHeightNew" value="">
+                          </span>
+                      </label>
+                      <input type="text" class="form-control" readonly>
+                  </div>
+
+                  <div class="form-group text-center">
+                      <label class="label tool-tip" data-toggle="tooltip" id="tooltipNew" title="Select the image before cropping">
+                          <input class="btn btn-info" type="button" value="Crop me" id="cropmeNew" name="cropmenow" onclick="cropMe(this)"/>
+                      </label>
+                  </div>
+
+                  <div class="form-group">
+                      <input type="text" class="form-control" id="iNN" name="itemName" maxlength="50" placeholder="Name" required/>
+                  </div>
+                  <div class="form-group">
+                      <textarea class="form-control" rows="3" cols="40" id="iDN" name="itemDescr" maxlength="300" placeholder="Description" required></textarea>
+                  </div>
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-primary" name="addNewItem">Add</button>
+                  </div>
+              </div>
+            </form>
+            <!-- End a new activity -->
+            <!-- All activities -->
+            <div class="row">
+                <div class="box">
+                    <div class="col-lg-12">
+                        {% if achievements %}
+                        <table class="table table-hover table-responsive gctable">
+                          <tbody>
+                          {% for a in achievements %}
+                          <small class="lead">
+                          <tr>
+                              <form class="form-horizontal" enctype="multipart/form-data" action="{% url 'user:submit-achievements-admin' %}" method="post">
+                                  {% csrf_token %}
+                                  <td scope="row">
+                                      <div class="text-center img-wrapper col-xs-12"><img src="{{ a.image_file.url }}" id="image{{a.id}}Preview" class="img-responsive img-rounded" alt="{{ a.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
+
+                                      <div class="form-group text-center">
+                                          <label class="label tool-tip" data-toggle="tooltip" id="tooltip{{a.id}}" title="Select the image before cropping">
+                                              <input class="btn btn-info" type="button" value="Crop me" name="cropmenow" id="cropme{{a.id}}" onclick="cropMe(this)"/>
+                                          </label>
+                                      </div>
+                                  </td>
+                                  <td scope="row">
+                                      <div class="form-group margin-marketitems-admin">
+                                          <input type="text" class="form-control" name="name{{a.id}}" maxlength="50" value="{{ a.name }}" required/>
+                                      </div>
+                                      <div class="form-group margin-marketitems-admin">
+                                          <input type="text" class="form-control" name="descr{{a.id}}" maxlength="300" value="{{ a.description }}" required/>
+                                      </div>
+                                      <div class="input-group">
+                                          <label class="input-group-btn">
+                                              <span class="btn btn-success margin-bottom">
+                                                  Replace Image<input type="file" id="image{{a.id}}" name="image{{a.id}}" style="display: none;" onchange="previewFile(this)" accept="image/*"/>
+                                                  <input type="hidden" id="inputX{{a.id}}" name="inputX{{a.id}}" value="">
+                                                  <input type="hidden" id="inputY{{a.id}}" name="inputY{{a.id}}" value="">
+                                                  <input type="hidden" id="inputWidth{{a.id}}" name="inputWidth{{a.id}}" value="">
+                                                  <input type="hidden" id="inputHeight{{a.id}}" name="inputHeight{{a.id}}" value="">
+                                              </span>
+                                          </label>
+                                          <input type="text" class="form-control" readonly>
+                                      </div>
+                                      <div class="form-group">
+                                          <button type="submit" class="btn btn-primary" name="update{{a.id}}" value="{{a.id}}">Save</button>
+                                          <button type="submit" class="btn btn-danger pull-right" name="remove{{a.id}}" value="{{a.id}}">Remove</button>
+                                      </div>
+                                  </td>
+                              </form>
+                          </tr>
+                          <tr style="background-color: rgb(221,255,255,0.6);"><td></td><td></td></tr>
+                          </small>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- End all activities -->
+        </div>
+    </div>
+</div>
+
+{% include "modal_window.html" %}
+
+{% endblock %}
+
+{% block customjs %}
+<script src="{% static 'user/js/cropper/cropper.js' %}"></script>
+<script src="{% static 'user/js/cropper/cropme.js' %}"></script>
+{% endblock %}

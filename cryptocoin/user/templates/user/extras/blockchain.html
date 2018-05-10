@@ -1,0 +1,65 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="box">
+        <div class="container-fluid">
+            <div class="col-md-12">
+                <hr>
+                <h2 class="intro-text text-center">Blockchain</h2>
+                <hr>
+                <div class="normal-text">
+                    <p class="lead">A Blockchain is a public ledger (a keeper of transactions) that is used in cryptocurrencies. The Blockchain allows users to know exactly what transactions happened at any time.
+                    </p>
+                    <p class="lead">This Blockchain keeps track of all honorary coins transactions and performs the necessary calculations so that users could trust the Blockchain. For instance, every transaction stores a virtual fingerprint (a hash value) of the previous transaction and users can verify that a transaction has truly happened by recalculating that fingerprint.</p>
+                </div>
+                <div class="timeline">
+
+                    <span class="timeline-label">
+                        <span class="label label-success">Blockchain Starts</span>
+                    </span>
+
+                    {% for log in transfers %}
+                    {% if log.switch_next_day %}
+                    <span class="timeline-label">
+                        <span class="label label-info">{{ log.day }}</span>
+                    </span>
+                    {% endif %}
+
+                    <div class="timeline-item">
+                        <div class="timeline-point timeline-point-info">
+                        </div>
+                        <div class="timeline-event timeline-event-info">
+                            <div class="timeline-heading">
+                                <h4>Transaction #{{ log.id }}</h4>
+                            </div>
+                            <div class="timeline-body">
+                                <p>{{ log.sender }} sent &clubs;{{ log.amount }} to {{ log.receiver }}</p>
+                                <div class="hash-style">sha-1 (hash): {{ log.hash }}</div>
+                            </div>
+                            <div class="timeline-footer">
+                                <small><p class="text-right fixed-date">{{ log.date }}</p></small>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <span class="timeline-label">
+                        <span class="label label-info">No GenCyberCoin transactions happened yet</span>
+                    </span>
+                    {% endfor %}
+
+                    <span class="timeline-label">
+                        <span class="label label-success">Blockchain Ends</span>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block customjs %}
+    <script src="{% static 'user/js/timetolocal.js' %}"></script>
+{% endblock %}

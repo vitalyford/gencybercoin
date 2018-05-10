@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+
+{% load auth_extras %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Welcome to GenCyberCoin Marketplace at {{ request.user|get_school }}</h2>
+            <hr>
+        </div>
+        <div class="box">
+            <div class="col-sm-4">
+                <a href="https://www.gen-cyber.com/" target="_blank" rel="noopener noreferrer"><img src="{% static 'user/img/gencyber-logo.png' %}" alt="GenCyber Camp" class="img-responsive img-rounded center-block" width="350px"></a>
+                <p class="lead text-center"><b>NSA/NSF GenCyber</b><br>National Cybersecurity Summer Camps</p>
+            </div>
+            <div class="col-sm-4 text-center">
+                <p class="lead">Confidentiality</p>
+                <p class="lead">Integrity</p>
+                <p class="lead">Availability</p>
+                <p class="lead">Defense in Depth</p>
+                <p class="lead">Keep it Simple</p>
+            </div>
+            <div class="col-sm-4">
+                <img src="{% static 'user/img/gencybercoin.png' %}" alt="GenCyberCoin" class="img-responsive img-rounded center-block" width="230px"/>
+                <p class="lead text-center"><b>GenCyberCoin</b><br>Digital Currency of GenCyber</p>
+            </div>
+        </div>
+</div>
+{% endblock %}

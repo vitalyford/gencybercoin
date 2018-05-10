@@ -1,0 +1,198 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+{% block customcss %}
+    <link href="{% static 'user/css/cropper/cropper.css' %}" rel="stylesheet">
+    <style>
+      .label {
+        cursor: pointer;
+      }
+      .img-container img {
+        max-width: 100%;
+      }
+      .tool-tip [disabled] {
+        pointer-events: none;
+      }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Coins -->
+{% if marketdata %}
+<div class="row">
+    <div class="box">
+      <div class="col-lg-12">
+          <hr>
+          <h2 class="intro-text text-center">Market Items Editor</h2>
+          <hr>
+          <div class="normal-text">
+              <div class="lead text-center">To open the market for students, go to Admin -> Settings menu</div>
+              {% if messages %}
+                {% for message in messages %}
+                    <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+              <div class="text-center"><button type="button" class="btn btn-default btn-lg" data-toggle="collapse" data-target="#admin_market_info" style="white-space: normal;">Important FYI, please read to be aware how the market works</button></div>
+              <div id="admin_market_info" class="collapse">
+                  <p class="lead">The tiers are solely used to sort the market items for students from the most expensive to the least expensive (based on your personal opinion). The prices will be generated automatically, making sure that all students will be able to get any market item; tiers do not define the prices, just their order.</p>
+                  <p class="lead">The prices are generated randomly from 1/4 to 1/2 of what the student with the smallest number of GenCyberCoins has (<i>min_coins</i>). Therefore, you do not have to worry about setting the prices. Every time a student buys an item, its price is updated with whatever price was set for that student, simulating the volatile nature of the cryptocurrency trade market.</p>
+                  <p class="lead">In any outcome (even if a student has 0 coins), everyone will be able to get items from the market. The primary purpose of the coins that students own is to define the order in which students can purchase items from the market. However, from the students' perspective, coins DO matter and they will seek for the opportunities to get them.</p>
+                  <p class="lead">You can set how many students with the highest number of coins can purchase items at the same time. For instance, say, you have 10 students in the camp with {67, 65, 50, 47, 44, 35, 35, 32, 20, 16} coins, respectively, and you have a setting in the Admin Settings menu that sets the "Number of top students allowed to order items" to 4. It means that top-4 students (with {67, 65, 50, 47} coins) can go ahead and purchase items and the rest of the students have to wait their turn. As soon as a student purchases an item, the student is automatically moved at the back of the queue regardless how many coins the student has left, giving a spot for others to jump in and start ordering (in our case, someone with {44} coins will be able to start ordering).</p>
+                  <p class="lead">In case if none of the top-queued students order anything within the predefined time, the system will automatically allow 2 more students to order, meaning that students will be motivated to make decisions fast because the competition for items will rise as time goes on.</p>
+                  <p class="lead">Make sure that your market items have distinct titles because you will see students' carts on the "View student carts" page that will show students' names and the titles of the market items that they have ordered. Students will not be able to order the same item twice.</p>
+                  <p class="lead">Note that you (as an admin) will not be able to order anything from the market. You CAN see the market page with the purpose of taking a look how the students see it from the Student View.</p>
+                  <p class="lead">When you upload the image, you can crop it right on the spot (mobile-friendly) and the system will auto-resize the image for optimal saving so you do not have to worry about the its initial resolution.</p>
+                  <p class="lead">Supported image formats are: jpg, jpeg, png, and gif.</p>
+                  <div class="lead text-center"><b>Tier 10: most expensive/valuable<br>Tier 1: least expensive/valuable</b></div>
+              </div>
+          </div>
+
+<!-- Add a new market item -->
+<form class="form-horizontal" action="{% url 'user:submit-market-admin' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="row center-block" style="width: 300px;">
+      <div class="form-group">
+          <img src="{% static 'user/img/no-image.jpg' %}" id="imageNewPreview" alt="Image preview..." class="img-responsive img-rounded center-block">
+      </div>
+      <div class="input-group">
+          <label class="input-group-btn">
+              <span class="btn btn-success margin-bottom">
+                  Browse Image<input type="file" id="imageNew" name="imageNew" style="display: none;" onchange="previewFile(this)" accept="image/*"/>
+                  <input type="hidden" id="inputXNew" name="inputXNew" value="">
+                  <input type="hidden" id="inputYNew" name="inputYNew" value="">
+                  <input type="hidden" id="inputWidthNew" name="inputWidthNew" value="">
+                  <input type="hidden" id="inputHeightNew" name="inputHeightNew" value="">
+              </span>
+          </label>
+          <input type="text" class="form-control" readonly>
+      </div>
+
+      <div class="form-group text-center">
+          <label class="label tool-tip" data-toggle="tooltip" id="tooltipNew" title="Select the image before cropping">
+              <input class="btn btn-info" type="button" value="Crop me" id="cropmeNew" name="cropmenow" onclick="cropMe(this)"/>
+          </label>
+      </div>
+
+      <div class="form-group">
+          <input type="text" class="form-control" id="iNN" name="itemName" maxlength="50" placeholder="Name" required/>
+      </div>
+      <div class="form-group">
+          <textarea class="form-control" rows="3" cols="40" id="iDN" name="itemDescr" maxlength="300" placeholder="Description" required></textarea>
+      </div>
+      <div class="form-group">
+          <input type="text" class="form-control" name="itemQuantity" maxlength="50" placeholder="Quantity [0, infinity]" required/>
+      </div>
+      <div class="form-group">
+          <input type="number" class="form-control" name="itemTier" maxlength="50" placeholder="Tier [1, 10]" min="1" max="10" required/>
+      </div>
+      <div class="form-group">
+          <button type="submit" class="btn btn-primary" name="addNewItem">Add</button>
+      </div>
+  </div>
+</form>
+<!-- End a new market item -->
+
+          {% for item in marketdata %}
+            {% if forloop.first %}
+            <div class="row">
+              <div class="box">
+            {% elif forloop.counter0|divisibleby:"4" %}
+              </div>
+            </div>
+            <div class="row">
+              <div class="box">
+            {% endif %}
+                <div class="col-md-3 text-center">
+                  <form class="form-horizontal" enctype="multipart/form-data" action="{% url 'user:submit-market-admin' %}" method="post">
+                      {% csrf_token %}
+                      <div class="text-center img-wrapper"><img src="{{ item.image_file.url }}" id="image{{item.id}}Preview" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
+
+                      <div class="input-group col-sm-12">
+                          <label class="input-group-btn">
+                              <span class="btn btn-success margin-bottom">
+                                  Replace Image<input type="file" id="image{{item.id}}" name="image{{item.id}}" style="display: none;" onchange="previewFile(this)" accept="image/*"/>
+                                  <input type="hidden" id="inputX{{item.id}}" name="inputX{{item.id}}" value="">
+                                  <input type="hidden" id="inputY{{item.id}}" name="inputY{{item.id}}" value="">
+                                  <input type="hidden" id="inputWidth{{item.id}}" name="inputWidth{{item.id}}" value="">
+                                  <input type="hidden" id="inputHeight{{item.id}}" name="inputHeight{{item.id}}" value="">
+                              </span>
+                          </label>
+                          <input type="text" class="form-control" readonly>
+                      </div>
+
+                      <div class="form-group text-center">
+                          <label class="label tool-tip" data-toggle="tooltip" id="tooltip{{item.id}}" title="Select the image before cropping">
+                              <input class="btn btn-info" type="button" value="Crop me" name="cropmenow" id="cropme{{item.id}}" onclick="cropMe(this)"/>
+                          </label>
+                      </div>
+
+                      <div class="form-group margin-marketitems-admin">
+                          <input type="text" class="form-control" name="name{{item.id}}" maxlength="50" value="{{ item.name }}" required/>
+                      </div>
+                      <div class="form-group margin-marketitems-admin">
+                          Quantity<input type="text" class="form-control" name="quantity{{item.id}}" maxlength="50" value="{{ item.quantity }}" required/>
+                      </div>
+                      <div class="form-group margin-marketitems-admin">
+                          Tier<input type="number" class="form-control" name="tier{{item.id}}" maxlength="50" value="{{ item.tier }}" min="1" max="10" required/>
+                      </div>
+                      <div class="form-group margin-marketitems-admin">
+                          <textarea class="form-control" rows="5" name="descr{{item.id}}" maxlength="200" required>{{ item.description }}</textarea>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-primary" name="update{{item.id}}" value="{{item.id}}">Save</button>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-danger" name="remove{{item.id}}" value="{{item.id}}">Remove</button>
+                      </div>
+                  </form>
+                </div>
+            {% if forloop.last %}
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+          {% if pagination_enabled == "true" %}
+          <div class="row">
+              <div class="box text-center">
+                  <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-lg">
+                      <li{% if marketdata.has_previous %}{% else %} class="disabled"{% endif %}>
+                        <a href="{% if marketdata.has_previous %}?page={{ marketdata.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      {% for i in "x"|rjust:marketdata.paginator.num_pages %}
+                      <li{% if marketdata.number == forloop.counter %} class="active"{% endif %}><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+                      {% endfor %}
+                      <li{% if marketdata.has_next %}{% else %} class="disabled"{% endif %}>
+                        <a href="{% if marketdata.has_next %}?page={{ marketdata.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+              </div>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+</div>
+
+{% else %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+          <p class="lead text-center">No market items are available at this time. Swing by later!</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% include "modal_window.html" %}
+
+{% endblock %}
+
+{% block customjs %}
+<script src="{% static 'user/js/cropper/cropper.js' %}"></script>
+<script src="{% static 'user/js/cropper/cropme.js' %}"></script>
+{% endblock %}

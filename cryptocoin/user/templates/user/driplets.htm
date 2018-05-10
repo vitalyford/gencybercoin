@@ -1,0 +1,70 @@
+<div class="modal fade in" id="driplets-game" tabindex="-1" role="dialog" aria-labelledby="Driplets"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row game-header" id="game-header" style="visibility: hidden;">
+                    <div class="col-xs-3">Left: <span id="time">0</span>s</div>
+                    <div class="col-xs-3"></div>
+                    <div class="col-xs-3">
+                        <a href="#" onclick="return game.stopGame();">Pause</a>
+                    </div>
+                    <div class="col-xs-3">Score: <span id="score">0</span></div>
+                </div>
+                <div class="game-field-wrapper">
+                    <div class="game-field"></div>
+                    <div class="game-finish-screen container" id="finish-screen" style="display: none;">
+                        <div class="row">
+                            <div class="col-xs-6 col-xs-offset-3 text-center" style="margin-top: 20px;">
+                                <p style="margin: 100px 0 30px;font-size: 20px;">You have sucessfully defended against <span id="attacks">99%</span> attacks</p>
+                                <p style="font-size: 20px; display: none;" id="change-pwd">You have earned 20 Coins</p>
+                                <p style="font-size: 20px; color: white; display: none;">Change your password to prevent next attacks</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-start-screen container" id="start-screen">
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <h3 class="text-center">Driblets</h3>
+                                <p>Malicious packets (aka driblets) are falling from the sky! Your goal is to defend against the attacks by correctly computing the result of the math operation.</p>
+                                <p>To enter the solution of the calculation, you can use the numbers located horizontally on your keyboard. For instance, if you see a driplet showing 5+7, you press 13 and then press "Enter" key on your keyboard.</p>
+                                <p>If you calculated it correctly, the driplet disappears. Some of the driplets hide behind others, so be careful! You got only 100 sec. Let's go, comrade!</p>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <a class="btn btn-success" href="#" onclick="return game.startGame();">Start</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-stop-screen" id="stop-screen" style="display: none;">
+                        <div class="row">
+                            <div class="col-xs-1 col-xs-offset-5 text-center" style="margin-top: 150px;">
+                                <a class="btn btn-success" href="#" onclick="return game.continueGame();">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+{% load static %}
+<link href="{% static 'user/css/driplets.css' %}" rel="stylesheet">
+<script src="{% static 'user/js/Drop.min.js' %}"></script>
+<script src="{% static 'user/js/DropGame.min.js' %}?v=1"></script>
+
+<script>
+  var csrf = '{{ csrf_token }}';
+</script>
+
+<script>
+    var game = null;
+    $(function () {
+        game = new DropGame('.game-field');
+    });
+</script>

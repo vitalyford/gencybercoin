@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load auth_extras %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>GenCyberCoin - Earn the coins and get the prizes!</title>
+
+    {% load static %}
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'user/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'user/css/business-casual.css' %}" rel="stylesheet">
+    <link href="{% static 'user/css/timeline.css' %}" rel="stylesheet">
+    <link href="{% static 'user/css/bootstrap-toggle.css' %}" rel="stylesheet">
+    {% block customcss %}
+    {% endblock %}
+
+    <!-- Custom favicon -->
+    <link rel="icon" href="{% static 'user/img/favicon.png' %}">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div class="brand">GenCyberCoin</div>
+    <div class="address-bar">GenCyber | Where security meets opportunity{% if request.user|get_school != "" %} | {{ request.user|get_school }}{% endif %}</div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+                <a class="navbar-brand" href="{% url 'user:index' %}">GenCyberCoin</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse text-center" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                {% if not request.user.is_superuser %}
+                    {% if not request.user.is_authenticated %}
+                    <li><a href="{% url 'user:register' %}">Register</a></li>
+                    {% else %}
+                    <li><a href="{% url 'user:index' %}">Home</a></li>
+                        {% comment %}{% if not request.user|has_group:"gcadmin" %}{% endcomment %}
+                    <li><a href="{% url 'user:account' %}">Account</a></li>
+                    <li><a href="{% url 'user:wallet' %}">Wallet</a></li>
+                        {% comment %}{% endif %}{% endcomment %}
+                    {% endif %}
+                {% else %}
+                    <li><a href="{% url 'user:account' %}">My account</a></li>
+                {% endif %}
+                {% if not request.user.is_superuser and request.user.is_authenticated and not request.user|has_group:"gcadmin" %}
+                    <li><a href="{% url 'user:market' %}">Market</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Features<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'user:extras-cryptocurrency' %}">Cryptocurrency</a></li>
+                            <li><a href="{% url 'user:extras-blockchain' %}">Blockchain</a></li>
+                            {% if request.user|has_bug_bounty %}
+                            <hr style="margin: 2px;">
+                            <li><a href="{% url 'user:extras-bug-bounty' %}">Bug Bounty</a></li>
+                            <li><a href="{% url 'user:extras-hall-of-fame' %}">Hall of Fame</a></li>
+                            {% endif %}
+                            {% if request.user|has_se %}
+                            <hr style="margin: 2px;">
+                            <li><a href="{% url 'user:extras-social-engineering' %}">Social Engineering</a></li>
+                            {% endif %}
+                            <li><a href="#driplets-game" data-toggle="modal">Mini-Game</a></li>
+                            <hr style="margin: 2px;">
+                            <li><a href="{% url 'user:extras-feedback' %}">Leave Feedback</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                    {% if request.user.is_superuser or request.user|has_group:"gcadmin" %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'user:code-generator' %}">Code Generator</a></li>
+                            {% if not request.user.is_superuser %}
+                            <li><a href="{% url 'user:market-admin' %}">Market Editor</a></li>
+                            <li><a href="{% url 'user:achievements-admin' %}">Activity Editor</a></li>
+                            <li><a href="{% url 'user:extras-social-engineering-admin' %}">Social Engineering Editor</a></li>
+                            <hr style="margin: 2px;">
+                            <li><a href="{% url 'user:nominations-admin' %}">Activity Nomination</a></li>
+                            <li><a href="{% url 'user:student-carts-admin' %}">Student Orders</a></li>
+                            <li><a href="{% url 'user:student-manager-admin' %}">Student Manager</a></li>
+                            <hr style="margin: 2px;">
+                            <li><a href="#">Reports/Export</a></li>
+                            <li><a href="{% url 'user:settings-admin' %}">Display Settings</a></li>
+                            {% endif %}
+                            <hr style="margin: 2px;">
+                            <li><a href="{% url 'user:show-feedback-admin' %}">Show Feedback</a></li>
+                        </ul>
+                    </li>
+                    <!--<li><a href="#">Student View</a></li>-->
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                      <li><a href="{% url 'user:logout' %}">Logout ({{ request.user.first_name }})</a></li>
+                    {% else %}
+                      <li><a href="{% url 'user:login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div class="container" style="font-size: larger;" id="top">
+        {% if request.user|is_admin %}
+            <div class="pull-right margin-top"><a href="{% url 'user:change-mode-admin' %}">Switch to {% if request.user|student_mode %}admin{% else %}student{% endif %} mode</a></div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- /.container -->
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+<!-- Designed and developed by Vitaly Ford, vford.me -->
+                    <p class="lead">Copyright &copy; Vitaly Ford, Ph.D. (<span style="color: #0000ff;">fordv@arcadia.edu</span>)<br>in support for the NSA/NSF GenCyber Program</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <span id="top-link-block" class="hidden">
+        <a href="#top" class="well well-sm"  onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
+            <i class="glyphicon glyphicon-chevron-up"></i>
+        </a>
+    </span>
+    <!-- jQuery -->
+    <script src="{% static 'user/js/jquery.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'user/js/bootstrap.min.js' %}"></script>
+
+    <!-- GenCyberCoin JavaScript -->
+    <script src="{% static 'user/js/gencybercoin.js' %}"></script>
+    <script src="{% static 'user/js/bootstrap-toggle.js' %}"></script>
+    {% block customjs %}
+    {% endblock %}
+
+    {% include "driplets.htm" %}
+</body>
+
+</html>

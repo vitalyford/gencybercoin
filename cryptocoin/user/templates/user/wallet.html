@@ -1,0 +1,80 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% load auth_extras %}
+{% load static %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-3" style="margin: auto 0;">
+          <hr>
+          <h2 class="intro-text text-center">Redeem Reward Code</h2>
+          <hr>
+          <form class="form-inline text-center" action="{% url 'user:submit-wallet' %}" method="post">
+          {% csrf_token %}
+            <div class="form-group">
+              <small class="lead" style="font-size: 16px;">Code</small>
+              <input type="text" class="form-control" id="iC" name="inputCode" maxlength="15" placeholder="Enter your code here" style="margin: 5px;" required>
+              <button type="submit" class="btn btn-primary" name="redeem" style="margin: 5px;" value="redeem">Redeem</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-9">
+            <hr>
+            <h2 class="intro-text text-center">GenCyberCoin Wallet</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            <div class="col-sm-6 text-center">
+              <h3>Honorary Coins</h3>
+              <img src="{% static 'user/img/honory-coin.jpg' %}" class="img-responsive img-circle" alt="Honorary Coins" style="margin: 0 auto; max-width: 100px;" />
+              <p class="text-center coins" style="background-color: rgb(0,255,255,0.3)">&clubs;{{ userdata.honory_coins }}</p>
+            </div>
+            <div class="col-sm-6 text-center">
+              <h3>Earned Coins</h3>
+              <img src="{% static 'user/img/earned-coin.jpg' %}" class="img-responsive img-circle" alt="Earned Coins" style="margin: 0 auto; max-width: 100px;" />
+              <p class="text-center coins" style="background-color: rgb(0,255,255,0.3)">&hearts;{{ userdata.permanent_coins }}</p>
+            </div>
+
+            <div class="col-lg-12">
+              <p class="lead text-center">Coins Transfer</p>
+              <p class="sublead">You can transfer HONORARY coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the honorary coin as a token of appreciation to that person. It is limited to transfering a maximum of 2 honorary coins to every peer and you cannot transfer more than one time to anyone.</p>
+              <p class="sublead">At the end of the camp after purchasing market items, you can transfer your EARNED coins (not HONORARY) to the GenCyber Counselors whom you really appreciated and enjoyed working with by selecting their names and making the transaction. NOTE: you can send as many EARNED coins and as many times as you want to the Counselors.</p>
+              <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
+              {% csrf_token %}
+                <div class="form-group">
+                  <label for="iT" class="col-sm-2 control-label">Transfer to</label>
+                  <div class="input-group col-sm-10">
+                    <select class="form-control" id="iT" name="inputTransfer">
+                      <option>Who is the lucky one?</option>
+                      {% for au in allusers %}
+                        {% if au.username != request.user.username %}
+                          <option value="{{ au.username }}">{{ au.first_name }} {{ au.last_name }} (aka {{ au.username }}{% if au.is_admin %}, GenCyber Counselor{% endif %})</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="iA" class="col-sm-2 control-label">Amount</label>
+                  <div class="input-group col-sm-10">
+                    <div class="input-group-addon">&clubs;</div>
+                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Do not send too much :-D">
+                    <div class="input-group-addon">.00</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-lg-12 text-center">
+                    <button type="submit" class="btn btn-primary" name="submit">Make a Transaction</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

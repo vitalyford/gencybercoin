@@ -1,0 +1,127 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<!-- Coins -->
+{% load static %}
+{% load auth_extras %}
+<div class="row">
+    <div class="box">
+      <div class="col-sm-12">
+          <hr>
+          <h2 class="intro-text text-center">Market Settings</h2>
+          <hr>
+          <form class="form-horizontal text-center" action="{% url 'user:submit-settings-admin' %}" method="post">
+          {% csrf_token %}
+          <p class="lead text-center">Click on <button type="submit" class="btn btn-success" name="save" value="settings">Save all</button> when you are done changing the settings</p>
+{% if request.user|has_group:"gcadmin" %}
+          {% if error_message %}<div class="lead text-center text-warning">{{ error_message }}</div>{% endif %}
+              <div class="table-responsive">
+              <table class="table table-hover gctable">
+                  <small class="lead">
+                      <tbody>
+                          <tr>
+                              <td scope="row" class="text-center col-md-4"><h5 class="lead">Setting</h5></td>
+                              <td scope="row" class="text-center col-md-1"><h5 class="lead">Options</h5></td>
+                              <td scope="row" class="text-center col-md-7"><h5 class="lead">Description</h5></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">Market item ordering is</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="market_enabled" {% if market_enabled == "true" %}checked{% endif %}>
+                              </td>
+                              <td scope="row" class="text-justify col-sm6"><p class="lead">If the market is enabled, the students will be able to order items in the market.<br>If it is disabled, the students will only see what items are on the market without an option to order those.<br>We recommend to enable it only at the end of the camp when you are ready to give the market items to the students.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">AJAX for the market queue is</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="ajax_enabled" {% if ajax_enabled == "true" %}checked{% endif %}>
+                              </td>
+                              <td scope="row" class="text-justify col-sm6"><p class="lead">Enabled AJAX will allow to auto-update the queue on the market and students will not need to refresh the market page to check for their turn.<br>Be advised that if adding items in the market lags, switch AJAX off.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right"><p class="lead">Market pagination is</p></td>
+                              <td scope="row" class="text-left"><input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="pagination_enabled" {% if pagination_enabled == "true" %}checked{% endif %}></td>
+                              <td scope="row" class="text-justify col-sm6"><p class="lead">If enabled, the market will be split into pages (useful when you have a lot of items).<br>If disabled, the students and you will see all market items on one page.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">Number of students with the most coins who are allowed to order items is</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <div class="input-group" style="margin-top: 12px;" >
+                                      <div class="input-group-addon">#</div>
+                                      <input type="text" class="form-control" name="top_students_number" value="{{ top_students_number }}" size="4">
+                                  </div>
+                              </td>
+                              <td scope="row" class="text-justify"><p class="lead">Defines how many students with the highest number of coins will be able to order items from the market at the same time.<br>The rest of the students will have to wait their turn.<br>If you want to allow all students to order at the same time (free-for-all), set this setting to a number higher than the total number of students in the camp.<br>As soon as a student orders an item, s/he will be put at the end of the queue to allow others to order.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">Queue auto-expansion wait period is</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <div class="input-group" style="margin-top: 12px;" >
+                                      <input type="text" class="form-control" name="queue_wait_period" value="{{ queue_wait_period }}" size="4">
+                                      <div class="input-group-addon">min</div>
+                                  </div>
+                              </td>
+                              <td scope="row" class="text-justify"><p class="lead">In case if none of the top-queued students order anything within this predefined time, the system will automatically allow 2 more students to order (and will continue doing that until eventually everyone can order). Decimal point is allowed.<br>If you set it to 0, then in a short period of time everyone will be allowed to order.<br>If you never want to allow for the queue auto-expansion, set a negative number.</p></td>
+                          </tr>
+                      </tbody>
+                  </small>
+              </table>
+              <hr>
+              <h2 class="intro-text text-center">Other Settings</h2>
+              <hr>
+              <table class="table table-hover gctable">
+                  <small class="lead">
+                      <tbody>
+                          <tr>
+                              <td scope="row" class="text-center col-md-4"><h5 class="lead">Setting</h5></td>
+                              <td scope="row" class="text-center col-md-1"><h5 class="lead">Options</h5></td>
+                              <td scope="row" class="text-center col-md-7"><h5 class="lead">Description</h5></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">Bug bounty is</p>
+                                  <p class="lead">Reward is</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="bug_bounty_enabled" {% if bug_bounty_enabled == "true" %}checked{% endif %}>
+                                  <div class="input-group" style="margin-top: 12px;">
+                                      <div class="input-group-addon">&hearts;</div>
+                                      <input type="text" class="form-control" name="bug_bounty_award_amount" value="{{ bug_bounty_award_amount }}" size="4">
+                                  </div>
+                              </td>
+                              <td scope="row" class="text-justify"><p class="lead">If enabled, the students will be able to look for bugs on the website and automatically earn coins as soon as they discover those.<br>They will be rewarded the amount of coins set here for every bug. The menu item will appear under Extras.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">Social engineering is</p>
+                                  <p class="lead">Reward is</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="se_enabled" {% if se_enabled == "true" %}checked{% endif %}>
+                                  <div class="input-group" style="margin-top: 12px;">
+                                      <div class="input-group-addon">&hearts;</div>
+                                      <input type="text" class="form-control" name="se_award_amount" value="{{ se_award_amount }}" size="4">
+                                  </div>
+                              </td>
+                              <td scope="row" class="text-justify"><p class="lead">If enabled, the students will see a menu option to perform social engineering on the GenCyber faculty/mentors/students under Extras. They will be rewarded the amount of coins set here for every correct answer.<br>But first, you should add/edit the questions in the Admin->Social Engineering menu.</p></td>
+                          </tr>
+                      </tbody>
+                  </small>
+              </table>
+              </div>
+              <button type="submit" class="btn btn-success margin-top" name="save" value="settings">Save all</button>
+          </form>
+{% endif %}
+      </div>
+    </div>
+</div>
+
+{% endblock %}

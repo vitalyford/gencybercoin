@@ -1,0 +1,96 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<!-- Account info -->
+<div class="row">
+    <div class="box">
+        <div class="col-md-3" style="margin: auto 0;">
+          <hr>
+          <h2 class="intro-text text-center">Password Management</h2>
+          <hr>
+          <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
+          {% csrf_token %}
+            <div class="form-group">
+              <input type="password" class="form-control" id="iCop" name="inputOldPassword" maxlength="30" placeholder="Your old password" style="margin: 5px;" required>
+              <input type="password" class="form-control" id="iC" name="inputNewPassword" maxlength="30" placeholder="Your new password" style="margin: 5px;" required>
+              <button type="submit" class="btn btn-primary" name="change" style="margin: 5px;" value="change">Change password</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-9">
+            <hr>
+            <h2 class="intro-text text-center">{{ request.user.first_name }}'s Account Details</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            {% if userdata %}
+            <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
+            {% csrf_token %}
+              <div class="form-group">
+                <table class="table table-hover table-responsive gctable">
+                <tbody
+                  <tr><th scope="row">Username</th><td>{{ userdata.username }}</td></tr>
+                  <tr><th scope="row">First Name</th><td>{{ userdata.first_name }}</td></tr>
+                  <tr><th scope="row">Last Name</th><td>{{ userdata.last_name }}</td></tr>
+                  {% if useranswers %}
+                  <tr><th scope="row">School</th><td>{{ userdata.school.name }}</td></tr>
+                  <tr>
+                    <th scope="row">{{ useranswers.question1 }}</th>
+                    <td><input type="text" class="form-control" id="iSQ1" name="inputSecQ1" maxlength="30" value="{{ useranswers.answer1 }}" required></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">{{ useranswers.question2 }}</th>
+                    <td><input type="text" class="form-control" id="iSQ2" name="inputSecQ2" maxlength="30" value="{{ useranswers.answer2 }}" required></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">{{ useranswers.question3 }}</th>
+                    <td><input type="text" class="form-control" id="iSQ3" name="inputSecQ3" maxlength="30" value="{{ useranswers.answer3 }}" required></td>
+                  </tr>
+                  {% endif %}
+                  {% comment %}<!--<tr style="height: 30px;"><th scope="row"></th><td></td></tr>
+                  <tr class="bg-warning" style="color: #00aa00"><td>The number of times you were hacked is</td><td>{{ useranswers.was_hacked }}. Change your security questions!</td></tr>-->{% endcomment %}
+                </tbody>
+                </table>
+                {% if useranswers %}<button type="submit" class="btn btn-primary" name="update" style="margin: 5px;" value="update">Update security questions</button>{% endif %}
+              </div>
+            </form>
+            {% else %}
+              <p class="lead text-center">No user information is available</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Achievements -->
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Activity History</h2>
+            <hr>
+            {% if achievements %}
+            <table class="table table-hover table-responsive gctable">
+              <tbody>
+              {% for a in achievements %}
+              <small class="lead">
+              <tr>
+                <td scope="row" align="center"><div class="img-wrapper"><img src="{{ a.image_file.url }}" class="img-responsive img-rounded" alt="{{ a.name }}" style="max-height: 120px;" /></div></td>
+                <td scope="row">
+                  <p class="lead">{{ a.name }}</p>
+                  <hr style="margin: 0px;">
+                  <small>{{ a.description }}</small>
+                </td>
+              </tr>
+              <tr style="background-color: rgb(221,255,255,0.6);"><td></td><td></td></tr>
+              </small>
+              {% endfor %}
+              </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
