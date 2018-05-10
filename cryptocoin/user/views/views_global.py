@@ -71,7 +71,7 @@ def init_portal_settings(school):
     # allow/disallow bug bounty
     bug_bounty_enabled, b_created = PortalSetting.objects.get_or_create(name="bug_bounty_enabled", school=school)
     if b_created:
-        bug_bounty_enabled = "true"
+        bug_bounty_enabled.value = "true"
         bug_bounty_enabled.save()
     # set the amount of coins for the bug bounty
     bug_bounty_award_amount, ba_created = PortalSetting.objects.get_or_create(name="bug_bounty_award_amount", school=school)

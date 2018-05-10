@@ -132,7 +132,7 @@
     </nav>
 
     <div class="container" style="font-size: larger;" id="top">
-        {% if request.user|is_admin %}
+        {% if request.user|is_admin and not request.user.is_superuser %}
             <div class="pull-right margin-top"><a href="{% url 'user:change-mode-admin' %}">Switch to {% if request.user|student_mode %}admin{% else %}student{% endif %} mode</a></div>
         {% endif %}
         {% block content %}

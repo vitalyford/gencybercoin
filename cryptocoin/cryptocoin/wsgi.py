@@ -8,10 +8,11 @@ https://docs.djangoproject.com/en/1.11/howto/deployment/wsgi/
 """
 
 import os,sys
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cryptocoin.settings")
-sys.path.append('.')
-sys.path.append('../')
+#sys.path.append('.')
+#sys.path.append('../')
 
 from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cryptocoin.settings")
 
 application = get_wsgi_application()

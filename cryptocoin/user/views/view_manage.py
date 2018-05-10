@@ -569,17 +569,17 @@ def change_mode_admin(request):
     return HttpResponseRedirect(reverse('user:index'))
 
 def show_feedback_admin(request):
+    context = {}
+    if request.user.is_superuser:
+        feedback = Feedback.objects.all()
+        count = feedback.count() // 2
+        context['feedbackFirst'] = feedback[:count]
+        context['feedbackSecond'] = feedback[count:]
+        return render(request, 'user/show-feedback-admin.html', context)
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
-        context = {}
         if request.user.groups.filter(name='gcadmin').exists():
             feedback = Feedback.objects.filter(school=ud.school)
-            count = feedback.count() // 2
-            context['feedbackFirst'] = feedback[:count]
-            context['feedbackSecond'] = feedback[count:]
-            return render(request, 'user/show-feedback-admin.html', context)
-        elif request.user.is_superuser:
-            feedback = Feedback.objects.all()
             count = feedback.count() // 2
             context['feedbackFirst'] = feedback[:count]
             context['feedbackSecond'] = feedback[count:]

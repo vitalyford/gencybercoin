@@ -1,10 +1,20 @@
 from django.core.management.base import BaseCommand, CommandError
 from user.models import PassRecQuestions
+from django.contrib.auth.models import User
 
 class Command(BaseCommand):
-    help = 'Loads the default settings into the database. The settings include registration security questions.'
+    help = 'Loads the default settings into the database. The settings include registration security questions and creating a superuser.'
 
     def handle(self, *args, **options):
+        # set the default superuser
+        try:
+            if not User.objects.filter(username="gcsuperuser").exists():
+                User.objects.create_superuser("gcsuperuser", "admin@admin.com", "gcsuperuser")
+                ud = UserData(username="gcsuperuser", first_name="gcsuperuser", last_name="gcsuperuser", password="gcsuperuser", is_admin=True)
+                ud.save()
+        except:
+            raise CommandError('The superuser could not be created. Did you make sure that your database is created? Seems like the database is not available or we do not have enough permissions to create User and UserData tables.')
+        # set the default security questions
         try:
             q, created = PassRecQuestions.objects.get_or_create(question='What food you do not like?')
             if created: q.save()

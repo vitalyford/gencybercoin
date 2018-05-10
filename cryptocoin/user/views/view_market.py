@@ -127,7 +127,7 @@ def market(request):
         context['cart'] = items_in_the_cart
         context.update(get_top_players(request, ud))
         context.update(get_portal_settings(ud.school))
-        if context['ajax_enabled'] == "true":
+        if context['ajax_enabled'] == "true" and context['market_enabled'] == "true":
             if context['top_player'] == "false":
                 messages.info(request, 'The queue will automatically notify you when it is your turn to order')
             else:
@@ -173,7 +173,13 @@ def get_top_players(request, ud):
         roof = min(total_users, max(queue_capacity, 3) + 3)
         # check if someone started ordering
         someone_started_ordering = False
-        latest_time = users[0].cart.date
+        try: # just in case if a cart has not been created yet
+            latest_time = users[0].cart.date
+        except:
+            for user in users:
+                c, created = Cart.objects.get_or_create(user_data=user)
+                if created: c.save()
+            latest_time = users[0].cart.date
         user_with_the_latest = users[0]
         for user in users:
             if user.cart.market_items.count() > 0:

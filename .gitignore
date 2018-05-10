@@ -1,2 +1,13 @@
 __pycache__/
+.env
+.dockerignore
+.elasticbeanstalk/
+Dockerfile
+convox.yml
+docker-compose.yml
 
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
