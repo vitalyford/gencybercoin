@@ -293,17 +293,17 @@ def save_image(request, ud, image_file, id):
         w = int(request.POST.get('inputWidth' + id))
         h = int(request.POST.get('inputHeight' + id))
         if x < 0 or x > width or y < 0 or y > height or w < 0 or w > width - x or h < 0 or h > height - y:
-            raise
-    except:
-        return image_file
-    else:
-        im = crop_image(im, x, y, w, h)
+            pass
+        else:
+            im = crop_image(im, x, y, w, h)
         format = image_file.name.split(".")[-1].lower()
         if format == "jpg":
             format = "jpeg"
         im.save(im_io, format=format, quality=100)
         im_content = ContentFile(im_io.getvalue(), image_file.name)
-    return im_content
+        return im_content
+    except:
+        return image_file
 
 def add_new_market_item(request, ud):
     try:

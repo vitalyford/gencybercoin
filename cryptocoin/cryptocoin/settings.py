@@ -11,8 +11,10 @@ from cryptocoin.aws.conf import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = '(v3q0od-tzk)gi-miq+4)5qnka6)by6x37+lk=fbk$x&+20&6b'
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
+if not SECRET_KEY:
+    SECRET_KEY = '(v3q0od-tzk)gi-miq+4)5qnka6)by6x37+lk=fbk$x&+20&6b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
