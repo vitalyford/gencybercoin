@@ -5,18 +5,19 @@ Django settings for GenCyberCoin project.
 
 #import dj_database_url #dj-database-url==0.4.1
 import os
+from cryptocoin.aws.conf import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(v3q0od-tzk)gi-miq+4)5qnka6)by6x37+lk=fbk$x&+20&6b'
-#SECRET_KEY = os.environ.get('SECRET_KEY')
+#SECRET_KEY = '(v3q0od-tzk)gi-miq+4)5qnka6)by6x37+lk=fbk$x&+20&6b'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.elasticbeanstalk.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['gencybercoin.tk', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'import_export',
+    'storages',
 ]
 
 MIDDLEWARE = [

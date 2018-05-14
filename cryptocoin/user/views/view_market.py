@@ -162,6 +162,7 @@ def get_top_players(request, ud):
     # admins and superuser do not count
     users = UserData.objects.filter(is_admin=False, school=ud.school).order_by('items_bought', '-permanent_coins')
     total_users = users.count()
+    context['top_player'] = "false"
     if total_users > 0:
         top_users = []
         try:
@@ -188,7 +189,6 @@ def get_top_players(request, ud):
                 user_with_the_latest = user
         # find top players
         already_increased_queue_capacity = False
-        context['top_player'] = "false"
         for i in range(0, roof):
             top_users.append(users[i].username)
             # allow top-n students to order market items
