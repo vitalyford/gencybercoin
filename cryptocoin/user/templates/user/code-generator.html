@@ -8,6 +8,11 @@
           <hr>
           <h2 class="intro-text text-center">Code Generator</h2>
           <hr>
+          {% if messages %}
+            {% for message in messages %}
+                <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
           {% if error_message %}<div class="lead text-center text-warning">{{ error_message }}</div>{% endif %}
           <p class="lead text-center">Generate codes for {% if is_gcadmin %}students{% endif %}{% if is_superuser %}admins{% endif %}</p>
           <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
@@ -40,9 +45,9 @@
         <hr>
         <h2 class="intro-text text-center">Marketplace registration codes for {% if is_gcadmin %}students{% endif %}{% if is_superuser %}school admins{% endif %}</h2>
         <hr>
-        <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
+        <form class="form-inline text-center" action="{% url 'user:pdf-codes-admin' %}" method="post">
         {% csrf_token %}
-            <button type="submit" class="btn btn-danger" name="delete" style="margin-bottom: 15px;" value="registration">Delete all registration codes</button>
+            <button type="submit" class="btn btn-primary" name="codeName" style="margin-bottom: 15px;" value="registration">Download registration codes</button>
         </form>
 {% if is_superuser %}
             <table class="table table-hover table-responsive gctable">
@@ -96,12 +101,16 @@
                     </td></tr>
                 </tbody>
             </table>
+            <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-danger" name="delete" style="margin-top: 15px;" value="registration">Delete all registration codes</button>
+            </form>
             <hr>
             <h2 class="intro-text text-center">Award codes for students</h2>
             <hr>
-            <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
+            <form class="form-inline text-center" action="{% url 'user:pdf-codes-admin' %}" method="post">
             {% csrf_token %}
-                <button type="submit" class="btn btn-danger" name="delete" style="margin-bottom: 15px;" value="award">Delete all award codes</button>
+                <button type="submit" class="btn btn-primary" name="codeName" style="margin-bottom: 15px;" value="award">Download award codes</button>
             </form>
             <table class="table table-hover table-responsive gctable">
                 <tbody>
@@ -116,6 +125,10 @@
                     </td></tr>
                 </tbody>
             </table>
+            <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-danger" name="delete" style="margin-top: 15px;" value="award">Delete all award codes</button>
+            </form>
 {% endif %}
     </div>
 </div>

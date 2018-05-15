@@ -59,9 +59,9 @@ class Code(models.Model):
     infinite     = models.BooleanField(default=False)
     school       = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def __str__(self):
-        output = self.allowed_hash + " value is " + str(self.value)
-        if self.infinite:
-            return output + " infinite"
+        output = self.allowed_hash + " \n♥" + str(self.value)
+        #if self.infinite:
+        #    return output + " infinite"
         return output
 
 class CodeRedeemer(models.Model):

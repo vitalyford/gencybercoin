@@ -14,6 +14,7 @@ pip-review==1.0
 psycopg2==2.7.4
 pytz==2018.3
 PyYAML==3.12
+reportlab==3.4.0
 tablib==0.12.1
 unicodecsv==0.14.1
 xlrd==1.1.0

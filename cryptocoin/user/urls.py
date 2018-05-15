@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^manage/student-manager-admin/$', views.student_manager_admin, name='student-manager-admin'),
     url(r'^manage/submit-student-manager-admin/$', views.submit_student_manager_admin, name='submit-student-manager-admin'),
     url(r'^manage/show-feedback-admin/$', views.show_feedback_admin, name='show-feedback-admin'),
+    url(r'^manage/pdf-codes-admin/$', views.pdf_codes_admin, name='pdf-codes-admin'),
     url(r'^extras/cryptocurrency/$', views.extras_cryptocurrency, name='extras-cryptocurrency'),
     url(r'^extras/bug-bounty/$', views.extras_bug_bounty, name='extras-bug-bounty'),
     url(r'^extras/hall-of-fame/$', views.extras_hall_of_fame, name='extras-hall-of-fame'),
