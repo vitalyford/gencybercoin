@@ -3,6 +3,7 @@ from django.utils import timezone
 
 # imports from settings
 from django.conf import settings
+import os
 
 # Create your models here.
 class School(models.Model):

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from user.models import PassRecQuestions
+from user.models import PassRecQuestions, UserData
 from django.contrib.auth.models import User
 
 class Command(BaseCommand):

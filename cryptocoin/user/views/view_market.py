@@ -5,7 +5,7 @@ def submit_cart(request):
         for key in request.POST:
             ud = get_object_or_404(UserData, username=request.user.username)
             # allow to add items in the cart to only top players, also check if market is enabled
-            market_enabled = get_object_or_404(PortalSetting, name="market_enabled", school=school).value
+            market_enabled = get_object_or_404(PortalSetting, name="market_enabled", school=ud.school).value
             if "add" in str(key) and market_enabled == "true":
                 players = get_top_players(request, ud)
                 if players['top_player'] == "true":
@@ -69,7 +69,7 @@ def get_cart(request, ud):
     return context
 
 def remove_cart_item(request, key, ud):
-    market_enabled = get_object_or_404(PortalSetting, name="market_enabled", school=school).value
+    market_enabled = get_object_or_404(PortalSetting, name="market_enabled", school=ud.school).value
     if market_enabled == "false":
         return
     try:

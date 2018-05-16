@@ -10,6 +10,8 @@ def submit_social_engineering(request):
         context = {}
         if request.method == 'POST':
             for key in request.POST:
+                if key == 'csrfmiddlewaretoken' or key == 'submit':
+                    continue
                 try: # to parse out the POST params
                     question_id = int(key)
                     answer = request.POST.get(key).lower().strip()
