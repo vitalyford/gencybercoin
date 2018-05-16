@@ -30,6 +30,16 @@ def extras_blockchain(request):
                 else:
                     log.switch_next_day = False
                 context['transfers'] = transfers
+                try:
+                    if get_object_or_404(UserData, username=log.sender).is_admin:
+                        log.sender += " (GenCyber Team)"
+                except:
+                    pass
+                try:
+                    if get_object_or_404(UserData, username=log.receiver).is_admin:
+                        log.receiver += " (GenCyber Team)"
+                except:
+                    pass
         return render(request, 'user/extras/blockchain.html', context)
     return goto_login(request, "blockchain")
 

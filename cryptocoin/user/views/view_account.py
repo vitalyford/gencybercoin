@@ -131,15 +131,15 @@ def transfer(request):
     except:
         messages.warning(request, 'Select the user to send the money to')
     else:
-        amount = request.POST.get('inputAmount')
-        if receiver.is_admin:
-            max_amount_allowed_to_send = 10000
+        amount_str = request.POST.get('inputAmount')
+        if receiver.is_admin or sender.is_admin:
+            max_amount_allowed_to_send = 100000
             coins = sender.permanent_coins
         else:
             coins = sender.honory_coins
         amount_not_integer = False
         try:
-            amount = int(amount)
+            amount = int(amount_str)
         except:
             amount_not_integer = True
         if amount_not_integer: # if all but the first character are not digits
@@ -155,13 +155,13 @@ def transfer(request):
                     messages.warning(request, 'Wanted to send more money than you can afford? Gotcha! =P')
                 else:
                     # check if the sender has previously moved money to receiver
-                    if amount != 0 and not receiver.is_admin and TransferLogs.objects.filter(sender=sender.username, receiver=receiver.username, school=sender.school).count() > 0:
+                    if amount != 0 and not receiver.is_admin and not sender.is_admin and TransferLogs.objects.filter(sender=sender.username, receiver=receiver.username, school=sender.school).count() > 0:
                         messages.warning(request, 'You have already sent money to this user, sorry, budget cuts do not allow sending more =(')
                     else:
                         if amount > max_amount_allowed_to_send:
-                            amount = str(max_amount_allowed_to_send)
-                            messages.warning(request, 'Sorry, you can send only ' + str(max_amount_allowed_to_send) + ' coins at a time, budget cuts =(')
-                        if receiver.is_admin:
+                            amount = max_amount_allowed_to_send
+                            messages.warning(request, 'Sorry, you can send only up to ' + str(max_amount_allowed_to_send) + ' coins at a time, we changed it to ' + str(max_amount_allowed_to_send) + ' because of the budget cuts =(')
+                        if receiver.is_admin or sender.is_admin:
                             receiver.permanent_coins = receiver.permanent_coins + amount
                             sender.permanent_coins = sender.permanent_coins - amount
                         else:
@@ -169,15 +169,10 @@ def transfer(request):
                             sender.honory_coins = sender.honory_coins - amount
                         receiver.save()
                         sender.save()
-                        # log the sender/receiver and timestamp only if amount != 0
-                        if amount != 0 and not receiver.is_admin:
+                        # log the sender/receiver and timestamp only if amount > 0
+                        if amount > 0:
                             tl = TransferLogs(sender=sender.username, receiver=receiver.username, amount=amount, school=sender.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                             tl.save()
-                            # increment the counter for the number of times being hacked
-                            #userdata = get_object_or_404(UserData, username=request.user.username)
-                            #useranswers = get_object_or_404(UserAnswers, data=userdata)
-                            #useranswers.was_hacked = useranswers.was_hacked + 1
-                            #useranswers.save()
                             messages.info(request, 'You sent ' + str(amount) + ' to ' + receiver.username + '!')
     return HttpResponseRedirect(reverse('user:wallet'))
 

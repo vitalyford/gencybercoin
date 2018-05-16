@@ -35,7 +35,7 @@
                                 <h4>Transaction #{{ log.id }}</h4>
                             </div>
                             <div class="timeline-body">
-                                <p>{{ log.sender }} sent &clubs;{{ log.amount }} to {{ log.receiver }}</p>
+                                <p>{{ log.sender }} sent {% if 'GenCyber Team' in log.sender or 'GenCyber Team' in log.receiver %}&hearts;{% else %}&clubs;{% endif %}{{ log.amount }} to {{ log.receiver }}</p>
                                 <div class="hash-style">sha-1 (hash): {{ log.hash }}</div>
                             </div>
                             <div class="timeline-footer">

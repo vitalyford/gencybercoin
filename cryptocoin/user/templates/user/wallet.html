@@ -22,6 +22,7 @@
             <hr>
             <h2 class="intro-text text-center">GenCyberCoin Wallet</h2>
             <hr>
+            {% if request.user|is_admin %}<p class="lead text-center">As an admin, you can send the earned coins directly to your students</p>{% endif %}
             {% if messages %}
               {% for message in messages %}
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
@@ -40,18 +41,18 @@
 
             <div class="col-lg-12">
               <p class="lead text-center">Coins Transfer</p>
-              <p class="sublead">You can transfer HONORARY coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the honorary coin as a token of appreciation to that person. It is limited to transfering a maximum of 2 honorary coins to every peer and you cannot transfer more than one time to anyone.</p>
+              <p class="sublead">You can transfer HONORARY coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the honorary coin as a token of appreciation to that person. It is limited to transfering a maximum of 5 honorary coins to every peer and you cannot transfer more than one time to anyone.</p>
               <p class="sublead">At the end of the camp after purchasing market items, you can transfer your EARNED coins (not HONORARY) to the GenCyber Counselors whom you really appreciated and enjoyed working with by selecting their names and making the transaction. NOTE: you can send as many EARNED coins and as many times as you want to the Counselors.</p>
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
               {% csrf_token %}
                 <div class="form-group">
                   <label for="iT" class="col-sm-2 control-label">Transfer to</label>
                   <div class="input-group col-sm-10">
-                    <select class="form-control" id="iT" name="inputTransfer">
+                    <select class="form-control" id="iT" name="inputTransfer" onchange="if (this.selectedIndex) updateCurrency(this);">
                       <option>Who is the lucky one?</option>
                       {% for au in allusers %}
                         {% if au.username != request.user.username %}
-                          <option value="{{ au.username }}">{{ au.first_name }} {{ au.last_name }} (aka {{ au.username }}{% if au.is_admin %}, GenCyber Counselor{% endif %})</option>
+                          <option value="{{ au.username }}">{{ au.first_name }} {{ au.last_name }} (aka {{ au.username }}{% if au.is_admin %}, GenCyber Team{% endif %})</option>
                         {% endif %}
                       {% endfor %}
                     </select>
@@ -60,8 +61,8 @@
                 <div class="form-group">
                   <label for="iA" class="col-sm-2 control-label">Amount</label>
                   <div class="input-group col-sm-10">
-                    <div class="input-group-addon">&clubs;</div>
-                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Do not send too much :-D">
+                    <div class="input-group-addon" id="clubs-or-hearts"></div>
+                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Choose the user you want to send the money to">
                     <div class="input-group-addon">.00</div>
                   </div>
                 </div>
@@ -77,4 +78,24 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block customjs %}
+<script>
+function updateCurrency(obj) {
+    if (obj.selectedIndex == -1)
+        return null;
+
+    var clubsOrHearts = document.getElementById('clubs-or-hearts');
+    var transferTo = document.getElementById('iA');
+    if ({% if request.user|is_admin %}true{% else %}false{% endif %} || obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
+        clubsOrHearts.innerHTML = "&hearts;";
+        transferTo.placeholder = "You can send as many " + String.fromCharCode(9829) + "coins as you want";
+    }
+    else {
+        clubsOrHearts.innerHTML = "&clubs;";
+        transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9827) + "5";
+    }
+}
+</script>
 {% endblock %}
