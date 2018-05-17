@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.generic.base import RedirectView
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
@@ -7,7 +8,7 @@ app_name = 'user'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^driblets/$', views.driblets, name='driblets'),
+    #url(r'^driblets/$', views.driblets, name='driblets'),
     url(r'^register/$', views.register, name='register'),
     url(r'^wallet/$', views.wallet, name='wallet'),
     url(r'^wallet/submit/$', views.submit_wallet, name='submit-wallet'),
@@ -48,13 +49,5 @@ urlpatterns = [
     url(r'^extras/blockchain/$', views.extras_blockchain, name='extras-blockchain'),
     url(r'^extras/feedback/$', views.extras_feedback, name='extras-feedback'),
     url(r'^extras/submit-feedback/$', views.submit_extras_feedback, name='submit-extras-feedback'),
+    url(r'^.*$', RedirectView.as_view(permanent=False, url='/')),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-'''urlpatterns += patterns('',
-        url(r'^media/(?P<school_id>[0-9]+)/market/[0-9a-zA-Z_\s]+\.[jpegpnif]+$', 'django.views.static.serve', {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-        url(r'^media/no-image.jpg$', 'django.views.static.serve', {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-   )'''

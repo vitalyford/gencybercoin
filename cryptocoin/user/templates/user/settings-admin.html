@@ -10,6 +10,11 @@
           <hr>
           <h2 class="intro-text text-center">Market Settings</h2>
           <hr>
+          {% if messages %}
+            {% for message in messages %}
+                <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
           <form class="form-horizontal text-center" action="{% url 'user:submit-settings-admin' %}" method="post">
           {% csrf_token %}
           <p class="lead text-center">Click on <button type="submit" class="btn btn-success" name="save" value="settings">Save all</button> when you are done changing the settings</p>
@@ -54,7 +59,7 @@
                               <td scope="row" class="text-left">
                                   <div class="input-group" style="margin-top: 12px;" >
                                       <div class="input-group-addon">#</div>
-                                      <input type="text" class="form-control" name="top_students_number" value="{{ top_students_number }}" size="4">
+                                      <input type="number" class="form-control" name="top_students_number" value="{{ top_students_number }}" size="4" min="1">
                                   </div>
                               </td>
                               <td scope="row" class="text-justify"><p class="lead">Defines how many students with the highest number of coins will be able to order items from the market at the same time.<br>The rest of the students will have to wait their turn.<br>If you want to allow all students to order at the same time (free-for-all), set this setting to a number higher than the total number of students in the camp.<br>As soon as a student orders an item, s/he will be put at the end of the queue to allow others to order.</p></td>
@@ -66,10 +71,10 @@
                               <td scope="row" class="text-left">
                                   <div class="input-group" style="margin-top: 12px;" >
                                       <input type="text" class="form-control" name="queue_wait_period" value="{{ queue_wait_period }}" size="4">
-                                      <div class="input-group-addon">min</div>
+                                      <div class="input-group-addon">′</div>
                                   </div>
                               </td>
-                              <td scope="row" class="text-justify"><p class="lead">In case if none of the top-queued students order anything within this predefined time, the system will automatically allow 2 more students to order (and will continue doing that until eventually everyone can order). Decimal point is allowed.<br>If you set it to 0, then in a short period of time everyone will be allowed to order.<br>If you never want to allow for the queue auto-expansion, set a negative number.</p></td>
+                              <td scope="row" class="text-justify"><p class="lead">In case if none of the top-queued students order anything within this predefined time in minutes, the system will automatically allow 2 more students to order (and will continue doing that until eventually everyone can order). Decimal point is allowed.<br>If you set it to 0, then in a short period of time everyone will be allowed to order.<br>If you never want to allow for the queue auto-expansion, set a negative number.</p></td>
                           </tr>
                       </tbody>
                   </small>
@@ -94,7 +99,7 @@
                                   <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="bug_bounty_enabled" {% if bug_bounty_enabled == "true" %}checked{% endif %}>
                                   <div class="input-group" style="margin-top: 12px;">
                                       <div class="input-group-addon">&hearts;</div>
-                                      <input type="text" class="form-control" name="bug_bounty_award_amount" value="{{ bug_bounty_award_amount }}" size="4">
+                                      <input type="number" class="form-control" name="bug_bounty_award_amount" value="{{ bug_bounty_award_amount }}" size="4" min="0">
                                   </div>
                               </td>
                               <td scope="row" class="text-justify"><p class="lead">If enabled, the students will be able to look for bugs on the website and automatically earn coins as soon as they discover those.<br>They will be rewarded the amount of coins set here for every bug. The menu item will appear under Extras.</p></td>
@@ -108,7 +113,7 @@
                                   <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="se_enabled" {% if se_enabled == "true" %}checked{% endif %}>
                                   <div class="input-group" style="margin-top: 12px;">
                                       <div class="input-group-addon">&hearts;</div>
-                                      <input type="text" class="form-control" name="se_award_amount" value="{{ se_award_amount }}" size="4">
+                                      <input type="number" class="form-control" name="se_award_amount" value="{{ se_award_amount }}" size="4" min="0">
                                   </div>
                               </td>
                               <td scope="row" class="text-justify"><p class="lead">If enabled, the students will see a menu option to perform social engineering on the GenCyber faculty/mentors/students under Extras. They will be rewarded the amount of coins set here for every correct answer.<br>But first, you should add/edit the questions in the Admin->Social Engineering menu.</p></td>

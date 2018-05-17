@@ -44,7 +44,8 @@
         <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items, please wait your turn{% endif %}</p>
         <div id="students_list">
         {% for u in top_players %}
-          <p class="lead">{{forloop.counter}}. {{u}}</p>
+          <p class="lead">{{ forloop.counter }}. {{ u }}</p>
+          {% if forloop.counter == top_students_number|add:"0" %}<hr style="border-top: dashed 1px;" />{% endif %}
         {% empty %}
         <p class="lead text-center">No students are registered yet</p>
         {% endfor %}

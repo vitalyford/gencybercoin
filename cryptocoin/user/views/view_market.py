@@ -200,7 +200,6 @@ def get_top_players(request, ud):
                 try:
                     queue_wait_period = int(get_object_or_404(PortalSetting, school=ud.school, name="queue_wait_period").value)
                 except:
-                    messages.warning(request, 'Let your GenCyber organizers know that something is set wrong with their queue wait period setting: no big deal, it is set to 1 min by default.')
                     queue_wait_period = 1
                 if queue_wait_period >= 0 and (timezone.now() - latest_time).total_seconds() > queue_wait_period * 60:
                     user_with_the_latest.cart.date = timezone.now()

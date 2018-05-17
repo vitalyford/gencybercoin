@@ -48,7 +48,7 @@
                 <div class="form-group">
                   <label for="iT" class="col-sm-2 control-label">Transfer to</label>
                   <div class="input-group col-sm-10">
-                    <select class="form-control" id="iT" name="inputTransfer" onchange="if (this.selectedIndex) updateCurrency(this);">
+                    <select class="form-control" id="iT" name="inputTransfer" onchange="updateCurrency(this)">
                       <option>Who is the lucky one?</option>
                       {% for au in allusers %}
                         {% if au.username != request.user.username %}
@@ -88,7 +88,11 @@ function updateCurrency(obj) {
 
     var clubsOrHearts = document.getElementById('clubs-or-hearts');
     var transferTo = document.getElementById('iA');
-    if ({% if request.user|is_admin %}true{% else %}false{% endif %} || obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
+    if (obj.selectedIndex == 0) {
+        clubsOrHearts.innerHTML = "";
+        transferTo.placeholder = "Choose the user you want to send the money to";
+    }
+    else if ({% if request.user|is_admin %}true{% else %}false{% endif %} || obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
         clubsOrHearts.innerHTML = "&hearts;";
         transferTo.placeholder = "You can send as many " + String.fromCharCode(9829) + "coins as you want";
     }

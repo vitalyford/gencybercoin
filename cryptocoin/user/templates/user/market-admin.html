@@ -79,13 +79,13 @@
           <textarea class="form-control" rows="3" cols="40" id="iDN" name="itemDescr" maxlength="300" placeholder="Description" required></textarea>
       </div>
       <div class="form-group">
-          <input type="text" class="form-control" name="itemQuantity" maxlength="50" placeholder="Quantity [0, infinity]" required/>
+          <input type="number" class="form-control" name="itemQuantity" maxlength="50" placeholder="Quantity [0, infinity]" min="0" required/>
       </div>
       <div class="form-group">
           <input type="number" class="form-control" name="itemTier" maxlength="50" placeholder="Tier [1, 10]" min="1" max="10" required/>
       </div>
       <div class="form-group">
-          <button type="submit" class="btn btn-primary" name="addNewItem">Add</button>
+          <button type="submit" class="btn btn-primary center-block" name="addNewItem">Add</button>
       </div>
   </div>
 </form>
@@ -129,7 +129,7 @@
                           <input type="text" class="form-control" name="name{{item.id}}" maxlength="50" value="{{ item.name }}" required/>
                       </div>
                       <div class="form-group margin-marketitems-admin">
-                          Quantity<input type="text" class="form-control" name="quantity{{item.id}}" maxlength="50" value="{{ item.quantity }}" required/>
+                          Quantity<input type="number" class="form-control" name="quantity{{item.id}}" maxlength="50" value="{{ item.quantity }}" min="0" required/>
                       </div>
                       <div class="form-group margin-marketitems-admin">
                           Tier<input type="number" class="form-control" name="tier{{item.id}}" maxlength="50" value="{{ item.tier }}" min="1" max="10" required/>
@@ -137,11 +137,9 @@
                       <div class="form-group margin-marketitems-admin">
                           <textarea class="form-control" rows="5" name="descr{{item.id}}" maxlength="200" required>{{ item.description }}</textarea>
                       </div>
-                      <div class="form-group">
-                          <button type="submit" class="btn btn-primary" name="update{{item.id}}" value="{{item.id}}">Save</button>
-                      </div>
-                      <div class="form-group">
-                          <button type="submit" class="btn btn-danger" name="remove{{item.id}}" value="{{item.id}}">Remove</button>
+                      <div class="form-group margin-marketitems-admin">
+                          <button type="submit" class="btn btn-primary pull-left" name="update{{item.id}}" value="{{item.id}}">Save</button>
+                          <button type="submit" class="btn btn-default pull-right" name="remove{{item.id}}" value="{{item.id}}">Remove</button>
                       </div>
                   </form>
                 </div>

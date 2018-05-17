@@ -272,12 +272,22 @@ def market_admin(request):
     return HttpResponseRedirect(reverse('user:index'))
 
 def crop_image(image, x, y, w, h):
+    width, height = image.size
     size = 300, 300
-    cropped_image = image.crop((x, y, w + x, h + y))
-    cropped_image.thumbnail(size, Image.ANTIALIAS)
-    #rotated_image = cropped_image.rotate(r)
-    #cropped_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
-    return cropped_image
+    if x < 0 or x > width or y < 0 or y > height or w < 0 or w > width - x or h < 0 or h > height - y:
+        image.thumbnail(size, Image.ANTIALIAS)
+        return image
+    else:
+        try:
+            cropped_image = image.crop((x, y, w + x, h + y))
+        except:
+            image.thumbnail(size, Image.ANTIALIAS)
+            return image
+        else:
+            cropped_image.thumbnail(size, Image.ANTIALIAS)
+            #rotated_image = cropped_image.rotate(r)
+            #cropped_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+            return cropped_image
 
 def image_upload_market(ud, filename):
     image_path = '{school}/market/{filename}'.format(school=ud.school.id, filename=filename)
@@ -287,15 +297,14 @@ def save_image(request, ud, image_file, id):
     im = Image.open(image_file)
     im_io = BytesIO()
     try:
-        width, height = im.size
-        x = int(request.POST.get('inputX' + id))
-        y = int(request.POST.get('inputY' + id))
-        w = int(request.POST.get('inputWidth' + id))
-        h = int(request.POST.get('inputHeight' + id))
-        if x < 0 or x > width or y < 0 or y > height or w < 0 or w > width - x or h < 0 or h > height - y:
-            pass
-        else:
-            im = crop_image(im, x, y, w, h)
+        try:
+            x = int(request.POST.get('inputX' + id))
+            y = int(request.POST.get('inputY' + id))
+            w = int(request.POST.get('inputWidth' + id))
+            h = int(request.POST.get('inputHeight' + id))
+        except:
+            x, y, w, h = -1, -1, -1, -1
+        im = crop_image(im, x, y, w, h)
         format = image_file.name.split(".")[-1].lower()
         if format == "jpg":
             format = "jpeg"

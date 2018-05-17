@@ -32,7 +32,7 @@
                 <button type="submit" class="btn btn-success margin-top" name="generate" value="generate">Generate</button>
                 <br>
                 <label class="checkbox-inline">
-                    <input type="checkbox" name="infinite">Infinite (the code can always be used)
+                    <input type="checkbox" name="infinite">Infinite (can be only redeemed once per student but used by all of them)
                 </label>
           </form>
         </div>
@@ -103,7 +103,7 @@
             </table>
             <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
             {% csrf_token %}
-                <button type="submit" class="btn btn-danger" name="delete" style="margin-top: 15px;" value="registration">Delete all registration codes</button>
+                <button type="submit" class="btn btn-default" name="delete" style="margin-top: 15px;" value="registration">Delete all registration codes</button>
             </form>
             <hr>
             <h2 class="intro-text text-center">Award codes for students</h2>
@@ -127,7 +127,7 @@
             </table>
             <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
             {% csrf_token %}
-                <button type="submit" class="btn btn-danger" name="delete" style="margin-top: 15px;" value="award">Delete all award codes</button>
+                <button type="submit" class="btn btn-default" name="delete" style="margin-top: 15px;" value="award">Delete all award codes</button>
             </form>
 {% endif %}
     </div>
