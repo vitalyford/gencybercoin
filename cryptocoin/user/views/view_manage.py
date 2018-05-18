@@ -42,14 +42,14 @@ def submit_code_generator(request):
                 c.save()
         elif request.user.groups.filter(name='gcadmin').exists() and ('inputCount' in request.POST):
             award_value = 0
+            type = request.POST.get('codeType')
             try:
                 count = int(request.POST.get('inputCount'))
-                if request.POST.get('inputValue') != "":
+                if type == "award" and request.POST.get('inputValue') != "":
                     award_value = int(request.POST.get('inputValue'))
             except:
                 messages.warning(request, 'Please enter a number, not a string')
             else:
-                type = request.POST.get('codeType')
                 special_char = "#" # by default, the code is a registration code
                 if type == "award":
                     special_char = "$"
@@ -99,7 +99,7 @@ def code_generator(request):
             school_gcadmin = get_object_or_404(UserData, username=request.user.username).school
             registration_codes = []
             award_codes = {}
-            codes = Code.objects.filter(school=school_gcadmin)
+            codes = Code.objects.filter(school=school_gcadmin).order_by('id')
             for c in codes:
                 if "#" in c.allowed_hash:
                     registration_codes.append(c.allowed_hash)
