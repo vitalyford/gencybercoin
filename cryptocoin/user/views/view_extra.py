@@ -18,7 +18,7 @@ def extras_blockchain(request):
     if request.user.is_authenticated:
         context = {}
         ud = get_object_or_404(UserData, username=request.user.username)
-        transfers = TransferLogs.objects.filter(school=ud.school)
+        transfers = TransferLogs.objects.filter(school=ud.school).order_by('-id')
         if transfers.count() > 0:
             curr_day = ""
             for log in transfers:

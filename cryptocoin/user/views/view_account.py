@@ -116,7 +116,7 @@ def submit_wallet(request):
                     real_code = code_counter[0]
                     # cancel if the code is not an award
                     if real_code.name != "award":
-                        messages.warning(request, 'Wrong code! Only Award codes can be redeemed')
+                        messages.warning(request, 'Wrong code! Only reward codes can be redeemed')
                     else:
                         money_earned = real_code.value
                         # add coins to the user
@@ -132,7 +132,12 @@ def submit_wallet(request):
                         tl = TransferLogs(sender='GenCyber Team', receiver=ud.username, amount=money_earned, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                         tl.save()
                 else:
-                    messages.warning(request, 'Wrong code!')
+                    # bug bounty
+                    if inputCode == "$broken-auth":
+                        run_bug_bounty(request, ud, 'broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
+                    # end bug bounty
+                    else:
+                        messages.warning(request, 'Wrong code!')
         return HttpResponseRedirect(reverse('user:wallet'))
     return goto_login(request, "wallet")
 
@@ -206,9 +211,11 @@ def user_login_process(request):
         else:
             return HttpResponseRedirect(reverse('user:code-generator'))
     else:
-        return render(request, 'user/login.html', {
-            'error_message': "Invalid login! Try again.",
-        })
+        # bug bounty
+        if username == "admin" and password == "forgot_my_password":
+            return render(request, 'user/extras/broken-admin.html', {})
+        # end bug bounty
+        return render(request, 'user/login.html', {'error_message': "Invalid login! Try again.",})
 
 def account_creation(request):
     # check if the registration code is valid
@@ -232,7 +239,7 @@ def account_creation(request):
         return render(request, 'user/register.html', context)
     # check for duplicates
     user_with_the_same_name = UserData.objects.filter(username=request.POST.get('inputUsername'))
-    if user_with_the_same_name.count() > 0:
+    if user_with_the_same_name.count() > 0 or uname == "admin":
         context['error_message'] = "Sorry, a user named \"" + request.POST.get('inputUsername') + "\" already exists. Try again =P"
         return render(request, 'user/register.html', context)
     # if there is no duplicate user, then continue

@@ -41,7 +41,7 @@
         <!-- Select students -->
             <div class="col-sm-5">
                 <div class="form-group">
-                    <label for="selectedStudents">List of all students <button type="button" class="btn btn-default" id="selectAllStudents">Select all</button></label>
+                    <label for="selectedStudents">Students <button type="button" class="btn btn-default" id="selectAllStudents">Select all</button></label>
                     <select multiple class="form-control" name="selectedStudents" id="selectedStudents" size="{{ students|length }}">
                         {% for s in students %}
                         <option value="{{ s.id }}">{{ s.first_name }} {{ s.last_name }} (aka {{ s.username }})</option>
@@ -53,7 +53,7 @@
             <!-- Select activities -->
             <div class="col-sm-7">
                 <div class="form-group">
-                    <label for="selectedActivities">List of all activities <button type="button" class="btn btn-default" id="selectAllActivities">Select all</button></label>
+                    <label for="selectedActivities">Activities <button type="button" class="btn btn-default" id="selectAllActivities">Select all</button></label>
                     <select multiple class="form-control" name="selectedActivities" id="selectedActivities" size="{{ achievements|length }}">
                         {% for a in achievements %}
                         <option value="{{ a.id }}">{{ a.name }} ({{ a.description }})</option>

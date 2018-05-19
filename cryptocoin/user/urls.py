@@ -8,6 +8,7 @@ app_name = 'user'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^5ebe2294ecd0e0f08eab7690d2a6ee69$', views.secret, name='secret'),
     #url(r'^driblets/$', views.driblets, name='driblets'),
     url(r'^register/$', views.register, name='register'),
     url(r'^wallet/$', views.wallet, name='wallet'),

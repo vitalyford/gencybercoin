@@ -580,7 +580,7 @@ def change_mode_admin(request):
 def show_feedback_admin(request):
     context = {}
     if request.user.is_superuser:
-        feedback = Feedback.objects.all()
+        feedback = Feedback.objects.all().order_by('id')
         count = feedback.count() // 2
         context['feedbackFirst'] = feedback[:count]
         context['feedbackSecond'] = feedback[count:]
@@ -588,7 +588,7 @@ def show_feedback_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            feedback = Feedback.objects.filter(school=ud.school)
+            feedback = Feedback.objects.filter(school=ud.school).order_by('id')
             count = feedback.count() // 2
             context['feedbackFirst'] = feedback[:count]
             context['feedbackSecond'] = feedback[count:]

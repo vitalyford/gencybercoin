@@ -81,3 +81,12 @@ def password_recovery(request):
                     return HttpResponseRedirect(reverse('user:index'))
                 context['error_message'] = "Only " + str(sum(answers)) + " answers are correct, try again"
     return render(request, 'user/password-recovery.html', context)
+
+def secret(request):
+    if request.user.is_authenticated:
+        ud = get_object_or_404(UserData, username=request.user.username)
+        # bug bounty
+        run_bug_bounty(request, ud, 'sensitive_data_exposure', 'Congrats! You found a secret page that programmers sometimes forget about. This kind of bugs may expose sensitive data.', 'https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure')
+        # end bug bounty
+        return render(request, 'user/extras/secret.html', {})
+    return HttpResponseRedirect(reverse('user:index'))
