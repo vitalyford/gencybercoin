@@ -75,7 +75,7 @@
             <div class="row">
               <div class="box">
             {% endif %}
-                <div class="col-md-3 text-center">
+                <div class="col-md-3 col-sm-6 text-center">
 
                   {% if item.quantity == 0 %}
                   <div class="container-sold text-center">
@@ -91,13 +91,15 @@
                   <p class="text-center lead">{{ item.name }} [&times;{{ item.quantity }}]</p>
                   {% endif %}
 
-                  <small class="text-center">{{ item.description }}</small><hr>
+                  <small class="text-center">{{ item.description }}</small>
+                  <hr class="hidden-xs">
                   {% if market_enabled == "true" %}
                   <form class="form-horizontal" {% if top_player == "true" and market_enabled == "true" and item.quantity != 0 %}action="{% url 'user:submit-cart' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post"{% endif %}>
                   {% csrf_token %}
                       <input type="hidden" name="checkers" value="{{ item.cost_permanent }}"/>
                       <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
                       <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}>Add to cart</button>
+                      <hr class="visible-xs">
                   </form>
                   {% endif %}
                 </div>

@@ -22,22 +22,49 @@
             <hr>
             <h2 class="intro-text text-center">GenCyberCoin Wallet</h2>
             <hr>
-            {% if request.user|is_admin %}<p class="lead text-center">As an admin, you can send the earned coins directly to your students</p>{% endif %}
+            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer the earned coins directly to your students</p>{% endif %}
             {% if messages %}
               {% for message in messages %}
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
               {% endfor %}
             {% endif %}
+
+        {% if userdata.is_admin and not request.user|student_mode %}
+        <form class="form-horizontal" action="{% url 'user:submit-wallet' %}" method="post">
+        {% csrf_token %}
+        {% endif %}
             <div class="col-sm-6 text-center">
               <h3>Honorary Coins</h3>
               <img src="{% static 'user/img/honory-coin.jpg' %}" class="img-responsive img-circle" alt="Honorary Coins" style="margin: 0 auto; max-width: 100px;" />
-              <p class="text-center coins" style="background-color: rgb(0,255,255,0.3)">&clubs;{{ userdata.honory_coins }}</p>
+              {% if userdata.is_admin and not request.user|student_mode %}
+                <div class="input-group coins">
+                    <div class="input-group-addon">&clubs;</div>
+                    <input type="number" class="form-control input-lg text-center" name="honoraryCoins" value="{{ userdata.honory_coins }}" size="4" min="0">
+                </div>
+              {% else %}
+              <p class="text-center coins">&clubs;{{ userdata.honory_coins }}</p>
+              {% endif %}
             </div>
             <div class="col-sm-6 text-center">
               <h3>Earned Coins</h3>
               <img src="{% static 'user/img/earned-coin.jpg' %}" class="img-responsive img-circle" alt="Earned Coins" style="margin: 0 auto; max-width: 100px;" />
-              <p class="text-center coins" style="background-color: rgb(0,255,255,0.3)">&hearts;{{ userdata.permanent_coins }}</p>
+            {% if userdata.is_admin and not request.user|student_mode %}
+              <div class="input-group coins">
+                  <div class="input-group-addon">&hearts;</div>
+                  <input type="number" class="form-control input-lg text-center" name="permanentCoins" value="{{ userdata.permanent_coins }}" size="4" min="0">
+              </div>
+            {% else %}
+              <p class="text-center coins">&hearts;{{ userdata.permanent_coins }}</p>
+            {% endif %}
             </div>
+        {% if userdata.is_admin and not request.user|student_mode %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary center-block" name="saveCoins">Save Coins</button>
+            </div>
+            <hr>
+        </form>
+        {% csrf_token %}
+        {% endif %}
 
             <div class="col-lg-12">
               <p class="lead text-center">Coins Transfer</p>

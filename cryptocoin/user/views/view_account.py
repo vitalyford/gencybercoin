@@ -78,8 +78,26 @@ def wallet(request):
         return render(request, 'user/wallet.html', context)
     return goto_login(request, "wallet")
 
+def save_coins(request, ud):
+    try:
+        honorary_coins  = int(request.POST.get('honoraryCoins'))
+        permanent_coins = int(request.POST.get('permanentCoins'))
+        if honorary_coins < 0 or permanent_coins < 0:
+            messages.warning(request, 'Both honorary or earned have to be >= 0')
+            return
+    except:
+        messages.warning(request, 'Both honorary or earned coins have to be integers >= 0')
+    else:
+        ud.honory_coins    = honorary_coins
+        ud.permanent_coins = permanent_coins
+        ud.save()
+
 def submit_wallet(request):
     if request.user.is_authenticated:
+        if 'saveCoins' in request.POST:
+            ud = get_object_or_404(UserData, username=request.user.username)
+            if ud.is_admin:
+                save_coins(request, ud)
         if 'inputCode' in request.POST:
             ud = get_object_or_404(UserData, username=request.user.username)
             inputCode = str(request.POST.get('inputCode')).lower()
