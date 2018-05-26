@@ -38,7 +38,7 @@
         <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
 {% endif %}
         <hr>
-        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick" id="queue-info"></i></h2>
+        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick, this number will change as time goes on" id="queue-info"></i></h2>
         <hr>
 {% if market_enabled == "true" %}
         <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items, please wait your turn{% endif %}</p>

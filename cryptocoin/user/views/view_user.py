@@ -9,6 +9,8 @@ def get_questions():
     return {'questions': PassRecQuestions.objects.all()}
 
 def register(request):
+    if request.user.is_authenticated:
+        return render(request, 'user/index.html', {})
     return render(request, 'user/register.html', get_questions())
 
 def user_logout(request):

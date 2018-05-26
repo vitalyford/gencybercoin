@@ -537,8 +537,8 @@ def submit_student_manager_admin(request):
             if request.POST.get('hiddenDelete') == "All":
                 TransferLogs.objects.all().delete()
                 CodeRedeemer.objects.all().delete()
-                UserData.objects.all(~Q(username=ud.username)).delete()
-                User.objects.all(~Q(username=ud.username)).delete()
+                UserData.objects.filter(~Q(username=ud.username)).delete()
+                User.objects.filter(~Q(username=ud.username)).delete()
                 messages.info(request, 'All user data except yours have been deleted')
             else:
                 try:
@@ -582,6 +582,8 @@ def show_feedback_admin(request):
     if request.user.is_superuser:
         feedback = Feedback.objects.all().order_by('id')
         count = feedback.count() // 2
+        for f in feedback:
+            f.date = f.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
         context['feedbackFirst'] = feedback[:count]
         context['feedbackSecond'] = feedback[count:]
         return render(request, 'user/show-feedback-admin.html', context)
@@ -590,6 +592,8 @@ def show_feedback_admin(request):
         if request.user.groups.filter(name='gcadmin').exists():
             feedback = Feedback.objects.filter(school=ud.school).order_by('id')
             count = feedback.count() // 2
+            for f in feedback:
+                f.date = f.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
             context['feedbackFirst'] = feedback[:count]
             context['feedbackSecond'] = feedback[count:]
             return render(request, 'user/show-feedback-admin.html', context)

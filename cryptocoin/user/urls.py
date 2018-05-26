@@ -2,11 +2,13 @@ from django.conf.urls import url
 from django.views.generic.base import RedirectView
 from django.conf.urls.static import static
 from django.conf import settings
+from django.contrib import admin
 from . import views
 
 app_name = 'user'
 
 urlpatterns = [
+    url(r'^gcsuperuser/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^5ebe2294ecd0e0f08eab7690d2a6ee69$', views.secret, name='secret'),
     #url(r'^driblets/$', views.driblets, name='driblets'),

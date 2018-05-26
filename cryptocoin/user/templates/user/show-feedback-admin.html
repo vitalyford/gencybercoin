@@ -1,5 +1,6 @@
 {% extends "base_generic.html" %}
 
+{% load static %}
 {% block content %}
 <div class="row">
     <div class="box">
@@ -13,20 +14,20 @@
               {% endfor %}
             {% endif %}
             <div class="col-sm-6">
-                <div class="normal-text">
                     {% for f in feedbackFirst %}
-                    <p class="lead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}{{ f.date }}<br>{{ f.message }}</p>
+                    <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
                     {% endfor %}
-                </div>
             </div>
             <div class="col-sm-6">
-                <div class="normal-text">
                     {% for f in feedbackSecond %}
-                    <p class="lead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}{{ f.date }}<br>{{ f.message }}</p>
+                    <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
                     {% endfor %}
-                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block customjs %}
+    <script src="{% static 'user/js/timetolocal.js' %}"></script>
 {% endblock %}

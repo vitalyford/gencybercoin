@@ -217,6 +217,15 @@ def user_login_process(request):
         # end bug bounty
         return render(request, 'user/login.html', {'error_message': "Invalid login! Try again.",})
 
+def check_fields(request):
+    if not 'inputUsername' in request.POST or not 'inputPassword' in request.POST:
+        return False
+    uname = request.POST.get('inputUsername')
+    pswd = request.POST.get('inputPassword')
+    if uname.strip() == "" or pswd.strip() == "":
+        return False
+    return True
+
 def account_creation(request):
     # check if the registration code is valid
     code = str(request.POST.get('inputCode')).lower()
@@ -233,21 +242,24 @@ def account_creation(request):
     questions = PassRecQuestions.objects.all()
     context = {'username': uname, 'password': pswd, 'first_name': fname, 'last_name': lname, 'q1': q1, 'q2': q2, 'q3': q3, 'a1': a1, 'a2': a2, 'a3': a3, 'code': code, 'questions': questions}
     try:
+        if not "#" in code:
+            raise
         school_id = Code.objects.filter(allowed_hash=code)[0].school
     except:
         context['error_message'] = "Registration code is not valid! Check it again or contact the GenCyber Squad for help."
         return render(request, 'user/register.html', context)
     # check for duplicates
-    user_with_the_same_name = UserData.objects.filter(username=request.POST.get('inputUsername'))
+    user_with_the_same_name = UserData.objects.filter(username=uname)
     if user_with_the_same_name.count() > 0 or uname == "admin":
-        context['error_message'] = "Sorry, a user named \"" + request.POST.get('inputUsername') + "\" already exists. Try again =P"
+        context['error_message'] = "Sorry, a user named \"" + uname + "\" already exists. Try again =P"
+        return render(request, 'user/register.html', context)
+    if not check_fields(request):
+        context['error_message'] = "Username and password cannot be empty."
         return render(request, 'user/register.html', context)
     # if there is no duplicate user, then continue
     try:
         # create an authenticated account and assign it a group
-        uname = request.POST.get('inputUsername')
-        passw = request.POST.get('inputPassword')
-        user = User.objects.create_user(username=uname, first_name=request.POST.get('inputFirstname'), last_name=request.POST.get('inputLastname'), email='dummy@email.coin', password=passw)
+        user = User.objects.create_user(username=uname, first_name=fname, last_name=lname, email='dummy@email.coin', password=pswd)
         # if the code belongs to gcadmin, else it belongs to gcstudent
         if "!" in code:
             group, _ = Group.objects.get_or_create(name='gcadmin')
@@ -260,27 +272,22 @@ def account_creation(request):
         is_admin = False
         if group.name == "gcadmin":
             is_admin = True
-        ud = UserData(username=uname, first_name=request.POST.get('inputFirstname'),
-            last_name=request.POST.get('inputLastname'), password=passw, is_admin=is_admin, school=school_id)
+        ud = UserData(username=uname, first_name=fname,
+            last_name=lname, password=pswd, is_admin=is_admin, school=school_id)
         ud.save()
         c = Cart(user_data=ud)
         c.save()
-        ua = UserAnswers(data=ud, answer1=request.POST.get('inputA1'),
-            answer2=request.POST.get('inputA2'),
-            answer3=request.POST.get('inputA3'), question1=request.POST.get('inputQ1'),
-            question2=request.POST.get('inputQ2'), question3=request.POST.get('inputQ3'))
+        ua = UserAnswers(data=ud, answer1=a1,
+            answer2=a2,
+            answer3=a3, question1=q1,
+            question2=q2, question3=q3)
         ua.save()
         if not Code.objects.get(allowed_hash=code).infinite:
             Code.objects.filter(allowed_hash=code)[0].delete()
 
-        user = authenticate(username=uname, password=passw)
+        user = authenticate(username=uname, password=pswd)
         login(request, user)
-    except ():
-        return render(request, 'user/register.html', {
-            'error_message': "Something went wrong, whoops. Please contact the GenCyber Squad.",
-        })
+    except:
+        return render(request, 'user/register.html', {'error_message': "Something went wrong, whoops. Please contact the GenCyber Team.",})
     else:
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(reverse('user:account'))
