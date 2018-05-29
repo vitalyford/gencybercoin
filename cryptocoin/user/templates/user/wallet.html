@@ -90,7 +90,7 @@
                   <label for="iA" class="col-sm-2 control-label">Amount</label>
                   <div class="input-group col-sm-10">
                     <div class="input-group-addon" id="clubs-or-hearts"></div>
-                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Choose the user you want to send the money to">
+                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Choose the user you want to send the money to" disabled>
                     <div class="input-group-addon">.00</div>
                   </div>
                 </div>
@@ -119,14 +119,17 @@ function updateCurrency(obj) {
     if (obj.selectedIndex == 0) {
         clubsOrHearts.innerHTML = "";
         transferTo.placeholder = "Choose the user you want to send the money to";
+        transferTo.disabled = true;
     }
     else if ({% if request.user|is_admin %}true{% else %}false{% endif %} || obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
         clubsOrHearts.innerHTML = "&hearts;";
         transferTo.placeholder = "You can send as many " + String.fromCharCode(9829) + "coins as you want";
+        transferTo.disabled = false;
     }
     else {
         clubsOrHearts.innerHTML = "&clubs;";
         transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9827) + "5";
+        transferTo.disabled = false;
     }
 }
 </script>

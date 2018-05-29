@@ -66,10 +66,8 @@
                     <li><a href="{% url 'user:register' %}">Register</a></li>
                     {% else %}
                     <li><a href="{% url 'user:index' %}">Home</a></li>
-                        {% comment %}{% if not request.user|has_group:"gcadmin" %}{% endcomment %}
                     <li><a href="{% url 'user:account' %}">Account</a></li>
                     <li><a href="{% url 'user:wallet' %}">Wallet</a></li>
-                        {% comment %}{% endif %}{% endcomment %}
                     {% endif %}
                 {% else %}
                     <li><a href="{% url 'user:account' %}">My account</a></li>
@@ -110,7 +108,6 @@
                             <li><a href="{% url 'user:student-carts-admin' %}">Student Orders</a></li>
                             <li><a href="{% url 'user:student-manager-admin' %}">Student Manager</a></li>
                             <hr style="margin: 2px;">
-                            <li><a href="#">Reports/Export</a></li>
                             <li><a href="{% url 'user:settings-admin' %}">Display Settings</a></li>
                             {% endif %}
                             <hr style="margin: 2px;">
