@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block customcss %}
-    <link href="{% static 'user/css/cropper/cropper.css' %}" rel="stylesheet">
+    <link href="{% static 'user/css/cropper/cropper.min.css' %}" rel="stylesheet">
     <style>
       .label {
         cursor: pointer;
@@ -142,6 +142,6 @@
 {% endblock %}
 
 {% block customjs %}
-<script src="{% static 'user/js/cropper/cropper.js' %}"></script>
-<script src="{% static 'user/js/cropper/cropme.js' %}"></script>
+<script src="{% static 'user/js/cropper/cropper.min.js' %}"></script>
+<script src="{% static 'user/js/cropper/cropme.min.js' %}"></script>
 {% endblock %}
