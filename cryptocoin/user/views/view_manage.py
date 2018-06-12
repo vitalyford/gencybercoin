@@ -11,7 +11,7 @@ def generate_gencyber_code():
     data = ""
     while done < 100:
         curr_time = str(time.localtime())
-        r = randint(0, 1000)
+        r = randint(0, 1000000)
         start = randint(0, 34)
         data = str(hashlib.sha1((str(curr_time) + str(r)).encode('utf-8')).hexdigest()[start:start + 5])
         if any(k == '0' for k in data) or any(k == 'o' for k in data):
@@ -57,7 +57,7 @@ def submit_code_generator(request):
                 for i in range(count):
                     key = str(school_gcadmin.id) + special_char + generate_gencyber_code()
                     if type == "registration":
-                         c = Code(allowed_hash=key, name=school_gcadmin.name, school=school_gcadmin, infinite=is_infinite)
+                         c = Code(allowed_hash=key, school=school_gcadmin, infinite=is_infinite)
                     elif type == "award":
                          c = Code(allowed_hash=key, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
                     c.save()
@@ -102,7 +102,10 @@ def code_generator(request):
             codes = Code.objects.filter(school=school_gcadmin).order_by('id')
             for c in codes:
                 if "#" in c.allowed_hash:
-                    registration_codes.append(c.allowed_hash)
+                    if c.infinite:
+                        registration_codes.append(c.allowed_hash + " (inf)")
+                    else:
+                        registration_codes.append(c.allowed_hash)
                 elif '$' in c.allowed_hash:
                     if c.infinite:
                         award_codes[c.allowed_hash] = str(c.value) + " (inf)"

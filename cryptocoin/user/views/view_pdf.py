@@ -20,7 +20,7 @@ def pdf_codes_admin(request):
         data = Code.objects.filter(school=ud.school, allowed_hash__contains='$')
         n = 5
     elif code_name == 'registration':
-        data = Code.objects.filter(school=ud.school, allowed_hash__contains='#').values_list('allowed_hash', flat=True)
+        data = Code.objects.filter(school=ud.school, allowed_hash__contains='#')#.values_list('allowed_hash', flat=True)
     else:
         messages.warning(request, 'The code request should be either for registration or reward codes')
         return HttpResponseRedirect(reverse('user:code-generator'))
