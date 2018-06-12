@@ -73,7 +73,7 @@ def submit_extras_feedback(request):
                 message = request.POST.get('message')
                 f = Feedback(school=ud.school, message=message)
                 f.save()
-                if "<script" in message:
+                if "<script" in message.lower():
                     # bug bounty
                     run_bug_bounty(request, ud, 'stored_XSS', 'Congrats! You found a programming bug called stored cross-site scripting! This bug would allow you to execute malicious javascript code in browsers.', 'https://excess-xss.com/')
                     # end bug bounty
