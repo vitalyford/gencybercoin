@@ -242,7 +242,7 @@ def account_creation(request):
     questions = PassRecQuestions.objects.all()
     context = {'username': uname, 'password': pswd, 'first_name': fname, 'last_name': lname, 'q1': q1, 'q2': q2, 'q3': q3, 'a1': a1, 'a2': a2, 'a3': a3, 'code': code, 'questions': questions}
     try:
-        if not "#" in code:
+        if not "#" in code and not "!" in code:
             raise
         school_id = Code.objects.filter(allowed_hash=code)[0].school
     except:
