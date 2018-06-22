@@ -22,6 +22,12 @@ def extras_blockchain(request):
         if transfers.count() > 0:
             curr_day = ""
             for log in transfers:
+                # anonymize the usernames
+                sender_name = log.sender
+                receiver_name = log.receiver
+                log.sender = "".join((sender_name[0], "*" * len(sender_name[1:])))
+                log.receiver = "".join((receiver_name[0], "*" * len(receiver_name[1:])))
+                # fix the dates
                 log.day = log.date.strftime("%A, %B %d")
                 log.date = log.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
                 if curr_day != log.day:
@@ -31,12 +37,12 @@ def extras_blockchain(request):
                     log.switch_next_day = False
                 context['transfers'] = transfers
                 try:
-                    if get_object_or_404(UserData, username=log.sender).is_admin:
+                    if get_object_or_404(UserData, username=sender_name).is_admin:
                         log.sender += " (GenCyber Team)"
                 except:
                     pass
                 try:
-                    if get_object_or_404(UserData, username=log.receiver).is_admin:
+                    if get_object_or_404(UserData, username=receiver_name).is_admin:
                         log.receiver += " (GenCyber Team)"
                 except:
                     pass

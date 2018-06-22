@@ -22,7 +22,7 @@
             <hr>
             <h2 class="intro-text text-center">GenCyberCoin Wallet</h2>
             <hr>
-            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer the earned coins directly to your students</p>{% endif %}
+            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer the reward coins directly to your students</p>{% endif %}
             {% if messages %}
               {% for message in messages %}
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
@@ -34,8 +34,8 @@
         {% csrf_token %}
         {% endif %}
             <div class="col-sm-6 text-center">
-              <h3>Honorary Coins</h3>
-              <img src="{% static 'user/img/honory-coin.jpg' %}" class="img-responsive img-circle" alt="Honorary Coins" style="margin: 0 auto; max-width: 100px;" />
+              <h3>Appreciation Coins</h3>
+              <img src="{% static 'user/img/honory-coin.jpg' %}" class="img-responsive img-circle" alt="Appreciation Coins" style="margin: 0 auto; max-width: 100px;" />
               {% if userdata.is_admin and not request.user|student_mode %}
                 <div class="input-group coins">
                     <div class="input-group-addon">&clubs;</div>
@@ -46,8 +46,8 @@
               {% endif %}
             </div>
             <div class="col-sm-6 text-center">
-              <h3>Earned Coins</h3>
-              <img src="{% static 'user/img/earned-coin.jpg' %}" class="img-responsive img-circle" alt="Earned Coins" style="margin: 0 auto; max-width: 100px;" />
+              <h3>Reward Coins</h3>
+              <img src="{% static 'user/img/earned-coin.jpg' %}" class="img-responsive img-circle" alt="Reward Coins" style="margin: 0 auto; max-width: 100px;" />
             {% if userdata.is_admin and not request.user|student_mode %}
               <div class="input-group coins">
                   <div class="input-group-addon">&hearts;</div>
@@ -68,8 +68,8 @@
 
             <div class="col-lg-12">
               <p class="lead text-center">Coins Transfer</p>
-              <p class="sublead">You can transfer HONORARY coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the honorary coin as a token of appreciation to that person. It is limited to transfering a maximum of 5 honorary coins to every peer and you cannot transfer more than one time to anyone.</p>
-              <p class="sublead">At the end of the camp after purchasing market items, you can transfer your EARNED coins (not HONORARY) to the GenCyber Counselors whom you really appreciated and enjoyed working with by selecting their names and making the transaction. NOTE: you can send as many EARNED coins and as many times as you want to the Counselors.</p>
+              <p class="sublead">You can transfer REWARD coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the reward coin as a token of appreciation to that person. It is limited to transfering a maximum of 5 reward coins to every peer and you cannot transfer more than one time to anyone.</p>
+              <p class="sublead">You can also transfer your APPRECIATION coins (not REWARD) to the GenCyber Chaperons whom you really appreciated and enjoyed working with by selecting their names and making the transaction. NOTE: you can send as many APPRECIATION coins and as many times as you want to the Chaperons.</p>
               <p class="sublead">All transfers are captured in the Features -> Blockchain.</p>
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
               {% csrf_token %}
@@ -121,14 +121,14 @@ function updateCurrency(obj) {
         transferTo.placeholder = "Choose the user you want to send the money to";
         transferTo.disabled = true;
     }
-    else if ({% if request.user|is_admin %}true{% else %}false{% endif %} || obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
-        clubsOrHearts.innerHTML = "&hearts;";
-        transferTo.placeholder = "You can send as many " + String.fromCharCode(9829) + "coins as you want";
+    else if (obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
+        clubsOrHearts.innerHTML = "&clubs;";
+        transferTo.placeholder = "You can send as many " + String.fromCharCode(9827) + "coins as you want";
         transferTo.disabled = false;
     }
     else {
-        clubsOrHearts.innerHTML = "&clubs;";
-        transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9827) + "5";
+        clubsOrHearts.innerHTML = "&hearts;";
+        transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9829) + "5";
         transferTo.disabled = false;
     }
 }

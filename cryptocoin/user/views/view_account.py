@@ -155,11 +155,14 @@ def transfer(request):
         messages.warning(request, 'Select the user to send the money to')
     else:
         amount_str = request.POST.get('inputAmount')
-        if receiver.is_admin or sender.is_admin:
+        if receiver.is_admin:
+            max_amount_allowed_to_send = 100000
+            coins = sender.honory_coins
+        elif sender.is_admin:
             max_amount_allowed_to_send = 100000
             coins = sender.permanent_coins
         else:
-            coins = sender.honory_coins
+            coins = sender.permanent_coins
         amount_not_integer = False
         try:
             amount = int(amount_str)
@@ -184,12 +187,12 @@ def transfer(request):
                         if amount > max_amount_allowed_to_send:
                             amount = max_amount_allowed_to_send
                             messages.warning(request, 'Sorry, you can send only up to ' + str(max_amount_allowed_to_send) + ' coins at a time, we changed it to ' + str(max_amount_allowed_to_send) + ' because of the budget cuts =(')
-                        if receiver.is_admin or sender.is_admin:
-                            receiver.permanent_coins = receiver.permanent_coins + amount
-                            sender.permanent_coins = sender.permanent_coins - amount
-                        else:
+                        if receiver.is_admin:
                             receiver.honory_coins = receiver.honory_coins + amount
                             sender.honory_coins = sender.honory_coins - amount
+                        else:
+                            receiver.permanent_coins = receiver.permanent_coins + amount
+                            sender.permanent_coins = sender.permanent_coins - amount
                         receiver.save()
                         sender.save()
                         # log the sender/receiver and timestamp only if amount > 0
