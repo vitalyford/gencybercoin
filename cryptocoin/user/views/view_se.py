@@ -14,7 +14,7 @@ def submit_social_engineering(request):
                     continue
                 try: # to parse out the POST params
                     question_id = int(key)
-                    answer = request.POST.get(key).lower().strip()
+                    answer = request.POST.get(key).lower().replace(" ", "")
                 except:
                     # bug bounty
                     run_bug_bounty(request, ud, 'html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
@@ -60,7 +60,7 @@ def submit_social_engineering_admin(request):
                         if "addQ" in key:
                             question = request.POST.get(key)
                         if "addA" in key:
-                            answer = request.POST.get(key).lower().strip()
+                            answer = request.POST.get(key).lower().replace(" ", "")
                     if question != "" and answer != "":
                         se_ques_answ = SEQuesAnsw(question=question, answer=answer, school=ud.school)
                         se_ques_answ.save()
@@ -72,7 +72,7 @@ def submit_social_engineering_admin(request):
                             try:
                                 id = int(key.replace("q", ""))
                                 question = request.POST.get(key)
-                                answer = request.POST.get("a" + str(id)).lower().strip()
+                                answer = request.POST.get("a" + str(id)).lower().replace(" ", "")
                                 se_ques_answ = get_object_or_404(SEQuesAnsw, id=id)
                                 se_ques_answ.question = question
                                 se_ques_answ.answer = answer
