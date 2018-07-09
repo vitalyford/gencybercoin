@@ -19,7 +19,7 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gencybercoin.tk', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['gencybercoin.tk', 'www.gencybercoin.tk', '.elasticbeanstalk.com', '34.202.109.150', '52.71.151.103', '127.0.0.1', 'localhost']
 
 # Application definition
 
