@@ -21,7 +21,8 @@
                 <select name="codeType" class="form-control margin-top" required onchange="updateCode(this)">
                     <option value="" disabled selected>Code type</option>
                     <option value="registration">Registration</option>
-                    <option value="award">Award coin</option>
+                    <option value="award">Random award coin</option>
+                    <option value="custom">Custom award coin</option>
                 </select>
                 <input type="text" class="form-control margin-top" id="iV" name="inputValue" maxlength="15" placeholder="" disabled/>
               {% endif %}
@@ -141,13 +142,21 @@ function updateCode(obj) {
         return null;
 
     var awardValue = document.getElementById('iV');
-    if (obj.value == "award") {
+    if (obj.value == "award" || obj.value == "custom") {
         awardValue.placeholder = "Award value, 0 is default";
         awardValue.disabled = false;
     }
     else {
         awardValue.placeholder = "";
         awardValue.disabled = true;
+    }
+
+    var iC = document.getElementById('iC');
+    if (obj.value == "custom") {
+        iC.placeholder = "Enter your custom code";
+    }
+    else {
+        iC.placeholder = "Number of codes";
     }
 }
 </script>

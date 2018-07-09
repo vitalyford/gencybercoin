@@ -44,22 +44,32 @@ def submit_code_generator(request):
             award_value = 0
             type = request.POST.get('codeType')
             try:
-                count = int(request.POST.get('inputCount'))
-                if type == "award" and request.POST.get('inputValue') != "":
+                count, custom_code = 0, "0"
+                if type == "custom":
+                    custom_code = request.POST.get('inputCount')
+                else:
+                    count = int(request.POST.get('inputCount'))
+                if (type == "award" or type == "custom") and request.POST.get('inputValue') != "":
                     award_value = int(request.POST.get('inputValue'))
             except:
                 messages.warning(request, 'Please enter a number, not a string')
             else:
-                special_char = "#" # by default, the code is a registration code
-                if type == "award":
-                    special_char = "$"
                 school_gcadmin = get_object_or_404(UserData, username=request.user.username).school
-                for i in range(count):
-                    key = str(school_gcadmin.id) + special_char + generate_gencyber_code()
-                    if type == "registration":
-                         c = Code(allowed_hash=key, school=school_gcadmin, infinite=is_infinite)
-                    elif type == "award":
-                         c = Code(allowed_hash=key, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
+                if type != "custom":
+                    special_char = "#" # by default, the code is a registration code
+                    if type == "award":
+                        special_char = "$"
+                    for i in range(count):
+                        key = str(school_gcadmin.id) + special_char + generate_gencyber_code()
+                        if type == "registration":
+                             c = Code(allowed_hash=key, school=school_gcadmin, infinite=is_infinite)
+                        elif type == "award":
+                             c = Code(allowed_hash=key, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
+                        c.save()
+                else:
+                    if not "$" in custom_code:
+                        messages.warning(request, 'Please have a $ sign in your code')
+                    c = Code(allowed_hash=custom_code, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
                     c.save()
         elif 'delete' in request.POST:
             if request.POST.get('delete') == "registration":
