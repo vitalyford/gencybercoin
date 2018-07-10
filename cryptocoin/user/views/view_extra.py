@@ -25,8 +25,9 @@ def extras_blockchain(request):
                 # anonymize the usernames
                 sender_name = log.sender
                 receiver_name = log.receiver
-                log.sender = "".join((sender_name[0], "*" * len(sender_name[1:])))
-                log.receiver = "".join((receiver_name[0], "*" * len(receiver_name[1:])))
+                if not ud.is_admin:
+                    log.sender = "".join((sender_name[0], "*" * len(sender_name[1:])))
+                    log.receiver = "".join((receiver_name[0], "*" * len(receiver_name[1:])))
                 # fix the dates
                 log.day = log.date.strftime("%A, %B %d")
                 log.date = log.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
