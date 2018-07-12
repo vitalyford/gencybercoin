@@ -41,11 +41,15 @@ def extras_social_engineering(request):
     if request.user.is_authenticated:
         context = {}
         ud = get_object_or_404(UserData, username=request.user.username)
-        all_se_questions = SEQuesAnsw.objects.filter(school=ud.school).order_by('id')
-        se_correct_answers = SECorrectAnswer.objects.filter(user_data=ud).values_list('se_ques_answ__id', flat=True)
-        context['allquestions'] = all_se_questions
-        context['correctanswers'] = se_correct_answers
-        return render(request, 'user/extras/social-engineering.html', context)
+        se_enabled = get_object_or_404(PortalSetting, name='se_enabled', school=ud.school).value
+        if se_enabled == "true":
+            all_se_questions = SEQuesAnsw.objects.filter(school=ud.school).order_by('id')
+            se_correct_answers = SECorrectAnswer.objects.filter(user_data=ud).values_list('se_ques_answ__id', flat=True)
+            context['allquestions'] = all_se_questions
+            context['correctanswers'] = se_correct_answers
+            return render(request, 'user/extras/social-engineering.html', context)
+        else:
+            return HttpResponseRedirect(reverse('user:index'))
     return goto_login(request, "social engineering")
 
 def submit_social_engineering_admin(request):

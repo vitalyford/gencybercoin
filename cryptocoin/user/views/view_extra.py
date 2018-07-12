@@ -22,10 +22,15 @@ def extras_blockchain(request):
         if transfers.count() > 0:
             curr_day = ""
             for log in transfers:
-                # anonymize the usernames
-                sender_name = log.sender
-                receiver_name = log.receiver
-                if not ud.is_admin:
+                if ud.is_admin:
+                    sender_name = get_object_or_404(UserData, username=log.sender)
+                    receiver_name = get_object_or_404(UserData, username=log.receiver)
+                    log.sender = "".join((sender_name.first_name, " ", sender_name.last_name))
+                    log.receiver = "".join((receiver_name.first_name, " ", receiver_name.last_name))
+                else:
+                    # anonymize the usernames
+                    sender_name = log.sender
+                    receiver_name = log.receiver
                     log.sender = "".join((sender_name[0], "*" * len(sender_name[1:])))
                     log.receiver = "".join((receiver_name[0], "*" * len(receiver_name[1:])))
                 # fix the dates
