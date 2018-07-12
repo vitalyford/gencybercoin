@@ -26,9 +26,13 @@ def extras_blockchain(request):
                     if log.sender != "GenCyber Team":
                         sender_name = get_object_or_404(UserData, username=log.sender)
                         log.sender = sender_name.first_name + " " + sender_name.last_name
+                        if sender_name.is_admin:
+                            log.sender += " (GenCyber Team)"
                     if log.receiver != "GenCyber Team":
                         receiver_name = get_object_or_404(UserData, username=log.receiver)
                         log.receiver = receiver_name.first_name + " " + receiver_name.last_name
+                        if receiver_name.is_admin:
+                            log.receiver += " (GenCyber Team)"
                 else:
                     # anonymize the usernames
                     sender_name = log.sender
