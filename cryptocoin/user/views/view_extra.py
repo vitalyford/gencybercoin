@@ -23,10 +23,12 @@ def extras_blockchain(request):
             curr_day = ""
             for log in transfers:
                 if ud.is_admin:
-                    sender_name = get_object_or_404(UserData, username=log.sender)
-                    receiver_name = get_object_or_404(UserData, username=log.receiver)
-                    log.sender = "".join((sender_name.first_name, " ", sender_name.last_name))
-                    log.receiver = "".join((receiver_name.first_name, " ", receiver_name.last_name))
+                    if log.sender != "GenCyber Team":
+                        sender_name = get_object_or_404(UserData, username=log.sender)
+                        log.sender = sender_name.first_name + " " + sender_name.last_name
+                    if log.receiver != "GenCyber Team":
+                        receiver_name = get_object_or_404(UserData, username=log.receiver)
+                        log.receiver = receiver_name.first_name + " " + receiver_name.last_name
                 else:
                     # anonymize the usernames
                     sender_name = log.sender
