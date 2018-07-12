@@ -128,7 +128,7 @@ function updateCurrency(obj) {
     }
     else {
         clubsOrHearts.innerHTML = "&hearts;";
-        transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9829) + "0";
+        transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9829) + {{ amount_allowed_to_send }};
         transferTo.disabled = false;
     }
 }

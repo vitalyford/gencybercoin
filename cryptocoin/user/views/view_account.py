@@ -74,7 +74,15 @@ def submit_user_account(request):
 
 def wallet(request):
     if request.user.is_authenticated:
+        ud = get_object_or_404(UserData, username=request.user.username)
         context = get_context(request, True)
+        try:
+            amount_allowed_to_send = int(get_object_or_404(PortalSetting, school=ud.school, name='amount_allowed_to_send').value)
+            if amount_allowed_to_send < 0:
+                raise
+        except:
+            amount_allowed_to_send = 2
+        context.update({'amount_allowed_to_send': amount_allowed_to_send})
         return render(request, 'user/wallet.html', context)
     return goto_login(request, "wallet")
 
@@ -146,8 +154,14 @@ def transfer(request):
         return goto_login(request, "transfer")
     # gcadmins are also counselors => college students/helpers
     # at the end of gencyber, K-12 students can give the leftover coins
-    # to the counselors to bet on the best one, just for fun
-    max_amount_allowed_to_send = settings.MAX_AMOUNT_ALLOWED_TO_SEND
+    # to the counselors to bet on the best one, just for
+    ud = get_object_or_404(UserData, username=request.user.username)
+    try:#settings.MAX_AMOUNT_ALLOWED_TO_SEND
+        max_amount_allowed_to_send = int(get_object_or_404(PortalSetting, school=ud.school, name='amount_allowed_to_send').value)
+        if max_amount_allowed_to_send < 0:
+            raise
+    except:
+        max_amount_allowed_to_send = 2
     sender = get_object_or_404(UserData, username=request.user.username)
     try:
         receiver = UserData.objects.get(username=request.POST.get('inputTransfer'), school=sender.school)

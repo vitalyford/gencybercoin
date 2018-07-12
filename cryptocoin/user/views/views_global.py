@@ -102,10 +102,15 @@ def init_portal_settings(school):
     if pa_created:
         pagination_enabled.value = "true"
         pagination_enabled.save()
+    # set the maximum allowed amount to transfer by students
+    amount_allowed_to_send, aats_created = PortalSetting.objects.get_or_create(name="amount_allowed_to_send", school=school)
+    if aats_created:
+        amount_allowed_to_send.value = "5" # default value in coins
+        amount_allowed_to_send.save()
 
 def get_portal_settings(school):
     context = {}
-    #init_portal_settings(school)
+    init_portal_settings(school)
     ps = PortalSetting.objects.filter(school=school)
     for s in ps:
         context[s.name] = s.value

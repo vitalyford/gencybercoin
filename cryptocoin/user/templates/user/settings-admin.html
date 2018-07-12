@@ -66,7 +66,9 @@
                           </tr>
                           <tr>
                               <td scope="row" class="text-right">
-                                  <p class="lead">Queue auto-expansion wait period is</p>
+                                  <div style="margin-top: 12px;">
+                                      <p class="lead">Queue auto-expansion wait period is</p>
+                                  </div>
                               </td>
                               <td scope="row" class="text-left">
                                   <div class="input-group" style="margin-top: 12px;" >
@@ -117,6 +119,18 @@
                                   </div>
                               </td>
                               <td scope="row" class="text-justify"><p class="lead">If enabled, the students will see a menu option to perform social engineering on the GenCyber faculty/mentors/students under Features. They will be rewarded the amount of coins set here for every correct answer.<br>But first, you should add/edit the questions in the Admin->Social Engineering menu.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right">
+                                  <p class="lead">Maximum amount allowed to transfer</p>
+                              </td>
+                              <td scope="row" class="text-left">
+                                  <div class="input-group" style="margin-top: 12px;">
+                                      <div class="input-group-addon">&hearts;</div>
+                                      <input type="number" class="form-control" name="amount_allowed_to_send" value="{{ amount_allowed_to_send }}" size="4" min="0">
+                                  </div>
+                              </td>
+                              <td scope="row" class="text-justify"><p class="lead">The maximum amount of reward coins that students can transfer to each other at a time.</p></td>
                           </tr>
                       </tbody>
                   </small>

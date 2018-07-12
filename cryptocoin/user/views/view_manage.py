@@ -515,6 +515,18 @@ def submit_settings_admin(request):
                         qw.save()
                 # enabling pagination
                 update_setting(request, ud, 'pagination_enabled')
+                # setting up the maximum amount allowed to transfer by students
+                if 'amount_allowed_to_send' in request.POST:
+                    try:
+                        amount_allowed_to_send = int(request.POST.get('amount_allowed_to_send'))
+                        if amount_allowed_to_send < 0:
+                            raise
+                    except:
+                        messages.warning(request, 'The maximum amount allowed to send has to be an integer greater than or equal to 0')
+                    else:
+                        aats = get_object_or_404(PortalSetting, school=ud.school, name='amount_allowed_to_send')
+                        aats.value = str(amount_allowed_to_send)
+                        aats.save()
     return HttpResponseRedirect(reverse('user:settings-admin'))
 
 def settings_admin(request):
