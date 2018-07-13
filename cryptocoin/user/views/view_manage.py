@@ -542,7 +542,7 @@ def student_carts_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            students = UserData.objects.filter(school=ud.school, is_admin=False)
+            students = UserData.objects.filter(school=ud.school, is_admin=False).order_by('-cart__date')
             carts = {}
             for s in students:
                 # try-except in case if cart does not exists
