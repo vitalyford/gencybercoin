@@ -119,7 +119,7 @@ def get_portal_settings(school):
 def get_all_market_data(request, ud):
     marketdata = MarketItem.objects.filter(school=ud.school)
     if request.user.groups.filter(name='gcadmin').exists():
-        marketdata = marketdata.order_by('id')
+        marketdata = marketdata.order_by('name')
     else:
         marketdata = marketdata.order_by('-tier', 'id')
     available_coins = ud.permanent_coins
