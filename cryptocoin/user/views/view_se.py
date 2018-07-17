@@ -34,6 +34,9 @@ def submit_social_engineering(request):
                             ud.permanent_coins = ud.permanent_coins + award_amount
                             ud.save()
                             messages.info(request, "You got " + str(award_amount) + " for your \"" + se_ques_answ.answer +"\" answer!")
+                            # record the SE transaction in the blockchain
+                            tl = TransferLogs(sender='GenCyber Team (SE)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                            tl.save()
         return HttpResponseRedirect(reverse('user:extras-social-engineering'))
     return goto_login(request, "social engineering")
 

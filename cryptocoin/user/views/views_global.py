@@ -51,6 +51,9 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
                 ud.permanent_coins = ud.permanent_coins + award_amount
                 ud.save()
                 bug.save()
+                # record the bug bounty transaction in the blockchain
+                tl = TransferLogs(sender='GenCyber Team (bugs)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                tl.save()
             messages.warning(request, bug_message + ' We have rewarded you ' + str(bug.reward) + ' GenCyberCoins for that! One-time only :)')
     except Exception as e:
         messages.warning(request, e)
