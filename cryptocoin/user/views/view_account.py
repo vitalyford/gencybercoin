@@ -35,7 +35,7 @@ def get_context(request, get_all_users):
     context = {}
     userdata = get_object_or_404(UserData, username=request.user.username)
     if get_all_users:
-        allusers = UserData.objects.filter(school=userdata.school).values('username', 'first_name', 'last_name', 'is_admin').order_by('first_name')
+        allusers = UserData.objects.filter(school=userdata.school).values('id', 'first_name', 'last_name', 'is_admin').order_by('first_name')
         context['allusers'] = allusers
     try:
         useranswers = get_object_or_404(UserAnswers, data=userdata)
@@ -164,7 +164,7 @@ def transfer(request):
         max_amount_allowed_to_send = 2
     sender = get_object_or_404(UserData, username=request.user.username)
     try:
-        receiver = UserData.objects.get(username=request.POST.get('inputTransfer'), school=sender.school)
+        receiver = UserData.objects.get(id=request.POST.get('inputTransfer'), school=sender.school)
     except:
         messages.warning(request, 'Select the user to send the money to')
     else:

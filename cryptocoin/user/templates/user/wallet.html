@@ -80,7 +80,7 @@
                       <option>Who is the lucky one?</option>
                       {% for au in allusers %}
                         {% if au.username != request.user.username %}
-                          <option value="{{ au.username }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
+                          <option value="{{ au.id }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
                         {% endif %}
                       {% endfor %}
                     </select>
