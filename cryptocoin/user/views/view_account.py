@@ -57,6 +57,16 @@ def user_account(request):
         ud = get_object_or_404(UserData, username=request.user.username)
         context = get_context(request, False)
         achievements = ud.achievement_set.all()
+        for a in achievements:
+            try:
+                sender_name = 'GenCyber Team (activity ' + str(a.id) + ')'
+                total_rewarded = TransferLogs.objects.filter(sender=sender_name, receiver=ud.username).aggregate(Sum('amount'))['amount__sum']
+                if not total_rewarded:
+                    raise
+            except:
+                a.reward = 0
+            else:
+                a.reward = total_rewarded
         context['achievements'] = achievements
         return render(request, 'user/account.html', context)
     return goto_login(request, "account")
@@ -137,7 +147,8 @@ def submit_wallet(request):
                         code_record.save()
                         messages.info(request, 'The code is successfully redeemed, you got ' + str(money_earned) + '!')
                         # record the code on the blockchain
-                        tl = TransferLogs(sender='GenCyber Team', receiver=ud.username, amount=money_earned, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                        sender_name = 'GenCyber Team (' + inputCode + ')'
+                        tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=money_earned, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                         tl.save()
                 else:
                     # bug bounty

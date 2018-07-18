@@ -131,6 +131,11 @@ def submit_nominations_admin(request):
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
             all_is_good = True
+            try:
+                activity_award_amount = int(request.POST.get('activity_award_amount'))
+            except:
+                messages.warning(request, 'The activity reward amount has been set to 0')
+                activity_award_amount = 0
             selectedStudents   = request.POST.getlist('selectedStudents')
             selectedActivities = request.POST.getlist('selectedActivities')
             if selectedStudents and selectedActivities:
@@ -144,6 +149,14 @@ def submit_nominations_admin(request):
                             all_is_good = False
                         else:
                             activity.user_data.add(ud)
+                            # assign the activity reward if not zero
+                            if activity_award_amount != 0:
+                                ud.permanent_coins = ud.permanent_coins + activity_award_amount
+                                ud.save()
+                                # record the activity on the blockchain
+                                sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                                tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=activity_award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                                tl.save()
                 if all_is_good:
                     messages.info(request, 'All students and activities have been successfully assigned')
                 else:
