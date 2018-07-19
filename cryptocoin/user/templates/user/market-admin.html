@@ -162,7 +162,7 @@
               <div class="box">
             {% endif %}
                 <div class="col-md-3 text-center">
-                  <form class="form-horizontal" enctype="multipart/form-data" action="{% url 'user:submit-market-admin' %}" method="post">
+                  <form class="form-horizontal" enctype="multipart/form-data" action="{% url 'user:submit-market-admin' %}" method="post" id="marketItemForm{{item.id}}" name="{{item.id}}">
                       {% csrf_token %}
                       <div class="text-center img-wrapper"><img src="{{ item.image_file.url }}" id="image{{item.id}}Preview" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
 
@@ -186,19 +186,19 @@
                       </div>
 
                       <div class="form-group margin-marketitems-admin">
-                          <input type="text" class="form-control" name="name{{item.id}}" maxlength="50" value="{{ item.name }}" required/>
+                          <input type="text" class="form-control" id="name{{item.id}}" name="name{{item.id}}" maxlength="50" value="{{ item.name }}" required/>
                       </div>
                       <div class="form-group margin-marketitems-admin">
-                          Quantity<input type="number" class="form-control" name="quantity{{item.id}}" maxlength="50" value="{{ item.quantity }}" min="0" required/>
+                          Quantity<input type="number" class="form-control" id="quantity{{item.id}}" name="quantity{{item.id}}" maxlength="50" value="{{ item.quantity }}" min="0" required/>
                       </div>
                       <div class="form-group margin-marketitems-admin">
-                          Tier<input type="number" class="form-control" name="tier{{item.id}}" maxlength="50" value="{{ item.tier }}" min="1" max="10" required/>
+                          Tier<input type="number" class="form-control" id="tier{{item.id}}" name="tier{{item.id}}" maxlength="50" value="{{ item.tier }}" min="1" max="10" required/>
                       </div>
                       <div class="form-group margin-marketitems-admin">
-                          <textarea class="form-control" rows="5" name="descr{{item.id}}" maxlength="200" required>{{ item.description }}</textarea>
+                          <textarea class="form-control" rows="5" id="descr{{item.id}}" name="descr{{item.id}}" maxlength="200" required>{{ item.description }}</textarea>
                       </div>
                       <div class="form-group margin-marketitems-admin">
-                          <button type="submit" class="btn btn-primary pull-left" name="update{{item.id}}" value="{{item.id}}">Save</button>
+                          <button type="button" class="btn btn-primary pull-left" name="update{{item.id}}" value="{{item.id}}" onclick="submitForm(this)">Save</button>
                           <button type="submit" class="btn btn-default pull-right" name="remove{{item.id}}" value="{{item.id}}">Remove</button>
                       </div>
                   </form>
@@ -235,11 +235,63 @@
     </div>
 </div>
 
+<!-- Update processing modal -->
+<div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Updating the item, please wait...
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End update processing modal -->
+
+<!-- Update success modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Successfully updated the item!
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End update success modal -->
+
 {% include "modal_window.html" %}
 
 {% endblock %}
 
 {% block customjs %}
+<script>
+    function submitForm(currObj) {
+        var id = currObj.value;
+        var formData = new FormData($('#marketItemForm' + id)[0]);
+        var action = $('#marketItemForm' + id).attr('action');
+        formData.append('update' + id, id);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        $.ajax({
+            url: action,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                $("#processingModal").modal('show');
+            },
+            complete: function() {
+                $("#processingModal").modal('hide');
+            },
+            success: function(json) {
+                $("#updateModal").modal('show');
+                setTimeout(function() { $("#updateModal").modal('hide'); }, 1500);
+            }
+        });
+        return false;
+    }
+</script>
+
 <script src="{% static 'user/js/cropper/cropper.min.js' %}"></script>
 <script src="{% static 'user/js/cropper/cropme.min.js' %}"></script>
 {% endblock %}

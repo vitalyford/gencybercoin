@@ -10,6 +10,21 @@
             <div class="normal-text">
                 <p class="lead">GenCyberCoin website has a bug bounty program! This program will reward you with coins if you find bugs (problems, errors) on the website.</p>
                 <p class="lead">Try to do something that the website would not expect a normal user to do. Afterwards, you may see a message that you found a bug and you will automatically receive a reward for that! For instance, if you submit something on the website, the information will be processed by the server and the result will be shown to you on the page. What if you send something that a normal user would never think to send? Maybe you find a place where you could request a certain type of information from the server or you can try to tinker around on the page itself.</p>
+                <p class="lead">HINTS</p>
+                <p class="lead">
+                    <ul>
+                        <li>Sensitive data exposure (hidden page that admin left somewhere in one of the pages' source code)</li>
+                        <li>Broken authentication (find admin credentials)</li>
+                        <li>Reflected XSS (check out wallet)</li>
+                        <li>Stored XSS (btw, did you leave us the feedback yet?)</li>
+                        <li>User input validation (wallet)</li>
+                        <li>HTML edits on social engineering page (how does the server know what question relate to what answer?)</li>
+                        <li>Local file inclusion (did you see that there are several pages of the items on the market?)</li>
+                        <li>HTML edits on market items (can you change the price of the items so that the money will actually come to you when you buy, instead of going out of your pocket?)</li>
+                        <li>Race condition (when market is enabled, notice what changes in every item's HTML code when it is your turn; then, when it is not your turn, can you still try to buy something?)</li>
+                        <li>Refresh on remove (when market is on)</li>
+                    </ul>
+                </p>
             </div>
         </div>
     </div>
