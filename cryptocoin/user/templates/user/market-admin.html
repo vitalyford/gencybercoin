@@ -31,7 +31,7 @@
                     <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
                 {% endfor %}
               {% endif %}
-              <div class="text-center"><button type="button" class="btn btn-default btn-lg" data-toggle="collapse" data-target="#admin_market_info" style="white-space: normal;">Important FYI, please read to be aware how the market works</button></div>
+              <div class="text-center"><button type="button" class="btn btn-default btn-lg" data-toggle="collapse" data-target="#admin_market_info" style="white-space: normal;">Important FYI, please read to be aware how the market and import/export work</button></div>
               <div id="admin_market_info" class="collapse">
                   <p class="lead">The tiers are solely used to sort the market items for students from the most expensive to the least expensive (based on your personal opinion). The prices will be generated automatically, making sure that all students will be able to get any market item; tiers do not define the prices, just their order.</p>
                   <p class="lead">The prices are generated randomly from 1/4 to 1/2 of what the student with the smallest number of GenCyberCoins has (<i>min_coins</i>). Therefore, you do not have to worry about setting the prices. Every time a student buys an item, its price is updated with whatever price was set for that student, simulating the volatile nature of the cryptocurrency trade market.</p>
@@ -43,7 +43,38 @@
                   <p class="lead">When you upload the image, you can crop it right on the spot (mobile-friendly) and the system will auto-resize the image for optimal saving so you do not have to worry about the its initial resolution.</p>
                   <p class="lead">Supported image formats are: jpg, jpeg, png, and gif.</p>
                   <div class="lead text-center"><b>Tier 10: most expensive/valuable<br>Tier 1: least expensive/valuable</b></div>
+                  <p class="lead">IMPORT/EXPORT</p>
+                  <p class="lead">Market items can be imported via uploading a .csv file that you can either create in Excel or a text editor. The necessary header must contain <i>name</i> and <i>description</i>. In addition, you can use <i>quantity</i> and <i>tier</i> in the header if you know those numbers; otherwise, you will be able to change everything here after importing in any case. If the item's name or description contain a comma, you must put the whole sentence in double quotes. An example of a .csv file is presented below (notice that the flash drive's description has a comma and we put it in double quotes; we do not know the tier for it yet, so we left it blank but the separating comma is still there).</p>
+                  <code>name,description,quantity,tier</code><br>
+                  <code>Flash drive,"16GB dlash drive, water/shock resistant",2,</code><br>
+                  <code>T-shirt,Small CyberEagles t-shirts,20,5</code><br>
+                  <code>Glasses,TnTech shades,,</code>
               </div>
+              <!-- Import/export -->
+              <form class="form-horizontal" action="{% url 'user:submit-market-admin' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row center-block" style="width: 300px;">
+                    <div class="input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-success margin-bottom margin-top">
+                                Select CSV file<input type="file" name="inputCSV" style="display: none;" required>
+                            </span>
+                        </label>
+                        <input type="text" class="form-control margin-bottom margin-top" readonly>
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-primary margin-bottom margin-top" name="importCSV">Import</button>
+                        </div>
+                    </div>
+                </div>
+              </form>
+              <form class="form-horizontal" action="{% url 'user:submit-market-admin' %}" method="post">
+                  {% csrf_token %}
+                  <div class="form-group" style="width: 300px; margin: auto;">
+                      <button type="submit" class="btn btn-primary pull-left" name="exportCSV">Export</button>
+                      <button type="submit" class="btn btn-default pull-right" name="deleteAll">Delete all market items</button>
+                  </div>
+              </form>
+              <!-- End import/export -->
           </div>
 
 <!-- Add a new market item -->
@@ -51,7 +82,7 @@
   {% csrf_token %}
   <div class="row center-block" style="width: 300px;">
       <div class="form-group">
-          <img src="{% static 'user/img/no-image.jpg' %}" id="imageNewPreview" alt="Image preview..." class="img-responsive img-rounded center-block">
+          <img src="{% static 'user/img/no-image.jpg' %}" id="imageNewPreview" alt="Image preview..." class="img-responsive img-rounded center-block margin-top">
       </div>
       <div class="input-group">
           <label class="input-group-btn">

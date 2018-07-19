@@ -1,5 +1,8 @@
 from .views_global import *
 from .view_market import market
+from tablib import Dataset
+import csv, codecs
+from ..resources import MarketItemResource
 
 ##
 ## management portal
@@ -379,15 +382,84 @@ def add_new_market_item(request, ud):
         marketitem.save()
         messages.info(request, name + ' has been added')
 
+def process_import_csv(request, ud):
+    try:
+        market_resource = MarketItemResource()
+        dataset = Dataset()
+        new_items = request.FILES['inputCSV']
+        if not new_items:
+            messages.warning(request, 'The file does not exist')
+        else:
+            try:
+                imported_data = dataset.load(new_items.read().decode("utf-8"))
+                # add school id and header
+                school_id_list = ()
+                for i in range(dataset.height):
+                    school_id_list += (ud.school.id,)
+                dataset.append_col(school_id_list, header='school')
+                # add item_id and header
+                new_id_list = ()
+                for i in range(dataset.height):
+                    new_id_list += ('',)
+                dataset.append_col(new_id_list, header='id')
+            except:
+                messages.warning(request, 'Wrong number of columns; make sure that sentences are surrounded by double quotes if using a text editor (Excel will make it easier)')
+            else:
+                # test the data import
+                result = market_resource.import_data(dataset, dry_run=True, raise_errors=True)
+                # import the data from CSV
+                if not result.has_errors():
+                    market_resource.import_data(dataset, dry_run=False)
+                    messages.info(request, str(dataset.height) + ' market items have been imported')
+                else:
+                    messages.warning(request, result.errors())
+    except Exception as e:
+        messages.warning(request, e)
+
+def process_export_csv(school_id):
+    market_resource = MarketItemResource()
+    dataset = market_resource.export()
+    # find school's index in the headers
+    school_index = dataset.headers.index('school')
+    id_index = dataset.headers.index('id')
+    # create headers in a tuple
+    headers, i = (), 0
+    for h in dataset.headers:
+        if i != school_index and i != id_index:
+            headers += (h,)
+        i += 1
+    # filter out market items for only the current school
+    dataset_for_school = Dataset()
+    dataset_for_school.append(headers)
+    for d in dataset:
+        if d[school_index] == school_id:
+            market_item = ()
+            i = 0
+            for val in d:
+                if i != school_index and i != id_index:
+                    market_item += (val,)
+                i += 1
+            dataset_for_school.append(market_item)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="market_items.csv"'
+    response.write(dataset_for_school.csv)
+    return response
+
 def submit_market_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
             context = {}
             if request.method == 'POST':
+                if "exportCSV" in request.POST:
+                    return process_export_csv(ud.school.id)
                 try:
                     if "addNewItem" in request.POST:
                         add_new_market_item(request, ud)
+                    elif "importCSV" in request.POST:
+                        process_import_csv(request, ud)
+                    elif "exportCSV" in request.POST:
+                        return process_export_csv(ud.school.id)
                     else:
                         name, quantity, tier, descr, id, update_remove = "", 0, 0, "", -1, ""
                         for key in request.POST:
