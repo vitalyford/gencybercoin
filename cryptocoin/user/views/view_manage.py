@@ -445,14 +445,23 @@ def process_export_csv(school_id):
     response.write(dataset_for_school.csv)
     return response
 
+def delete_all_market_items(request, school):
+    try:
+        market_items = MarketItem.objects.filter(school=school)
+        for i in market_items:
+            i.image_file.delete()
+            i.delete()
+    except:
+        messages.warning(request, 'Something went wrong, not all items have been deleted')
+    else:
+        messages.info(request, 'Successfully deleted all market items')
+
 def submit_market_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
             context = {}
             if request.method == 'POST':
-                if "exportCSV" in request.POST:
-                    return process_export_csv(ud.school.id)
                 try:
                     if "addNewItem" in request.POST:
                         add_new_market_item(request, ud)
@@ -460,6 +469,8 @@ def submit_market_admin(request):
                         process_import_csv(request, ud)
                     elif "exportCSV" in request.POST:
                         return process_export_csv(ud.school.id)
+                    elif "deleteAll" in request.POST:
+                        delete_all_market_items(request, ud.school)
                     else:
                         name, quantity, tier, descr, id, update_remove = "", 0, 0, "", -1, ""
                         for key in request.POST:
