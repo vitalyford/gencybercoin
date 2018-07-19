@@ -35,7 +35,7 @@ def get_context(request, get_all_users):
     context = {}
     userdata = get_object_or_404(UserData, username=request.user.username)
     if get_all_users:
-        allusers = UserData.objects.filter(school=userdata.school).values('id', 'first_name', 'last_name', 'is_admin').order_by('first_name')
+        allusers = UserData.objects.filter(school=userdata.school).values('id', 'first_name', 'last_name', 'is_admin').order_by('first_name', 'last_name')
         context['allusers'] = allusers
     try:
         useranswers = get_object_or_404(UserAnswers, data=userdata)

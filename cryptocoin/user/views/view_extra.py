@@ -18,11 +18,22 @@ def extras_blockchain(request):
     if request.user.is_authenticated:
         context = {}
         ud = get_object_or_404(UserData, username=request.user.username)
-        transfers = TransferLogs.objects.filter(school=ud.school).order_by('-id')
+        if ud.is_admin and request.method == 'POST' and 'selectedStudent' in request.POST:
+            try:
+                selectedStudentID = int(request.POST.get('selectedStudent'))
+                if selectedStudentID < 0:
+                    raise
+                selectedStudent = get_object_or_404(UserData, id=selectedStudentID)
+            except:
+                transfers = TransferLogs.objects.filter(school=ud.school).order_by('-id')
+            else:
+                transfers = TransferLogs.objects.filter(Q(sender=selectedStudent.username ) | Q(receiver=selectedStudent.username), school=ud.school).order_by('-id')
+        else:
+            transfers = TransferLogs.objects.filter(school=ud.school).order_by('-id')
         if transfers.count() > 0:
             curr_day = ""
             for log in transfers:
-                if ud.is_admin:
+                if ud.is_admin or ud.username == log.sender or ud.username == log.receiver:
                     if not "GenCyber Team" in log.sender:
                         sender_name = get_object_or_404(UserData, username=log.sender)
                         log.sender = sender_name.first_name + " " + sender_name.last_name
@@ -39,6 +50,17 @@ def extras_blockchain(request):
                     receiver_name = log.receiver
                     log.sender = "".join((sender_name[0], "*" * len(sender_name[1:])))
                     log.receiver = "".join((receiver_name[0], "*" * len(receiver_name[1:])))
+                    # add GenCyber Team if the sender or receiver is an admin
+                    try:
+                        if get_object_or_404(UserData, username=sender_name).is_admin:
+                            log.sender += " (GenCyber Team)"
+                    except:
+                        pass
+                    try:
+                        if get_object_or_404(UserData, username=receiver_name).is_admin:
+                            log.receiver += " (GenCyber Team)"
+                    except:
+                        pass
                 # fix the dates
                 log.day = log.date.strftime("%A, %B %d")
                 log.date = log.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
@@ -47,17 +69,11 @@ def extras_blockchain(request):
                     log.switch_next_day = True
                 else:
                     log.switch_next_day = False
-                context['transfers'] = transfers
-                try:
-                    if get_object_or_404(UserData, username=sender_name).is_admin:
-                        log.sender += " (GenCyber Team)"
-                except:
-                    pass
-                try:
-                    if get_object_or_404(UserData, username=receiver_name).is_admin:
-                        log.receiver += " (GenCyber Team)"
-                except:
-                    pass
+            context['transfers'] = transfers
+        # add users if it's the admin
+        if ud.is_admin:
+            allusers = UserData.objects.filter(school=ud.school).values('id', 'first_name', 'last_name', 'is_admin').order_by('first_name', 'last_name')
+            context['allusers'] = allusers
         return render(request, 'user/extras/blockchain.html', context)
     return goto_login(request, "blockchain")
 

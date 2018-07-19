@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load static %}
+{% load auth_extras %}
 <div class="row">
     <div class="box">
         <div class="container-fluid">
@@ -14,6 +15,24 @@
                     </p>
                     <p class="lead">This Blockchain keeps track of all coins transactions and performs the necessary calculations so that users could trust the Blockchain. For instance, every transaction stores a virtual fingerprint (a hash value) of the previous transaction and users can verify that a transaction has truly happened by recalculating that fingerprint.</p>
                 </div>
+                {% if not request.user.is_superuser and request.user.is_authenticated and request.user|is_admin %}
+                <form class="form-inline center-block" action="{% url 'user:extras-blockchain' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="selectedStudent"><p class="sublead">Show only</p></label>
+                        <select class="form-control" name="selectedStudent" onchange="this.form.submit()">
+                          <option value="-1">Select a user</option>
+                          <option value="-1">Show everyone</option>
+                          {% for au in allusers %}
+                            {% if au.username != request.user.username %}
+                              <option value="{{ au.id }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                        <label for="selectedStudent"><p class="sublead">P.S.: this "Select a user" option is not available to students and the blockchain is anonymized for them except their personal transactions</p></label>
+                    </div>
+                </form>
+                {% endif %}
                 <div class="timeline">
 
                     <span class="timeline-label">
