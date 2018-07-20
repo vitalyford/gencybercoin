@@ -35,7 +35,7 @@ def get_context(request, get_all_users):
     context = {}
     userdata = get_object_or_404(UserData, username=request.user.username)
     if get_all_users:
-        allusers = UserData.objects.filter(school=userdata.school).values('id', 'first_name', 'last_name', 'is_admin').order_by('first_name', 'last_name')
+        allusers = UserData.objects.filter(school=userdata.school).values('id', 'first_name', 'last_name', 'is_admin', 'username').order_by('first_name', 'last_name')
         context['allusers'] = allusers
     try:
         useranswers = get_object_or_404(UserAnswers, data=userdata)
@@ -166,14 +166,13 @@ def transfer(request):
     # gcadmins are also counselors => college students/helpers
     # at the end of gencyber, K-12 students can give the leftover coins
     # to the counselors to bet on the best one, just for
-    ud = get_object_or_404(UserData, username=request.user.username)
+    sender = get_object_or_404(UserData, username=request.user.username)
     try:#settings.MAX_AMOUNT_ALLOWED_TO_SEND
-        max_amount_allowed_to_send = int(get_object_or_404(PortalSetting, school=ud.school, name='amount_allowed_to_send').value)
+        max_amount_allowed_to_send = int(get_object_or_404(PortalSetting, school=sender.school, name='amount_allowed_to_send').value)
         if max_amount_allowed_to_send < 0:
             raise
     except:
         max_amount_allowed_to_send = 2
-    sender = get_object_or_404(UserData, username=request.user.username)
     try:
         receiver = UserData.objects.get(id=request.POST.get('inputTransfer'), school=sender.school)
     except:
@@ -215,11 +214,15 @@ def transfer(request):
                         if receiver.is_admin:
                             receiver.honory_coins = receiver.honory_coins + amount
                             sender.honory_coins = sender.honory_coins - amount
-                        else:
+                        elif receiver.username != sender.username:
                             receiver.permanent_coins = receiver.permanent_coins + amount
                             sender.permanent_coins = sender.permanent_coins - amount
                         receiver.save()
                         sender.save()
+                        # bug bounty
+                        if receiver.username == sender.username:
+                            run_bug_bounty(request, sender, 'html_editing_on_transfer', 'Congrats! You found an easter egg! This is not really a bug but you had to tweak something in the HTML code, so you get a reward.', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+                        # end bug bounty
                         # log the sender/receiver and timestamp only if amount > 0
                         if amount > 0:
                             tl = TransferLogs(sender=sender.username, receiver=receiver.username, amount=amount, school=sender.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
