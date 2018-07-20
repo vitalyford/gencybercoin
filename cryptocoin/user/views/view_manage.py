@@ -34,7 +34,13 @@ def submit_code_generator(request):
         # 'key' consists of the school id + "!" or "#" + code itself
         if request.user.is_superuser and ('inputSchool' in request.POST) and ('inputCount' in request.POST):
             school = request.POST.get('inputSchool')
-            count  = int(request.POST.get('inputCount'))
+            try:
+                count = int(request.POST.get('inputCount'))
+                if count < 0:
+                    raise
+            except:
+                count = 0
+                messages.warning(request, 'The code must be an integer > 0')
             # get or create a new School, if created => initialize default PortalSettings
             s, created = School.objects.get_or_create(name=school)
             if created:
@@ -51,39 +57,51 @@ def submit_code_generator(request):
                 if type == "custom":
                     custom_code = request.POST.get('inputCount')
                 else:
-                    count = int(request.POST.get('inputCount'))
+                    try:
+                        count = int(request.POST.get('inputCount'))
+                        if count < 0:
+                            raise
+                    except:
+                        messages.warning(request, 'The code must be an integer > 0')
+                        count = 0
+                    if count > 500:
+                        count = 500
+                        messages.warning(request, 'Warning: The maximum number of codes you can generate at a time is 500')
                 if (type == "award" or type == "custom") and request.POST.get('inputValue') != "":
-                    award_value = int(request.POST.get('inputValue'))
+                    try:
+                        award_value = int(request.POST.get('inputValue'))
+                        if award_value < 0 or award_value > 1000000:
+                            raise
+                    except:
+                        award_value = 0
+                        messages.warning(request, 'The award value should be between 0 and 1000000')
             except:
                 messages.warning(request, 'Please enter a number, not a string')
             else:
                 school_gcadmin = get_object_or_404(UserData, username=request.user.username).school
                 if type != "custom":
-                    special_char = "#" # by default, the code is a registration code
-                    if type == "award":
-                        special_char = "$"
                     for i in range(count):
-                        key = str(school_gcadmin.id) + special_char + generate_gencyber_code()
                         if type == "registration":
-                             c = Code(allowed_hash=key, school=school_gcadmin, infinite=is_infinite)
+                            key = str(school_gcadmin.id) + "#" + generate_gencyber_code()
+                            c = Code(allowed_hash=key, school=school_gcadmin, infinite=is_infinite)
                         elif type == "award":
-                             c = Code(allowed_hash=key, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
+                            key = "$" + generate_gencyber_code()
+                            c = Code(allowed_hash=key, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
                         c.save()
                 else:
-                    if not "$" in custom_code:
-                        messages.warning(request, 'Please have a $ sign in your code')
                     c = Code(allowed_hash=custom_code, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
                     c.save()
         elif 'delete' in request.POST:
             if request.POST.get('delete') == "registration":
                 if request.user.is_superuser:
-                    Code.objects.filter(allowed_hash__contains='!').delete()
+                    if 'school' in request.POST:
+                        Code.objects.filter(name=request.POST.get('school')).delete()
                 elif request.user.groups.filter(name='gcadmin').exists():
                     school_gcadmin = get_object_or_404(UserData, username=request.user.username).school
-                    Code.objects.filter(school=school_gcadmin, allowed_hash__contains='#').delete()
+                    Code.objects.filter(school=school_gcadmin, name='registration').delete()
             elif request.POST.get('delete') == "award" and request.user.groups.filter(name='gcadmin').exists():
                 school_gcadmin = get_object_or_404(UserData, username=request.user.username).school
-                Code.objects.filter(school=school_gcadmin, allowed_hash__contains='$').delete()
+                Code.objects.filter(school=school_gcadmin, name='award').delete()
     return HttpResponseRedirect(reverse('user:code-generator'))
 
 def code_generator(request):
@@ -119,7 +137,7 @@ def code_generator(request):
                         registration_codes.append(c.allowed_hash + " (inf)")
                     else:
                         registration_codes.append(c.allowed_hash)
-                elif '$' in c.allowed_hash:
+                else:#if '$' in c.allowed_hash:
                     if c.infinite:
                         award_codes[c.allowed_hash] = str(c.value) + " (inf)"
                     else:
