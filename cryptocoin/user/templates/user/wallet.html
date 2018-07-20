@@ -22,7 +22,7 @@
             <hr>
             <h2 class="intro-text text-center">GenCyberCoin Wallet</h2>
             <hr>
-            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer the reward coins directly to your students</p>{% endif %}
+            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer the reward coins directly to your students without entering the password</p>{% endif %}
             {% if messages %}
               {% for message in messages %}
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
@@ -70,7 +70,7 @@
               <p class="lead text-center">Coins Transfer</p>
               <p class="sublead">You can transfer REWARD coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the reward coin as a token of appreciation to that person. It is limited to transfering a maximum of 5 reward coins to every peer and you cannot transfer more than one time to anyone.</p>
               <p class="sublead">You can also transfer your APPRECIATION coins (not REWARD) to the GenCyber Chaperons whom you really appreciated and enjoyed working with by selecting their names and making the transaction. NOTE: you can send as many APPRECIATION coins and as many times as you want to the Chaperons.</p>
-              <p class="sublead">All transfers are captured in the Features -> Blockchain.</p>
+              <p class="sublead">All transfers are captured in the Features -> Blockchain.{% if not request.user|has_group:"gcadmin" %} Every transaction is verified with your password.{% endif %}</p>
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
               {% csrf_token %}
                 <div class="form-group">
@@ -94,6 +94,14 @@
                     <div class="input-group-addon">.00</div>
                   </div>
                 </div>
+                {% if not request.user|has_group:"gcadmin" %}
+                <div class="form-group">
+                  <label for="iP" class="col-sm-2 control-label">Password</label>
+                  <div class="input-group col-sm-10">
+                    <input type="password" class="form-control" id="iP" name="userPassword" placeholder="Enter your password">
+                  </div>
+                </div>
+                {% endif %}
                 <div class="form-group">
                   <div class="col-lg-12 text-center">
                     <button type="submit" class="btn btn-primary" name="submit">Make a Transaction</button>

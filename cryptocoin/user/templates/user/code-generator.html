@@ -46,10 +46,12 @@
         <hr>
         <h2 class="intro-text text-center">Marketplace registration codes for {% if is_gcadmin %}students{% endif %}{% if is_superuser %}school admins{% endif %}</h2>
         <hr>
+        {% if not is_superuser %}
         <form class="form-inline text-center" action="{% url 'user:pdf-codes-admin' %}" method="post">
         {% csrf_token %}
             <button type="submit" class="btn btn-primary" name="codeName" style="margin-bottom: 15px;" value="registration">Download registration codes</button>
         </form>
+        {% endif %}
 {% if is_superuser %}
             <table class="table table-hover table-responsive gctable">
                 <tbody>
@@ -63,7 +65,14 @@
                 {% for school, code_items in codes.items %}
                   <small class="lead">
                   <tr>
-                      <td scope="row"><p class="lead">{{ school }}</p></td>
+                      <td scope="row">
+                          <p class="lead">{{ school }}</p>
+                          <form class="form-inline" action="{% url 'user:submit-code-generator' %}" method="post">
+                          {% csrf_token %}
+                              <input type="hidden" name="school" value="{{ school }}">
+                              <button type="submit" class="btn btn-default" name="delete" value="registration">Delete codes</button>
+                          </form>
+                      </td>
                       <td scope="row">
                     {% for c in code_items %}
                       <p class="lead">{{ c }}</p>

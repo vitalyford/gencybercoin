@@ -167,6 +167,13 @@ def transfer(request):
     # at the end of gencyber, K-12 students can give the leftover coins
     # to the counselors to bet on the best one, just for
     sender = get_object_or_404(UserData, username=request.user.username)
+    # check password match for non-admins
+    if not sender.is_admin:
+        if not 'userPassword' in request.POST:
+            return HttpResponseRedirect(reverse('user:wallet'))
+        if not check_password(request.POST.get('userPassword'), request.user.password):
+            messages.warning(request, 'Wrong password, try again')
+            return HttpResponseRedirect(reverse('user:wallet'))
     try:#settings.MAX_AMOUNT_ALLOWED_TO_SEND
         max_amount_allowed_to_send = int(get_object_or_404(PortalSetting, school=sender.school, name='amount_allowed_to_send').value)
         if max_amount_allowed_to_send < 0:
@@ -227,7 +234,11 @@ def transfer(request):
                         if amount > 0:
                             tl = TransferLogs(sender=sender.username, receiver=receiver.username, amount=amount, school=sender.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                             tl.save()
-                            messages.info(request, 'You sent ' + str(amount) + ' to ' + receiver.username + '!')
+                            # show username if sent by a student, show first/last name if sent by/to admin
+                            if receiver.is_admin or sender.is_admin:
+                                messages.info(request, 'You sent ' + str(amount) + ' to ' + receiver.first_name + " " + receiver.last_name + '!')
+                            else:
+                                messages.info(request, 'You sent ' + str(amount) + ' to ' + receiver.username + '!')
     return HttpResponseRedirect(reverse('user:wallet'))
 
 def user_login_process(request):
