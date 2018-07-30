@@ -77,6 +77,7 @@ def password_recovery(request):
                 # login the user if 2 or more answers are correct
                 if sum(answers) > 1:
                     user = authenticate(username=request.POST.get('inputUsername'), password=useranswers.data.password)
+                    request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
                     login(request, user)
                     ##useranswers.was_hacked = useranswers.was_hacked + 1
                     ##useranswers.save()

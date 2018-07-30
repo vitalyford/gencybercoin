@@ -26,6 +26,7 @@ def change_password(request):
             # re-authenticate the user with the new creds
             user = authenticate(username=request.user.username, password=u.password)
             if user is not None:
+                request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
                 login(request, user)
             messages.info(request, 'Your password has been successfully changed')
         else:
@@ -246,6 +247,7 @@ def user_login_process(request):
     password = request.POST.get('inputPassword')
     user = authenticate(username=username, password=password)
     if user is not None:
+        request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
         login(request, user)
         # redirect to a home page if not a superuser
         if not request.user.is_superuser:
@@ -328,6 +330,7 @@ def account_creation(request):
             Code.objects.filter(allowed_hash=code)[0].delete()
 
         user = authenticate(username=uname, password=pswd)
+        request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
         login(request, user)
     except:
         return render(request, 'user/register.html', {'error_message': "Something went wrong, whoops. Please contact the GenCyber Team.",})
