@@ -15,12 +15,12 @@ def pdf_codes_admin(request):
     # get the name of codes and codes themselves
     code_name = request.POST.get('codeName')
     data = []
-    n = 6
+    n = 5
     if code_name == 'award':
-        data = Code.objects.filter(school=ud.school, allowed_hash__contains='$')
-        n = 5
+        data = Code.objects.filter(school=ud.school, name='award')
+        n = 4
     elif code_name == 'registration':
-        data = Code.objects.filter(school=ud.school, allowed_hash__contains='#')#.values_list('allowed_hash', flat=True)
+        data = Code.objects.filter(school=ud.school, name='registration')#.values_list('allowed_hash', flat=True)
     else:
         messages.warning(request, 'The code request should be either for registration or reward codes')
         return HttpResponseRedirect(reverse('user:code-generator'))
@@ -43,10 +43,11 @@ def pdf_codes_admin(request):
              ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
              ('INNERGRID',(0,0),(-1,-1),0.25,colors.black),
              ('BOX',(0,0),(-1,-1),0.25,colors.black),
-             ('LEFTPADDING',(0,0),(-1,-1),20),
-             ('RIGHTPADDING',(0,0),(-1,-1),20),
+             ('LEFTPADDING',(0,0),(-1,-1),15),
+             ('RIGHTPADDING',(0,0),(-1,-1),15),
              ('BOTTOMPADDING',(0,0),(-1,-1),20),
              ('TOPPADDING',(0,0),(-1,-1),20),
+             ('FONTSIZE',(0,0),(-1,-1),14),
         ]))
         elements.append(t)
         # write the document to disk
