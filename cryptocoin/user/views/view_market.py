@@ -95,11 +95,16 @@ def remove_cart_item(request, key, ud):
 
 def set_market_prices(marketdata, ud, top_players):
     # this can be refactored to speed up (something to think about later)
-    users = UserData.objects.filter(school=ud.school, is_admin=False, username__in=top_players).order_by('-permanent_coins')
+    # this commented part is an algorithm that takes into account all top_players
+    '''users = UserData.objects.filter(school=ud.school, is_admin=False, username__in=top_players).order_by('-permanent_coins')
     min_coins, max_coins = 0, 0
     min = users.aggregate(Min('permanent_coins'))['permanent_coins__min']
     min_coins = min // 4
-    max_coins = min // 2
+    max_coins = min // 2'''
+    # take into account the current's user available coins
+    available_coins = ud.permanent_coins
+    min_coins = available_coins // 4
+    max_coins = available_coins // 2
     for m in marketdata:
         m.cost_permanent = randint(min_coins, max_coins)
 
