@@ -51,6 +51,8 @@ def submit_cart(request):
                     # bug bounty
                     run_bug_bounty(request, ud, 'race_condition_when_ordering', 'Congrats! You found a programming bug on adding an item when it was not your turn! This bug would allow you to add any item regardless of your turn in the queue.', 'https://www.owasp.org/index.php/Testing_for_Race_Conditions_%28OWASP-AT-010%29')
                     # end bug bounty
+    if 'page' in request.GET:
+        return HttpResponseRedirect(reverse('user:market') + "?page=" + request.GET.get('page'))
     return HttpResponseRedirect(reverse('user:market'))
 
 def get_cart(request, ud):
