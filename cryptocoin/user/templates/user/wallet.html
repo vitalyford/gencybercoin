@@ -36,7 +36,7 @@
             <div class="col-sm-6 text-center">
               <h3>Appreciation Coins</h3>
               <p class="lead">(savings account)</p>
-              <img src="{% static 'user/img/honory-coin.jpg' %}" class="img-responsive img-circle" alt="Appreciation Coins" style="margin: 0 auto; max-width: 100px;" />
+              <img src="{% static 'user/img/savings-gencybercoin.jpg' %}" class="img-responsive img-circle" alt="Appreciation Coins" style="margin: 0 auto; max-width: 100px;" />
               {% if userdata.is_admin and not request.user|student_mode %}
                 <div class="input-group coins">
                     <div class="input-group-addon">&clubs;</div>
@@ -70,7 +70,7 @@
 
             <div class="col-lg-12">
               <p class="lead text-center">Coins Transfer</p>
-              <p class="sublead">You can transfer REWARD coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the REWARD coin as a token of appreciation to that person. It is limited to transfering a maximum of {{ amount_allowed_to_send }} REWARD coins to every peer and you cannot transfer more than once to anyone.</p>
+              <p class="sublead">You can transfer REWARD coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the REWARD coin as a token of appreciation to that person. It is limited to transfering a maximum of {{ amount_allowed_to_send }} REWARD coins to every peer and you cannot transfer more than once to anyone. You will use REWARD coins in the market to order real items.</p>
               <p class="sublead">You can also transfer your APPRECIATION coins (not REWARD) to the GenCyber Team members whom you really appreciated and enjoyed working with by selecting their names and making the transaction. NOTE: you can send as many APPRECIATION coins and as many times as you want to the GenCyber Team.</p>
               <p class="sublead">All transfers are captured in the Features -> Blockchain.{% if not request.user|has_group:"gcadmin" %} Every transaction is verified with your password.{% endif %}</p>
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
@@ -138,7 +138,11 @@ function updateCurrency(obj) {
     }
     else {
         clubsOrHearts.innerHTML = "&hearts;";
+        {% if not request.user|has_group:"gcadmin" %}
         transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9829) + {{ amount_allowed_to_send }};
+        {% else %}
+        transferTo.placeholder = "You can send as many " + String.fromCharCode(9829) + "coins as you want";
+        {% endif %}
         transferTo.disabled = false;
     }
 }
