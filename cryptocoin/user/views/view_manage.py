@@ -739,3 +739,16 @@ def show_feedback_admin(request):
             context['feedbackSecond'] = feedback[count:]
             return render(request, 'user/show-feedback-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
+
+def submit_feedback_admin(request):
+    if request.user.is_authenticated:
+        ud = get_object_or_404(UserData, username=request.user.username)
+        if request.user.groups.filter(name='gcadmin').exists():
+            if request.method == 'POST' and 'deleteAll' in request.POST:
+                try:
+                    feedback_messages = Feedback.objects.filter(school=ud.school).delete()
+                except:
+                    messages.warning(request, 'Something went wrong, not all messages have been deleted')
+                else:
+                    messages.info(request, 'Successfully deleted all feedback messages')
+    return HttpResponseRedirect(reverse('user:show-feedback-admin'))

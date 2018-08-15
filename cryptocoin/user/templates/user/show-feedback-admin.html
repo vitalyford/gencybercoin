@@ -8,6 +8,36 @@
             <hr>
             <h2 class="intro-text text-center">Feedback Messages</h2>
             <hr>
+            <!-- Delete all items -->
+            <form class="form-horizontal">
+                {% csrf_token %}
+                <div class="form-group">
+                    <button type="button" class="btn btn-default pull-right" name="deleteAll" data-toggle="modal" data-target="#confirmModal">Delete all feedback messages</button>
+                </div>
+            </form>
+            <!-- Confirm modal -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Confirmation
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete ALL feedback messages?
+                        </div>
+                        <div class="modal-footer">
+                            <form class="form-horizontal" action="{% url 'user:submit-feedback-admin' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="hiddenDelete" id="hiddenDelete">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="submit" name="deleteAll" class="btn btn-success success">Delete ALL</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End confirm modal -->
+            <!-- End delete all items -->
             {% if messages %}
               {% for message in messages %}
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
