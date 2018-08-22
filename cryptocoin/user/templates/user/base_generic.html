@@ -86,7 +86,7 @@
                             {% endif %}
                             {% if request.user|has_se %}
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:extras-social-engineering' %}">Social Engineering</a></li>
+                            <li><a href="{% url 'user:extras-social-engineering' %}">Reconnaissance</a></li>
                             {% endif %}
                             {% comment %}<li><a href="#driplets-game" data-toggle="modal">Mini-Game</a></li>{% endcomment %}
                             <hr style="margin: 2px;">
@@ -102,7 +102,7 @@
                             {% if not request.user.is_superuser %}
                             <li><a href="{% url 'user:market-admin' %}">Market Editor</a></li>
                             <li><a href="{% url 'user:achievements-admin' %}">Activity Editor</a></li>
-                            <li><a href="{% url 'user:extras-social-engineering-admin' %}">Social Engineering Editor</a></li>
+                            <li><a href="{% url 'user:extras-social-engineering-admin' %}">Reconnaissance Editor</a></li>
                             <hr style="margin: 2px;">
                             <li><a href="{% url 'user:nominations-admin' %}">Activity Nomination</a></li>
                             <li><a href="{% url 'user:student-carts-admin' %}">Student Orders</a></li>
