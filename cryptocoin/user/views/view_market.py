@@ -152,7 +152,7 @@ def market(request):
                     if page_int < 1 or page_int > paginator.num_pages:
                         raise
                 except:
-                    context['available_coins'] += run_bug_bounty(request, ud, 'local_file_inclusion', 'Congrats! You found a programming bug that can cause a local file inclusiong. This bug would allow you to potentially read every file on the server!', 'https://www.owasp.org/index.php/Testing_for_Local_File_Inclusion')
+                    context['available_coins'] += run_bug_bounty(request, ud, 'local_file_inclusion', 'Congrats! You found a programming bug that can cause a local file inclusion. This bug would allow you to potentially read every file on the server!', 'https://www.owasp.org/index.php/Testing_for_Local_File_Inclusion')
             # end bug bounty
             items = paginator.get_page(page)
             set_market_prices(items, ud, context['top_players'][:int(context['top_students_number'])])
@@ -204,7 +204,7 @@ def get_top_players(request, ud):
             if (i + 1) == roof and queue_capacity < total_users and not already_increased_queue_capacity and someone_started_ordering:
                 # get the queue auto-expansion wait period
                 try:
-                    queue_wait_period = int(get_object_or_404(PortalSetting, school=ud.school, name="queue_wait_period").value)
+                    queue_wait_period = float(get_object_or_404(PortalSetting, school=ud.school, name="queue_wait_period").value)
                 except:
                     queue_wait_period = 1
                 if queue_wait_period >= 0 and (timezone.now() - latest_time).total_seconds() > queue_wait_period * 60:
