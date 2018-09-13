@@ -5,7 +5,8 @@ Django settings for GenCyberCoin project.
 
 #import dj_database_url #dj-database-url==0.4.1
 import os
-from cryptocoin.aws.conf import *
+if 'RDS_DB_NAME' in os.environ:
+    from cryptocoin.aws.conf import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
