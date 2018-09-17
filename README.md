@@ -11,28 +11,75 @@ GenCyberCoin is the project developed by Dr. Vitaly Ford in collaboration with C
 
 GenCyberCoin has been successfully deployed at Tennessee Tech's GenCyber summer camps in 2017 and 2018. Students of 8-12 grades expressed high enthusiasm and actively participated in the GenCyberCoin platform, searching for bugs, performing reconnaissance, and earning coins for their leadership skills and willingness to learn cybersecurity. They later spent their coins at the GenCyberCoin marketplace to buy real items that our camp's Team has prepared for them.
 
-GenCyberCoin reinforces the objectives that GenCyber program has established. It complements the existing GenCyber camp activities and facilitates building curiosity and passion to pursue cybersecurity and solve challenges in this field.
+GenCyberCoin reinforces the objectives that the GenCyber program has established. It complements the existing GenCyber camp activities and facilitates building curiosity and passion to pursue cybersecurity and to solve challenges in this field.
 
 # Local setup instructions
 
 ## Software installation and configuration
 
-1. Install python3, pip, PostgreSQL server, and pgAdmin. (+links)
+1. Install [python3](https://www.python.org/downloads/), and [PostgreSQL server](https://www.postgresql.org/download/). Installation directions below.
+
+#### Python
+  * Click the yellow button to download the latest version. Refer to the links under the button for downloading Python on other operating systems such as Mac OS or Linux/UNIX. 
+  <img src="img-readme/Python_installation/python_download.JPG" width="250">
+  * **IMPORTANT** Be sure to check the box next to "Add Python 'latest version' to PATH"
+  <img src="img-readme/Python_installation/python_install.JPG" width="250">
+
+#### PostgreSQL
+  * Select which operating system you are using to download PostgreSQL. 
+  <img src="img-readme/PostgreSQL_installation/PostgreSQL_download.JPG" width="250">
+  * Click "Download the installer", and be sure to select the latest version (_currently 10.5_). This version comes with pgAdmin 4.  
+  <img src="img-readme/PostgreSQL_installation/PostgreSQL_installer.JPG" width="250">
+  * Open the installer to access the PostgreSQL Setup Wizard.
+  <img src="img-readme/PostgreSQL_installation/PostgreSQL_SetupWizard.JPG" width="250">
+  You can leave all components checked, and do not have to change the locale or port number. The default port number should be 5432.
+  **Be sure to remember your database superuser password.**
+
 2. After downloading or cloning this repository, navigate to the cryptocoin directory in the command line prompt or terminal (there should be requirements.txt file in that directory).
-3. Install the prerequisites by typing the following command:<br>
+3. Install the latest version of pip by typing the following command:<br>
+`python -m pip install --upgrade pip` 
+4. Install the prerequisites by typing the following command:<br>
 `pip install -r requirements.txt`
-4. Start PostgreSQL server, connect to it using pgAdmin.
-   * Create a server (you can call it MyServer)
-   * In the `Login/Group Roles`, create a new role named `coin_admin`; in the privileges tab set `Can login?` to `Yes`; in the `Definitions` tab set `Password` to `go-figure-me-cow`.
-   * Create a database called `coin_db` and set the `Owner` in it to `coin_admin`.
-5. In the command line prompt or terminal that is opened in the cryptocoin directory, type the following command:<br>
+#### Possible Errors
+  * If you encounter the error "pg_config executable not found" when trying to install the psycopg2 package, try running the following command to install it individually:
+  `pip install psycopg2`  
+  * If you encounter an error while installing the reportlab package, try installing the latest [Microsoft Visual C++ build tools](https://visualstudio.microsoft.com/downloads/).  Scroll down to "All downloads" and expand "Tools for Visual Studio 2017", and download "Build Tools for Viual Studio 2017".
+  <img src="img-readme/Package_installation/vs_buildtools_download.JPG" width="250">
+  Check the box for Visual C++ build tools, then click "Install" in the bottom right.
+  <img src="img-readme/Package_installation/vs_buildtools_install.JPG" width="250">
+  Note, this installation may take a few minutes.
+
+5. Start PostgreSQL server by connecting to it using pgAdmin.
+   * Launch pgAdmin
+   * Create a server 
+     -right click on "Servers", hover over "Create", and select "Server...".
+     <img src="img-readme/pgAdmin_img/pgAdmin_create_server.jpg" width="250">
+     -Under the `General` tab, be sure to give it a name (you can call it MyServer)
+     -Under the `Connection` tab, type "localhost" for the Host name/address. 
+      Make sure that the port number is the same as the one specified during installation.
+      Enter your password that you created while installing PostgreSQL.
+     <img src="img-readme/pgAdmin_img/pgAdmin_server_connection.JPG" width="250">
+     Click `Save`.
+   * Click the plus icon next to your server name
+     Right-click on `Login/Group Roles` to create a new role. 
+     Under the `General` tab, set the name to `coin_admin`; 
+     Under the `Definition` tab, set `Password` to `go-figure-me-cow`;
+     Under the `Privileges` tab, set `Can login?` to `Yes`.
+     Click `Save`.
+   * Right-click on `Databases` to create a database. 
+     Name it `coin_db` and set the `Owner` to `coin_admin`.
+     <img src="img-readme/pgAdmin_img/pgAdmin_database.JPG" width="250">
+     Click `Save`.
+     Make sure that you are connected to the coin_db. It is disconnected if it displays a red 'x'. Click on it to connect to it.
+     <img src="img-readme/pgAdmin_img/pgAdmin_coindb_connected.JPG" width="250">
+6. In the command line prompt or terminal that is opened in the cryptocoin directory, type the following command:<br>
 `python manage.py migrate`<br>
 which will migrate the existing database model to the PostgreSQL server.
-6. At this point your Database setup on the local machine is finished and you can launch the GenCyberCoin project.
+7. At this point your Database setup on the local machine is finished and you can launch the GenCyberCoin project.
 
 ## Launching GenCyberCoin project
 
-1. Make sure your started PostgreSQL server.
+1. Make sure you started PostgreSQL server.
 2. Navigate to the GenCyberCoin project's directory called cryptocoin in the command line prompt or terminal.
    * Type the following command:<br>
    `python manage.py runserver 80`<br>
@@ -94,3 +141,5 @@ Contact Vitaly Ford fordv@arcadia.edu with one of the following subject lines, d
 # Acknowledgements
 
 We thank [NSA/NSF GenCyber program](https://www.gen-cyber.com/ "NSA/NSF GenCyber Program") for funding the implementation of this project.
+
+We also thank Andrew Malinsky (CS student at Arcadia University) for bug hunting, testing the project's code, and helping with writing these instructions.
