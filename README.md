@@ -20,13 +20,13 @@ GenCyberCoin reinforces the objectives that the GenCyber program has established
 1. Install [python3](https://www.python.org/downloads/), and [PostgreSQL server](https://www.postgresql.org/download/). Installation directions below.
 
 #### Python
-  * Click the yellow button to download the latest version. Refer to the links under the button for downloading Python on other operating systems such as Mac OS or Linux/UNIX. 
+  * Click the yellow button to download the latest version. Refer to the links under the button for downloading Python on other operating systems such as Mac OS or Linux/UNIX.
   <img src="img-readme/Python_installation/python_download.JPG" width="250">
   * **IMPORTANT** Be sure to check the box next to "Add Python 'latest version' to PATH"
   <img src="img-readme/Python_installation/python_install.JPG" width="250">
 
 #### PostgreSQL
-  * Select which operating system you are using to download PostgreSQL. 
+  * Select which operating system you are using to download PostgreSQL.
   <img src="img-readme/PostgreSQL_installation/PostgreSQL_download.JPG" width="250">
   * Click "Download the installer", and be sure to select the latest version (_currently 10.5_). This version comes with pgAdmin 4.  
   <img src="img-readme/PostgreSQL_installation/PostgreSQL_installer.JPG" width="250">
@@ -37,7 +37,7 @@ GenCyberCoin reinforces the objectives that the GenCyber program has established
 
 2. After downloading or cloning this repository, navigate to the cryptocoin directory in the command line prompt or terminal (there should be requirements.txt file in that directory).
 3. Install the latest version of pip by typing the following command:<br>
-`python -m pip install --upgrade pip` 
+`python -m pip install --upgrade pip`
 4. Install the prerequisites by typing the following command:<br>
 `pip install -r requirements.txt`
 #### Possible Errors
@@ -51,22 +51,22 @@ GenCyberCoin reinforces the objectives that the GenCyber program has established
 
 5. Start PostgreSQL server by connecting to it using pgAdmin.
    * Launch pgAdmin
-   * Create a server 
+   * Create a server
      -right click on "Servers", hover over "Create", and select "Server...".
      <img src="img-readme/pgAdmin_img/pgAdmin_create_server.jpg" width="250">
      -Under the `General` tab, be sure to give it a name (you can call it MyServer)
-     -Under the `Connection` tab, type "localhost" for the Host name/address. 
+     -Under the `Connection` tab, type "localhost" for the Host name/address.
       Make sure that the port number is the same as the one specified during installation.
       Enter your password that you created while installing PostgreSQL.
      <img src="img-readme/pgAdmin_img/pgAdmin_server_connection.JPG" width="250">
      Click `Save`.
    * Click the plus icon next to your server name
-     Right-click on `Login/Group Roles` to create a new role. 
-     Under the `General` tab, set the name to `coin_admin`; 
+     Right-click on `Login/Group Roles` to create a new role.
+     Under the `General` tab, set the name to `coin_admin`;
      Under the `Definition` tab, set `Password` to `go-figure-me-cow`;
      Under the `Privileges` tab, set `Can login?` to `Yes`.
      Click `Save`.
-   * Right-click on `Databases` to create a database. 
+   * Right-click on `Databases` to create a database.
      Name it `coin_db` and set the `Owner` to `coin_admin`.
      <img src="img-readme/pgAdmin_img/pgAdmin_database.JPG" width="250">
      Click `Save`.
