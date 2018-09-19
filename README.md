@@ -20,18 +20,18 @@ GenCyberCoin reinforces the objectives that the GenCyber program has established
 1. Install [python3](https://www.python.org/downloads/), and [PostgreSQL server](https://www.postgresql.org/download/). Installation directions below.
 
 #### Python
-  * Click the yellow button to download the latest version. Refer to the links under the button for downloading Python on other operating systems such as Mac OS or Linux/UNIX.
-  <img src="img-readme/Python_installation/python_download.JPG" width="250">
-  * **IMPORTANT** Be sure to check the box next to "Add Python 'latest version' to PATH"
-  <img src="img-readme/Python_installation/python_install.JPG" width="250">
+  * Click the yellow button to download the latest version. Refer to the links under the button for downloading Python on other operating systems such as Mac OS or Linux/UNIX.<br>
+  <img src="img-readme/Python_installation/python_download.JPG" width="350">
+  * **IMPORTANT** Be sure to check the box next to "`Add Python 'latest version' to PATH`"<br>
+  <img src="img-readme/Python_installation/python_install.JPG" width="350">
 
 #### PostgreSQL
-  * Select which operating system you are using to download PostgreSQL.
-  <img src="img-readme/PostgreSQL_installation/PostgreSQL_download.JPG" width="250">
-  * Click "Download the installer", and be sure to select the latest version (_currently 10.5_). This version comes with pgAdmin 4.  
-  <img src="img-readme/PostgreSQL_installation/PostgreSQL_installer.JPG" width="250">
-  * Open the installer to access the PostgreSQL Setup Wizard.
-  <img src="img-readme/PostgreSQL_installation/PostgreSQL_SetupWizard.JPG" width="250">
+  * Select which operating system you are using to download PostgreSQL.<br>
+  <img src="img-readme/PostgreSQL_installation/PostgreSQL_download.JPG" width="350">
+  * Click "`Download the installer`", and be sure to select the latest version (_currently 10.5_). This version comes with pgAdmin 4.<br>
+  <img src="img-readme/PostgreSQL_installation/PostgreSQL_installer.JPG" width="350">
+  * Open the installer to access the `PostgreSQL Setup Wizard`.<br>
+  <img src="img-readme/PostgreSQL_installation/PostgreSQL_SetupWizard.JPG" width="350"><br>
   You can leave all components checked, and do not have to change the locale or port number. The default port number should be 5432.
   **Be sure to remember your database superuser password.**
 
@@ -41,36 +41,36 @@ GenCyberCoin reinforces the objectives that the GenCyber program has established
 4. Install the prerequisites by typing the following command:<br>
 `pip install -r requirements.txt`
 #### Possible Errors
-  * If you encounter the error "pg_config executable not found" when trying to install the psycopg2 package, try running the following command to install it individually:
+  * If you encounter the error "pg_config executable not found" when trying to install the `psycopg2` package, try running the following command to install it individually:<br>
   `pip install psycopg2`  
-  * If you encounter an error while installing the reportlab package, try installing the latest [Microsoft Visual C++ build tools](https://visualstudio.microsoft.com/downloads/).  Scroll down to "All downloads" and expand "Tools for Visual Studio 2017", and download "Build Tools for Viual Studio 2017".
-  <img src="img-readme/Package_installation/vs_buildtools_download.JPG" width="250">
-  Check the box for Visual C++ build tools, then click "Install" in the bottom right.
-  <img src="img-readme/Package_installation/vs_buildtools_install.JPG" width="250">
+  * If you encounter an error while installing the reportlab package, try installing the latest [Microsoft Visual C++ build tools](https://visualstudio.microsoft.com/downloads/).  Scroll down to "`All downloads`" and expand "Tools for Visual Studio 2017", and download "Build Tools for Viual Studio 2017".<br>
+  <img src="img-readme/Package_installation/vs_buildtools_download.JPG" width="350"><br>
+  Check the box for Visual C++ build tools, then click "`Install`" in the bottom right.<br>
+  <img src="img-readme/Package_installation/vs_buildtools_install.JPG" width="350"><br>
   Note, this installation may take a few minutes.
 
 5. Start PostgreSQL server by connecting to it using pgAdmin.
    * Launch pgAdmin
    * Create a server
-     -right click on "Servers", hover over "Create", and select "Server...".
-     <img src="img-readme/pgAdmin_img/pgAdmin_create_server.jpg" width="250">
-     -Under the `General` tab, be sure to give it a name (you can call it MyServer)
-     -Under the `Connection` tab, type "localhost" for the Host name/address.
+     - Right click on "`Servers`", hover over "`Create`", and select "`Server...`".<br>
+     <img src="img-readme/pgAdmin_img/pgAdmin_create_server.jpg" width="350"><br>
+     - Under the `General` tab, be sure to give it a name (you can call it MyServer)
+     - Under the `Connection` tab, type "localhost" for the Host name/address.
       Make sure that the port number is the same as the one specified during installation.
-      Enter your password that you created while installing PostgreSQL.
-     <img src="img-readme/pgAdmin_img/pgAdmin_server_connection.JPG" width="250">
+      Enter your password that you created while installing PostgreSQL.<br>
+     <img src="img-readme/pgAdmin_img/pgAdmin_server_connection.JPG" width="350"><br>
      Click `Save`.
    * Click the plus icon next to your server name
      Right-click on `Login/Group Roles` to create a new role.
-     Under the `General` tab, set the name to `coin_admin`;
-     Under the `Definition` tab, set `Password` to `go-figure-me-cow`;
+     Under the `General` tab, set the name to `coin_admin`.
+     Under the `Definition` tab, set `Password` to `go-figure-me-cow`.
      Under the `Privileges` tab, set `Can login?` to `Yes`.
      Click `Save`.
    * Right-click on `Databases` to create a database.
-     Name it `coin_db` and set the `Owner` to `coin_admin`.
-     <img src="img-readme/pgAdmin_img/pgAdmin_database.JPG" width="250">
+     Name it `coin_db` and set the `Owner` to `coin_admin`.<br>
+     <img src="img-readme/pgAdmin_img/pgAdmin_database.JPG" width="450"><br>
      Click `Save`.
-     Make sure that you are connected to the coin_db. It is disconnected if it displays a red 'x'. Click on it to connect to it.
+     Make sure that you are connected to the coin_db. It is disconnected if it displays a red '`x`'. Click on it to connect to it.<br>
      <img src="img-readme/pgAdmin_img/pgAdmin_coindb_connected.JPG" width="250">
 6. In the command line prompt or terminal that is opened in the cryptocoin directory, type the following command:<br>
 `python manage.py migrate`<br>
@@ -129,7 +129,7 @@ After generating codes for your GenCyber Team (administrators of your GenCyber s
 
 **IMPORTANT**: when you register the accounts, make sure that your security answers are not easy to guess based on the questions because there is a `Forgot your password` option that allows you to enter the account by guessing correctly two security questions out of three which means that your K12 students could potentially try to social engineer one of your GenCyber Team members to get into their accounts, just saying.<br>
 
-Additional `admin panel` exists for the `gcsuperuser` that you can access by navigating to `localhost/gcsuperuser/` (both slashes are important to type). However, use this `admin panel` at your own risk because it access directly the data that relates to everything on the website.
+Additional `admin panel` exists for the `gcsuperuser` that you can access by navigating to `http://localhost/gcsuperuser/` in case of the local installation (both slashes are important to type). However, use this `admin panel` at your own risk because it access directly the data that relates to everything on the website.
 
 # Questions/bugs/suggestions?
 
