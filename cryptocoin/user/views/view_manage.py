@@ -676,10 +676,12 @@ def submit_student_manager_admin(request):
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists() and 'hiddenDelete' in request.POST:
             if request.POST.get('hiddenDelete') == "All":
-                TransferLogs.objects.all().delete()
-                CodeRedeemer.objects.all().delete()
-                UserData.objects.filter(~Q(username=ud.username)).delete()
-                User.objects.filter(~Q(username=ud.username)).delete()
+                users = UserData.objects.filter(~Q(username=ud.username) & Q(school=ud.school))
+                for user in users:
+                    CodeRedeemer.objects.filter(username=user.username).delete()
+                    User.objects.filter(username=user.username).delete()
+                TransferLogs.objects.filter(school=ud.school).delete()
+                UserData.objects.filter(~Q(username=ud.username) & Q(school=ud.school)).delete()
                 messages.info(request, 'All user data except yours have been deleted')
             else:
                 try:

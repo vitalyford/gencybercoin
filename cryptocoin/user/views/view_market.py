@@ -93,7 +93,7 @@ def remove_cart_item(request, key, ud):
     ud.items_bought = ud.items_bought - 1
     ud.save()
 
-def set_market_prices(marketdata, ud, top_players):
+def set_market_prices(marketdata, ud):
     # this can be refactored to speed up (something to think about later)
     # this commented part is an algorithm that takes into account all top_players
     '''users = UserData.objects.filter(school=ud.school, is_admin=False, username__in=top_players).order_by('-permanent_coins')
@@ -155,10 +155,10 @@ def market(request):
                     context['available_coins'] += run_bug_bounty(request, ud, 'local_file_inclusion', 'Congrats! You found a programming bug that can cause a local file inclusion. This bug would allow you to potentially read every file on the server!', 'https://www.owasp.org/index.php/Testing_for_Local_File_Inclusion')
             # end bug bounty
             items = paginator.get_page(page)
-            set_market_prices(items, ud, context['top_players'][:int(context['top_students_number'])])
+            set_market_prices(items, ud)
             context['marketdata'] = items
         else:
-            set_market_prices(all_market_data['marketdata'], ud, context['top_players'][:int(context['top_students_number'])])
+            set_market_prices(all_market_data['marketdata'], ud)
             context['marketdata'] = all_market_data['marketdata']
         return render(request, 'user/market.html', context)
     return goto_login(request, "market")

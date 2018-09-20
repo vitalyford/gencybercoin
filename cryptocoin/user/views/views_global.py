@@ -84,6 +84,7 @@ def init_portal_settings(school):
     # allow/disallow social engineering exercise
     se_enabled, se_created = PortalSetting.objects.get_or_create(name="se_enabled", school=school)
     if se_created:
+        se_enabled.value = "true"
         se_enabled.save()
     # set the amount of coins for social engineering
     se_award_amount, sea_created = PortalSetting.objects.get_or_create(name="se_award_amount", school=school)
