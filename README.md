@@ -88,7 +88,7 @@ which will migrate the existing database model to the PostgreSQL server.
    `localhost`
    * At this point you should be able to see the GenCyberCoin's front page.
 
-# Amazon Web Services (AWS) setup instructions
+# Amazon Web Services (AWS) setup instructions (WORK IN PROGRESS, NOT FINISHED YET, email fordv@arcadia.edu if you need assistance with it)
 
 ## AWS account setup
 
