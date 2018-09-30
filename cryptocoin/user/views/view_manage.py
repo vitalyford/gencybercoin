@@ -132,12 +132,12 @@ def code_generator(request):
             award_codes = {}
             codes = Code.objects.filter(school=school_gcadmin).order_by('id')
             for c in codes:
-                if "#" in c.allowed_hash:
+                if '#' in c.allowed_hash and 'registration' in c.name:
                     if c.infinite:
                         registration_codes.append(c.allowed_hash + " (inf)")
                     else:
                         registration_codes.append(c.allowed_hash)
-                else:#if '$' in c.allowed_hash:
+                elif 'award' in c.name:
                     if c.infinite:
                         award_codes[c.allowed_hash] = str(c.value) + " (inf)"
                     else:
