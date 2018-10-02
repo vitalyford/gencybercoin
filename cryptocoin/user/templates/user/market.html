@@ -19,6 +19,7 @@
           <tr>
             <td scope="row">{{ c.name }}</td>
             <td scope="row" class="text-right">&hearts;{{ c.cost_permanent }}</td>
+            {% comment %}
             <td scope="row" class="text-center">
                 <form class="form-horizontal" action="{% url 'user:market' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post">
                 {% csrf_token %}
@@ -26,6 +27,7 @@
                     <button type="submit" class="btn btn-default btn-xs" name="remove{{ c.id }}" value="{{ c.id }}">X</button>
                 </form>
             </td>
+            {% endcomment %}
           </tr>
           </small>
           {% endfor %}
@@ -41,7 +43,7 @@
         <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick, this number will change as time goes on" id="queue-info"></i></h2>
         <hr>
 {% if market_enabled == "true" %}
-        <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items, please wait your turn{% endif %}</p>
+        <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% endif %}</p>
         <div id="students_list">
         {% for u in top_players %}
           <p class="lead">{{ forloop.counter }}. {{ u }}</p>
@@ -63,7 +65,7 @@
             {% endfor %}
           {% endif %}
           <p class="lead text-center">Available Coins: &hearts;{{ available_coins }}</p>
-          {% if market_enabled == "false" %}<p class="text-center text-warning">The market items are not currently available to order.<br>We will open it at the end of the camp!</p>{% endif %}
+          {% if market_enabled == "false" %}<p class="text-center text-warning">The market items are not currently available to order.</p>{% endif %}
 
           {% for item in marketdata %}
             {% if forloop.first %}
