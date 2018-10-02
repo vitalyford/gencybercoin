@@ -8,7 +8,7 @@
     <div class="box">
       <div class="col-lg-3">
         <hr>
-        <h2 class="intro-text text-center">Cart <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item for a price that is smaller or bigger, keep an eye on your cart" id="cart-info"></i></h2>
+        <h2 class="intro-text text-center">Cart</h2>
         <hr>
 {% if cart %}
         {#<p class="text-right" style="font-size: 16px;">Remove</p>#}
@@ -40,7 +40,7 @@
         <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
 {% endif %}
         <hr>
-        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick, this number will change as time goes on" id="queue-info"></i></h2>
+        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick" id="queue-info"></i></h2>
         <hr>
 {% if market_enabled == "true" %}
         <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% endif %}</p>
