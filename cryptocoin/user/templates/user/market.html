@@ -11,7 +11,7 @@
         <h2 class="intro-text text-center">Cart <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item for a price that is smaller or bigger, keep an eye on your cart" id="cart-info"></i></h2>
         <hr>
 {% if cart %}
-        <p class="text-right" style="font-size: 16px;">Remove</p>
+        {#<p class="text-right" style="font-size: 16px;">Remove</p>#}
         <table class="table table-hover table-responsive" style="margin: 0 auto;">
           <tbody>
           {% for c in cart %}
@@ -32,7 +32,7 @@
           </small>
           {% endfor %}
           {% if total %}
-          <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td><td></td></tr>
+          <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td></tr>
           {% endif %}
           </tbody>
         </table>
@@ -100,7 +100,7 @@
                   {% csrf_token %}
                       <input type="hidden" name="checkers" value="{{ item.cost_permanent }}"/>
                       <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
-                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}>Add to cart</button>
+                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}>Add to cart</button>
                       <hr class="visible-xs">
                   </form>
                   {% endif %}
@@ -166,7 +166,7 @@
                   if (top_player == "true" && top_player == json['top_player']) {
                       /* do not update the page if the user is already a top player */
                   }
-                  else if (top_player != json['top_player'] || top_students_number != json['top_students_number'] || cart_size != json['cart_size']) {
+                  else if (top_player != json['top_player'] || cart_size != json['cart_size']) {
                       window.location = window.location.href;
                   }
               }
