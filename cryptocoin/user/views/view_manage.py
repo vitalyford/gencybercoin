@@ -561,6 +561,38 @@ def submit_market_admin(request):
         return market(request)
     return HttpResponseRedirect(reverse('user:index'))
 
+def configure_market(request, ud, enabled):
+    try:
+        top_students_number = get_object_or_404(PortalSetting, school=ud.school, name="top_students_number")
+        queue_capacity = int(top_students_number.value)
+    except:
+        queue_capacity = 5
+    # set the tier values for the top students
+    if enabled == "true": # the market is enabled
+        top_students = UserData.objects.filter(school=ud.school, is_admin=False).order_by('-permanent_coins')[:queue_capacity]
+        tier_number = 10
+        multiplier = 0
+        for student in top_students:
+            multiplier += student.permanent_coins
+            student.tier = tier_number
+            student.save()
+            if tier_number > 2:
+                tier_number -= 2
+            else:
+                tier_number = 1
+        # set the market items prices
+        if multiplier != 0:
+            multiplier = int(multiplier / 55)
+        marketdata = MarketItem.objects.filter(school=ud.school)
+        for m in marketdata:
+            m.cost_permanent = m.tier * multiplier
+            m.save()
+    else: # if market is turned off then reset all students' tier values to 0
+        students = UserData.objects.filter(school=ud.school, tier__gt=0, is_admin=False)
+        for student in students:
+            student.tier = 0
+            student.save()
+
 def update_setting(request, ud, portal_setting):
     # enabling portal_setting
     enabled = str(request.POST.get(portal_setting) == 'on').lower()
@@ -568,6 +600,9 @@ def update_setting(request, ud, portal_setting):
     if ps.value != enabled:
         ps.value = enabled
         ps.save()
+        # re-configure the market space if the market has been switched on/off
+        if portal_setting == 'market_enabled':
+            configure_market(request, ud, enabled)
 
 def submit_settings_admin(request):
     if request.user.is_authenticated:

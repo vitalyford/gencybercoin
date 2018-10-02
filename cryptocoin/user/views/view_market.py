@@ -14,6 +14,7 @@ def submit_cart(request):
                     except:
                         c = Cart(user_data=ud)
                         c.save()
+                        messages.warning(request, 'You cart has not been created before for some reason. It exists now though so try to order again!')
                         break
                     md = get_object_or_404(MarketItem, id=int(key.replace("add", "")))
                     if md.quantity <= 0:
@@ -25,12 +26,12 @@ def submit_cart(request):
                         break
                     # get the price from the submitted item
                     try:
-                        item_price = int(request.POST.get('checkers'))
-                        if item_price < 0:
+                        item_price = md.cost_permanent
+                        if int(request.POST.get('checkers')) != md.cost_permanent:
                             raise
                     except:
                         # bug bounty
-                        run_bug_bounty(request, ud, 'client_side_input_validation', 'Congrats! You found a programming bug on client-side/hidden-field input validation. This bug would allow you to get the money back for the item you have just bought => direct profit! Besides, you know how to buy your items for free from now on ;)', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+                        run_bug_bounty(request, ud, 'client_side_input_validation', 'Congrats! You found a programming bug on client-side/hidden-field input validation. This bug would allow you to get the money back for the item you have just bought => direct profit!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                         # end bug bounty
                         break
                     # save only if the user can afford it in the cart
@@ -43,6 +44,8 @@ def submit_cart(request):
                         md.save()
                         ud.permanent_coins = ud.permanent_coins - item_price
                         ud.items_bought = ud.items_bought + 1
+                        # users can buy only once per turn, so set the tier back to 0
+                        ud.tier = 0
                         ud.save()
                     else:
                         messages.warning(request, 'You cannot afford ' + md.name)
@@ -125,7 +128,7 @@ def market(request):
         if request.method == 'POST':
             for key in request.POST:
                 if "remove" in str(key):
-                    remove_cart_item(request, key, ud)
+                    #remove_cart_item(request, key, ud)
                     break
         # get the cart
         context.update(get_cart(request, ud))
@@ -135,7 +138,7 @@ def market(request):
         context.update(get_portal_settings(ud.school))
         if context['ajax_enabled'] == "true" and context['market_enabled'] == "true":
             if context['top_player'] == "false":
-                messages.info(request, 'The queue will automatically notify you when it is your turn to order')
+                messages.info(request, 'You will be able to order next time you get to the top-' + context['top_students_number'])
             else:
                 messages.info(request, 'Order NOW!')
         # pagination setup
@@ -155,10 +158,10 @@ def market(request):
                     context['available_coins'] += run_bug_bounty(request, ud, 'local_file_inclusion', 'Congrats! You found a programming bug that can cause a local file inclusion. This bug would allow you to potentially read every file on the server!', 'https://www.owasp.org/index.php/Testing_for_Local_File_Inclusion')
             # end bug bounty
             items = paginator.get_page(page)
-            set_market_prices(items, ud)
+            #set_market_prices(items, ud)
             context['marketdata'] = items
         else:
-            set_market_prices(all_market_data['marketdata'], ud)
+            #set_market_prices(all_market_data['marketdata'], ud)
             context['marketdata'] = all_market_data['marketdata']
         return render(request, 'user/market.html', context)
     return goto_login(request, "market")
@@ -166,55 +169,19 @@ def market(request):
 def get_top_players(request, ud):
     context = {}
     # admins and superuser do not count
-    users = UserData.objects.filter(is_admin=False, school=ud.school).order_by('items_bought', '-permanent_coins')
-    total_users = users.count()
+    users = UserData.objects.filter(school=ud.school, is_admin=False, tier__gt=0).order_by('-permanent_coins')
+    top_users = []
     context['top_player'] = "false"
-    if total_users > 0:
-        top_users = []
-        try:
-            top_students_number = get_object_or_404(PortalSetting, school=ud.school, name="top_students_number")
-            queue_capacity = int(top_students_number.value)
-        except:
-            queue_capacity = 3
-        # find top-(n+3) students
-        roof = min(total_users, max(queue_capacity, 3) + 3)
-        # check if someone started ordering
-        someone_started_ordering = False
-        try: # just in case if a cart has not been created yet
-            latest_time = users[0].cart.date
-        except:
-            for user in users:
-                c, created = Cart.objects.get_or_create(user_data=user)
-                if created: c.save()
-            latest_time = users[0].cart.date
-        user_with_the_latest = users[0]
-        for user in users:
-            if user.cart.market_items.count() > 0:
-                someone_started_ordering = True
-                latest_time = max(user.cart.date, latest_time)
-                user_with_the_latest = user
-        # find top players
-        already_increased_queue_capacity = False
-        for i in range(0, roof):
-            top_users.append(users[i].username)
-            # allow top-n students to order market items
-            if i < queue_capacity and users[i].username == request.user.username:
-                context['top_player'] = "true"
-            # if previous top users did not order anything within X min, allow 2 more users to order
-            if (i + 1) == roof and queue_capacity < total_users and not already_increased_queue_capacity and someone_started_ordering:
-                # get the queue auto-expansion wait period
-                try:
-                    queue_wait_period = float(get_object_or_404(PortalSetting, school=ud.school, name="queue_wait_period").value)
-                except:
-                    queue_wait_period = 1
-                if queue_wait_period >= 0 and (timezone.now() - latest_time).total_seconds() > queue_wait_period * 60:
-                    user_with_the_latest.cart.date = timezone.now()
-                    user_with_the_latest.cart.save()
-                    already_increased_queue_capacity = True
-                    roof += 2
-                    queue_capacity += 2
-                    top_students_number.value = str(queue_capacity)
-                    top_students_number.save()
-        context['top_players'] = top_users
-        context['top_students_number'] = queue_capacity
+    for user in users:
+        top_users.append(user.username)
+        # just in case if a cart has not been created yet
+        c, created = Cart.objects.get_or_create(user_data=user)
+        if created: c.save()
+        # assign the top player to the current user if possible
+        if user.username == request.user.username:
+            context['top_player'] = "true"
+    context['top_players'] = top_users
+    #top_students_number = get_object_or_404(PortalSetting, school=ud.school, name="top_students_number")
+    #queue_capacity = int(top_students_number.value)
+    context['top_students_number'] = users.count()
     return context
