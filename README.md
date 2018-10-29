@@ -45,3 +45,5 @@ Contact Vitaly Ford fordv@arcadia.edu with one of the following subject lines, d
 # Acknowledgements
 
 We thank [NSA/NSF GenCyber program](https://www.gen-cyber.com/ "NSA/NSF GenCyber Program") for funding the implementation of this project.
+
+We also thank Andy Malinsky, a Computer Science and Mathematics student at Arcadia University, for bug hunting, testing the project's code, and helping with writing these instructions.
