@@ -4,7 +4,7 @@ Django settings for GenCyberCoin project.
 """
 
 #import dj_database_url #dj-database-url==0.4.1
-import os
+import os 
 if 'RDS_DB_NAME' in os.environ:
     from cryptocoin.aws.conf import *
 
