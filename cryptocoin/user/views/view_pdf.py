@@ -35,7 +35,7 @@ def pdf_codes_admin(request):
     # draw codes on the pdf
     if data:
         # split 1d data into 2d
-        data = [data[i:i+n] for i in xrange(0, len(data), n)]
+        data = [data[i:i+n] for i in range(0, len(data), n)]
         # create and draw the table
         t = Table(data)
         t.setStyle(TableStyle([
