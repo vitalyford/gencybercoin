@@ -125,4 +125,5 @@
 
     * You can locate the project either by typing the command `eb console` or navigating to [AWS Console](https://console.aws.amazon.com/console/home "AWS Console") in your browser and selecting `Elastic Beanstalk` among the `AWS Services`.
     
-    * To view the project in the browser, simply click the URL located at the top of your Elastic Beanstalk environment.
+    * To view the project in the browser, simply click the URL located at the top of your Elastic Beanstalk environment. 
+      Note: The page may fail to load the first time you try to access it. Simply refresh the page and it should be working.
