@@ -22,7 +22,7 @@
 
 1. Create a User:
 
-    a. Under the Services drop-down, select "IAM" which is located under the "Security, Identity & Compliance" section. Click on “Users” on the left-hand side, then click the button “Add User.”
+    a. Under the Services drop-down, search for "IAM" which is also located under the "Security, Identity & Compliance" section. Click on “Users” on the left-hand side, then click the button “Add User.”
     
     b. Create a username (e.g. cybercoin), and assign the user "Programmatic access".
 
@@ -78,7 +78,7 @@
 
 5.	Set up the AWS S3 bucket:
   
-    a. Connecting the bucket with the project will store files including images, CSS, and Javascript. Open https://console.aws.amazon.com in your browser and choose "S3" in the Services drop down under the "Storage" section. 
+    a. Connecting the bucket with the project will store files including images, CSS, and Javascript. Sign in to the [AWS Console](https://console.aws.amazon.com) and choose "S3" in the Services drop down under the "Storage" section. 
   
     Please refer to the directions below as you go through the bucket setup steps found [here](https://www.codingforentrepreneurs.com/blog/s3-static-media-files-for-django/). 
     
