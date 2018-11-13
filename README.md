@@ -21,6 +21,13 @@ The instructions for setting up a local version of the GenCyberCoin project can 
 
 The instructions for setting up the GenCyberCoin project on AWS can be found [here](instructions/AWS_setup.MD).
 
+# Custom Domain setup instructions
+
+The instructions for setting up a custom domain for your version of the GenCyberCoin project can be found [here](instructions/Domain_setup.MD).
+
+# SSL Certificate for AWS setup instructions
+
+The instructions for setting up a secure website certificate for you version of the GenCyberCoin project can be found [here](instructions/SSL_setup.MD).
 
 # Creating administrators
 
