@@ -64,8 +64,8 @@ var name;
             //aspectRatio: 1,
             //autoCropArea: 1,
             viewMode: 2,
-            minCropBoxWidth: 150,
-            minCropBoxHeight: 150,
+            minCropBoxWidth: 50,
+            minCropBoxHeight: 50,
           });
           // Enable zoom in button
           $(".js-zoom-in").click(function () {

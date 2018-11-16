@@ -14,7 +14,15 @@
     bottom: 25px; /* height of link element */
     right: 5px; /* padding from the left side of the window */
 }
+.go-to-top:hover {
+    color: #ffffff;
+    background: #23527c;
+}
 /* End go to the top button */
+
+.input-group-addon { /* font size for the transfer-to in the wallet */
+    font-size: 20px;
+}
 
  @-moz-document url-prefix() {
    fieldset { display: table-cell; }
@@ -56,7 +64,7 @@
 }
 
 .gccell {
-    width: 120px;
+    width: 130px;
     background-color: rgb(249,249,249,0.6);
 }
 
@@ -285,6 +293,7 @@ footer p {
   font-size: 50px !important;
   margin: 20px;
   padding: 10px;
+  background-color: rgb(0,255,255,0.3)
 }
 
 /* SOLD */
