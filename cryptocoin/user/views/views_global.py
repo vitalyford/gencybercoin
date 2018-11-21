@@ -111,6 +111,11 @@ def init_portal_settings(school):
     if aats_created:
         amount_allowed_to_send.value = "5" # default value in coins
         amount_allowed_to_send.save()
+    # define the program type, camp is default
+    program_type, program_type_created = PortalSetting.objects.get_or_create(name="program_type", school=school)
+    if program_type_created:
+        program_type.value = "camp"
+        program_type.save()
 
 def get_portal_settings(school):
     context = {}
