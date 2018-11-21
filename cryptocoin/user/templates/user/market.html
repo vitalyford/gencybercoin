@@ -8,10 +8,10 @@
     <div class="box">
       <div class="col-lg-3">
         <hr>
-        <h2 class="intro-text text-center">Cart</h2>
+        <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item for a price that is smaller or bigger, keep an eye on your cart" id="cart-info"></i>{% endif %}</h2>
         <hr>
 {% if cart %}
-        {#<p class="text-right" style="font-size: 16px;">Remove</p>#}
+        {% if program_type == "camp" %}<p class="text-right" style="font-size: 16px;">Remove</p>{% endif %}
         <table class="table table-hover table-responsive" style="margin: 0 auto;">
           <tbody>
           {% for c in cart %}
@@ -19,7 +19,7 @@
           <tr>
             <td scope="row">{{ c.name }}</td>
             <td scope="row" class="text-right">&hearts;{{ c.cost_permanent }}</td>
-            {% comment %}
+            {% if program_type == "camp" %}
             <td scope="row" class="text-center">
                 <form class="form-horizontal" action="{% url 'user:market' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post">
                 {% csrf_token %}
@@ -27,12 +27,12 @@
                     <button type="submit" class="btn btn-default btn-xs" name="remove{{ c.id }}" value="{{ c.id }}">X</button>
                 </form>
             </td>
-            {% endcomment %}
+            {% endif %}
           </tr>
           </small>
           {% endfor %}
           {% if total %}
-          <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td></tr>
+          <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td>{% if program_type == "camp" %}<td></td>{% endif %}</tr>
           {% endif %}
           </tbody>
         </table>
@@ -40,10 +40,10 @@
         <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
 {% endif %}
         <hr>
-        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick" id="queue-info"></i></h2>
+        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick{% if program_type == 'camp' %}, this number will change as time goes on{% endif %}" id="queue-info"></i></h2>
         <hr>
 {% if market_enabled == "true" %}
-        <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% endif %}</p>
+        <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% if program_type == "camp" %}, please wait your turn{% endif %}{% endif %}</p>
         <div id="students_list">
         {% for u in top_players %}
           <p class="lead">{{ forloop.counter }}. {{ u }}</p>
@@ -65,7 +65,7 @@
             {% endfor %}
           {% endif %}
           <p class="lead text-center">Available Coins: &hearts;{{ available_coins }}</p>
-          {% if market_enabled == "false" %}<p class="text-center text-warning">The market items are not currently available to order.</p>{% endif %}
+          {% if market_enabled == "false" %}<p class="text-center text-warning">The market items are not currently available to order.{% if program_type == "camp" %}<br>We will open it at the end of the camp!{% endif %}</p>{% endif %}
 
           {% for item in marketdata %}
             {% if forloop.first %}
@@ -100,7 +100,11 @@
                   {% csrf_token %}
                       <input type="hidden" name="checkers" value="{{ item.cost_permanent }}"/>
                       <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
-                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}>Add to cart</button>
+                      {% if program_type == "classroom" %}
+                            <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}>Add to cart</button>
+                      {% else %}
+                            <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}>Add to cart</button>
+                      {% endif %}
                       <hr class="visible-xs">
                   </form>
                   {% endif %}
@@ -166,7 +170,7 @@
                   if (top_player == "true" && top_player == json['top_player']) {
                       /* do not update the page if the user is already a top player */
                   }
-                  else if (top_player != json['top_player'] || cart_size != json['cart_size']) {
+                  else if (top_player != json['top_player'] {% if program_type == "camp" %}top_students_number != json['top_students_number'] || {% endif %}|| cart_size != json['cart_size']) {
                       window.location = window.location.href;
                   }
               }
