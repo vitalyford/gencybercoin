@@ -3,6 +3,21 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+.live-edit {
+    background-color:rgba(0, 0, 0, 0);
+    color:white;
+    border: none;
+    outline:none;
+    height:30px;
+    transition:height 1s;
+    -webkit-transition:height 1s;
+}
+
+.live-edit:focus {
+    height:50px;
+    font-size:16px;
+}
+
 /* Go to the top button */
 #top-link-block.affix-top {
     position: absolute; /* allows it to "slide" up into view */

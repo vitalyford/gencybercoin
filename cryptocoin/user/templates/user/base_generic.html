@@ -40,8 +40,14 @@
 
 <body>
 
-    <div class="brand">GenCyberCoin</div>
-    <div class="address-bar">GenCyber | Where security meets opportunity{% if request.user|get_school != "" %} | {{ request.user|get_school }}{% endif %}</div>
+    <div class="brand">
+        {% if request.user|has_group:"gcadmin" %}<input name="brand" type="text" class="live-edit" value="GenCyberCoin">
+        {% else %}GenCyberCoin{% endif %}
+    </div>
+    <div class="address-bar">
+        {% if request.user|has_group:"gcadmin" %}<input name="title" type="text" class="live-edit" value="GenCyber | Where security meets opportunity{% if request.user|get_school != "" %} | {{ request.user|get_school }}{% endif %}">
+        {% else %}GenCyber | Where security meets opportunity{% if request.user|get_school != "" %} | {{ request.user|get_school }}{% endif %}{% endif %}
+    </div>
 
     <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
