@@ -3,6 +3,30 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+.live-edit {
+    background-color: rgba(0, 0, 0, 0);
+    color: inherit;
+    border: none;
+    outline: none;
+    text-align: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    transition: height 1s;
+    width: 100%;
+    //-webkit-transition: height 1s;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+}
+
+.live-edit:hover {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
 /* Go to the top button */
 #top-link-block.affix-top {
     position: absolute; /* allows it to "slide" up into view */
