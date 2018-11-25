@@ -60,3 +60,21 @@ def get_school(user):
     except:
         pass
     return ""
+
+@register.filter(name='get_brand')
+def get_school(user):
+    try:
+        ud = UserData.objects.get(username=user.username)
+        return ud.school.brand
+    except:
+        pass
+    return ""
+
+@register.filter(name='get_title')
+def get_school(user):
+    try:
+        ud = UserData.objects.get(username=user.username)
+        return ud.school.title
+    except:
+        pass
+    return ""
