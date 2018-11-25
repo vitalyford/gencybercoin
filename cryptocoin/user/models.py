@@ -7,12 +7,12 @@ import os
 
 # Create your models here.
 class School(models.Model):
-    name            = models.CharField(max_length=50)
-    state           = models.CharField(max_length=30, default="")
-    description     = models.CharField(max_length=300, default="")
+    name  = models.CharField(max_length=80)
+    brand = models.CharField(max_length=300, default="GenCyberCoin")
+    title = models.CharField(max_length=300, default="GenCyber | Where security meets opportunity")
     student_mode_for_admins = models.BooleanField(default=False)
     def __str__(self):
-        return str(self.id) + " " + self.name + " " + self.state
+        return str(self.id) + " " + self.name
 
 class UserData(models.Model):
     username   = models.CharField(max_length=30)
@@ -25,6 +25,7 @@ class UserData(models.Model):
     date            = models.DateTimeField()
     is_admin        = models.BooleanField(default=False)
     team_number     = models.IntegerField(default=0)
+    tier            = models.IntegerField(default=0)
     driplets_score  = models.IntegerField(default=0)
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def save(self, *args, **kwargs):

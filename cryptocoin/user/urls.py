@@ -14,6 +14,7 @@ urlpatterns = [
     #url(r'^driblets/$', views.driblets, name='driblets'),
     url(r'^register/$', views.register, name='register'),
     url(r'^wallet/$', views.wallet, name='wallet'),
+    url(r'^update/header/$', views.update_header, name='update-header'),
     url(r'^wallet/submit/$', views.submit_wallet, name='submit-wallet'),
     url(r'^account-creation/$', views.account_creation, name='account-creation'),
     url(r'^account/$', views.user_account, name='account'),

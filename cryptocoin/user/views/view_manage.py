@@ -44,6 +44,8 @@ def submit_code_generator(request):
             # get or create a new School, if created => initialize default PortalSettings
             s, created = School.objects.get_or_create(name=school)
             if created:
+                s.title = s.title + " | " + school
+                s.save()
                 init_portal_settings(s)
             for i in range(count):
                 key = str(s.id) + "!" + generate_gencyber_code()
