@@ -7,7 +7,7 @@ def update_header(request):
             brand = request.POST.get('brand').strip()
             title = request.POST.get('title').strip()
             school = get_object_or_404(School, name=ud.school.name)
-            if school.brand != '': school.brand = brand
-            if school.title != '': school.title = title
+            if brand != '': school.brand = brand
+            if title != '': school.title = title
             school.save()
     return HttpResponseRedirect(reverse('user:index'))
