@@ -25,7 +25,6 @@ class UserData(models.Model):
     date            = models.DateTimeField()
     is_admin        = models.BooleanField(default=False)
     team_number     = models.IntegerField(default=0)
-    tier            = models.IntegerField(default=0)
     driplets_score  = models.IntegerField(default=0)
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def save(self, *args, **kwargs):
