@@ -293,7 +293,7 @@ def account_creation(request):
         context['error_message'] = "Registration code is not valid! Check it again or contact the GenCyber Squad for help."
         return render(request, 'user/register.html', context)
     # check for duplicates
-    user_with_the_same_name = UserData.objects.filter(username=uname)
+    user_with_the_same_name = User.objects.filter(username=uname)
     if user_with_the_same_name.count() > 0 or uname == "admin":
         context['error_message'] = "Sorry, a user named \"" + uname + "\" already exists. Try again =P"
         return render(request, 'user/register.html', context)

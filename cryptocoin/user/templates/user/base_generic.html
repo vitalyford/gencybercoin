@@ -39,9 +39,29 @@
 </head>
 
 <body>
+    {% if request.user|has_group:"gcadmin" %}
+    <form class="form-horizontal" action="{% url 'user:update-header' %}" method="post">
+        {% csrf_token %}
+    {% endif %}
+        <div class="brand">
+            {% if request.user|has_group:"gcadmin" %}<input name="brand" type="text" class="live-edit" value="{% if request.user|get_brand != "" %}{{ request.user|get_brand }}{% else %}GenCyberCoin{% endif %}">
+            {% elif request.user|get_brand != "" %}{{ request.user|get_brand }}
+            {% else %}GenCyberCoin{% endif %}
+        </div>
+        <div class="address-bar">
+            {% if request.user|has_group:"gcadmin" %}<input name="title" type="text" class="live-edit" value="{% if request.user|get_title != "" %}{{ request.user|get_title }}{% else %}GenCyber | Where security meets opportunity{% endif %}">
+            {% elif request.user|get_title != "" %}{{ request.user|get_title }}
+            {% else %}GenCyber | Where security meets opportunity{% endif %}
 
-    <div class="brand">GenCyberCoin</div>
-    <div class="address-bar">GenCyber | Where security meets opportunity{% if request.user|get_school != "" %} | {{ request.user|get_school }}{% endif %}</div>
+            {% if request.user|has_group:"gcadmin" %}
+            <div class="pull-right" style="position: relative; top: 0; left: 0; width: 100%; padding-top: 3px;">
+                <button type="submit" class="btn btn-primary">Update header</button>
+            </div>
+            {% endif %}
+        </div>
+    {% if request.user|has_group:"gcadmin" %}
+    </form>
+    {% endif %}
 
     <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
