@@ -1,0 +1,76 @@
+package problems_2014;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+/*
+ * By: Andy Malinsky
+ * Purpose: CCSC Eastern programming contest 2014 - practice problem 1 (Root Beer Collection)
+ * 
+ */
+
+public class Problem1 {
+
+	private Scanner input = new Scanner(System.in);
+	
+	private int bottleTypeTotal;
+	private String bottleType;
+	private ArrayList<String> bottles = new ArrayList<String>();
+	private Map<Integer, ArrayList<String>>	cases = new HashMap<Integer, ArrayList<String>>();
+	
+	private int colorID;
+	private int bottleSize;
+	private int bottleQuantity;
+	private int caseCounter;
+	
+	//constructor
+	public Problem1() {
+		
+		
+		setCases();
+	}
+
+	
+	public void setCases() {
+		
+		caseCounter = 1;
+		bottles.clear();
+
+		
+		while(caseCounter == 1 || input.hasNextInt() && input.nextInt() != 0) {
+			
+			bottles.clear();
+			System.out.println("Case " + caseCounter + ": Enter number of types of bottles...");
+			bottleTypeTotal = input.nextInt();
+			
+			for(int i = 0; i < bottleTypeTotal; i++) {
+				System.out.println("Type " + i + ": ");
+				bottleType = input.nextLine();
+				bottleType.replace(" ", "");
+				
+				bottleQuantity = bottleType.charAt(2);
+				for(int j = 0; j < bottleQuantity; j++) {
+					bottleType = bottleType.substring(0, 2);  //string of two ints, colorID and bottleSize
+					bottles.add(bottleType);
+				}
+			}
+			
+			caseCounter++;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//main method driver
+	public static void main(String[] args) {
+		
+		Problem1 p = new Problem1();
+	}
+}
