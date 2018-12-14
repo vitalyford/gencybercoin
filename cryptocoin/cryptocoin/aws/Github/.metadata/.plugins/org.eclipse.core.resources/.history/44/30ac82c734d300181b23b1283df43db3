@@ -1,0 +1,87 @@
+package problems_2017;
+
+import java.util.Scanner;
+import java.util.Stack;
+
+class Position{
+	public int x;
+	public int y;
+	
+	Position(){
+		x = y = 0;
+	}
+	
+	Position(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+}
+
+
+
+public class Problem3 {
+	public static void main(String[] args) {
+		Stack<Position> stack = new Stack<Position>();
+
+		Scanner input = new Scanner(System.in);
+		
+		while(true) {
+		int width = 0;
+		try {
+			width = input.nextInt();  //16
+			System.out.println();
+		}
+		catch(Exception e){
+			break;
+		}
+		
+		int height = input.nextInt();  //7
+		int initX = input.nextInt() - 1;  //8 columns
+		int initY = input.nextInt() - 1;  //5 rows
+		Character fill = input.nextLine().trim().charAt(0);
+		
+		
+		Character[][] matrix = new Character[height][width];
+		
+		for(int i = 0; i < height; i++) {
+			String line = input.nextLine();
+			for(int j = 0; j < line.length(); j++) {
+				matrix[i][j] = line.charAt(j);
+			}
+		}
+		
+		stack.push(new Position(initX, initY));
+		
+		while(!stack.empty()) {
+			Position p = stack.pop();
+			matrix[p.y][p.x] = fill;
+			
+			//can we go left
+			if(p.x-1 >= 0 && matrix[p.y][p.x-1] != '#' && matrix[p.y][p.x-1] != fill) {
+				stack.push(new Position(p.x-1, p.y));
+			}
+			//can we go top
+			if(p.y-1 >= 0 && matrix[p.y-1][p.x] != '#' && matrix[p.y-1][p.x] != fill) {
+				stack.push(new Position(p.x, p.y-1));
+			}
+			//can we go right
+			if(p.x+1 < width && matrix[p.y][p.x+1] != '#' && matrix[p.y][p.x+1] != fill) {
+				stack.push(new Position(p.x+1, p.y));
+			}
+			//can we go bottom
+			if(p.y+1 < height && matrix[p.y+1][p.x] != '#' && matrix[p.y+1][p.x] != fill) {
+				stack.push(new Position(p.x, p.y+1));
+			}
+		}//while loop finishes
+		
+		for(int row = 0; row < height; row++) {
+			for(int col = 0; col < width; col++) {
+				System.out.print(matrix[row][col]);
+			}
+			System.out.println();
+		}
+			System.out.println();
+		}//while true before it breaks
+		input.close();
+	}
+}

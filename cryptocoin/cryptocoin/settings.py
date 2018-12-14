@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'storages',
+    'upload',
 ]
 
 MIDDLEWARE = [
@@ -87,13 +88,22 @@ if 'RDS_DB_NAME' in os.environ:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'coin_db',
-            'USER': 'coin_admin',
-            'PASSWORD': 'go-figure-me-cow',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.postgresql'),
+            'NAME': os.getenv('SQL_DATABASE', os.path.join(BASE_DIR, 'db.postgresql')),
+            'USER': os.getenv('SQL_USER', 'user'),
+            'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
+            'HOST': os.getenv('SQL_HOST', 'localhost'),
+            'PORT': os.getenv('SQL_PORT', '5432'),
         }
+        
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql',
+        #     'NAME': 'coin_db',
+        #     'USER': 'coin_admin',
+        #     'PASSWORD': 'go-figure-me-cow',
+        #     'HOST': 'localhost',
+        #     'PORT': '5432',
+        # }
     }
 
 
@@ -133,9 +143,12 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATIC_URL = '/static/'
 
+
 # File storage settiings
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
 
 # Secure settings
 #SSLIFY_DISABLE = True

@@ -1,0 +1,62 @@
+package problems_2014;
+
+import java.util.Scanner;
+
+/*
+ * By: Andy Malinsky
+ * Purpose: CCSC Eastern programming contest 2014 - practice problem 1 (Root Beer Collection)
+ * 
+ */
+
+public class Problem1 {
+
+	private Scanner input = new Scanner(System.in);
+	private int bottleTypeTotal;
+	private int colorID;
+	private int bottleSize;
+	private int bottleQuantity;
+	private int[] cases;
+	private int caseCounter;
+	
+	//constructor
+	public Problem1() {
+		
+		setCases();
+	}
+	String[] arr=input.d .split(" ");//take the input in string array separated by whitespaces" "
+	int[] intarr=new int[arr.length];
+	 
+	for(int i=0;i<arr.length;i++)
+	 int arr[i]=Integer.parseInt(arr[i]);//each array indices parsed to integer
+	
+	
+	public void setCases() {
+		
+		caseCounter = 1;
+		
+		while(input.hasNextInt() && input.nextInt() != 0) {
+			
+			System.out.println("Case " + caseCounter + ": Enter number of types of bottles...");
+			bottleTypeTotal = input.nextInt();
+			
+			for(int i = 0; i < bottleTypeTotal; i++) {
+				System.out.println("Type " + i + ": ");
+				
+			}
+			
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//main method driver
+	public static void main(String[] args) {
+		
+		Problem1 p = new Problem1();
+	}
+}
