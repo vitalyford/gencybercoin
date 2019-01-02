@@ -16,12 +16,10 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import path
-from upload.views import image_upload
+
 
 urlpatterns = [
     url(r'^', include ('user.urls', namespace="user")),
-    path('', image_upload, name='upload'),
     url(r'^gcsuperuser/', admin.site.urls),
 ]
 
