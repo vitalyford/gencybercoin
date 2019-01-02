@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.http import HttpResponseRedirect, HttpResponse
 
+
 urlpatterns = [
     url(r'^', include ('user.urls', namespace="user")),
     url(r'^gcsuperuser/', admin.site.urls),
