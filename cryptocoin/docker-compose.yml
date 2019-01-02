@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    #command: python /usr/src/cryptocoin/manage.py runserver 0.0.0.0:80
+    command: gunicorn  cryptocoin.wsgi:application --bind 0.0.0.0:80
+    volumes:
+      - .:/usr/src/cryptocoin/
+      - static_volume:/usr/src/cryptocoin/cryptocoin/static
+      - media_volume:/usr/src/cryptocoin/cryptocoin/media
+    expose:
+      - 80
+    environment:
+      - SECRET_KEY='8##0)!!pa9#s8ak9b+%=gn@wz_i*&Ac^!b8j0!jmq^ptbp-+x_'
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_DATABASE=postgres
+      - SQL_USER=postgres
+      - SQL_PASSWORD=postgres
+      - SQL_HOST=db
+      - SQL_PORT=5432
+      - DATABASE=postgres
+    depends_on:
+      - db
+  db:
+    image: postgres:10.5-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/cryptocoin/cryptocoin/static
+      - media_volume:/usr/src/cryptocoin/cryptocoin/media
+    ports:
+      - 80:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
