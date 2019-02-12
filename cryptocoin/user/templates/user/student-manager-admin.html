@@ -1,6 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% load auth_extras %}
+
+{% block customcss %}
+<!-- For table sorting -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="box">
@@ -15,7 +21,7 @@
             {% endif %}
             {% if userdata %}
             <div class="table-responsive">
-              <table class="table table-hover">
+              <table class="display" id="table-to-sort">
               <thead>
                 <tr>
                   <th>#</th>
@@ -87,6 +93,8 @@
 {% endblock %}
 
 {% block customjs %}
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
 <script>
     $("#show-hide-passwords").click(function() {
         var show_hide = document.getElementById('show-hide-passwords');
@@ -126,5 +134,23 @@
          document.getElementById('hiddenDelete').value = currObject.name.replace("delete", "");
          document.getElementById('submit').name = currObject.name;
     }
+
+    $(document).ready(function() {
+    $('#table-to-sort').DataTable( {
+        columnDefs: [ {
+            targets: [ 0 ],
+            orderData: [ 0, 1 ]
+        }, {
+            targets: [ 1 ],
+            orderData: [ 1, 0 ]
+        }, {
+            targets: [ 4 ],
+            orderData: [ 4, 0 ]
+        }, {
+          'bSortable' : false,
+          'aTargets' : [ 0, 7, 8 ]
+        } ]
+    } );
+} );
 </script>
 {% endblock %}
