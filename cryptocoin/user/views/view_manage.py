@@ -563,13 +563,49 @@ def submit_market_admin(request):
         return market(request)
     return HttpResponseRedirect(reverse('user:index'))
 
+def configure_market(request, ud, enabled):
+    MAX_TIERS = 10
+    try:
+        top_students_number = get_object_or_404(PortalSetting, school=ud.school, name="top_students_number")
+        queue_capacity = int(top_students_number.value)
+    except:
+        queue_capacity = 5
+    # set the tier values for the top students
+    if enabled == "true": # the market is enabled
+        top_students = UserData.objects.filter(school=ud.school, is_admin=False).order_by('-permanent_coins')[:queue_capacity]
+        tier_number = MAX_TIERS
+        multiplier = 0
+        for student in top_students:
+            multiplier += student.permanent_coins
+            student.tier = tier_number
+            student.save()
+            tier_number = (tier_number - 2) if (tier_number > 2) else 1
+        # set the market items prices
+        multiplier = int(multiplier / (queue_capacity * MAX_TIERS))
+        marketdata = MarketItem.objects.filter(school=ud.school)
+        for m in marketdata:
+            m.cost_permanent = m.tier * multiplier
+            m.save()
+    else: # if market is turned off then reset all students' tier values to 0
+        students = UserData.objects.filter(school=ud.school, tier__gt=0, is_admin=False)
+        for student in students:
+            student.tier = 0
+            student.save()
+
 def update_setting(request, ud, portal_setting):
     # enabling portal_setting
-    enabled = str(request.POST.get(portal_setting) == 'on').lower()
-    ps = get_object_or_404(PortalSetting, school=ud.school, name=portal_setting)
-    if ps.value != enabled:
-        ps.value = enabled
-        ps.save()
+    try:
+        enabled = str(request.POST.get(portal_setting) == 'on').lower()
+        ps = get_object_or_404(PortalSetting, school=ud.school, name=portal_setting)
+        if ps.value != enabled:
+            ps.value = enabled
+            ps.save()
+            program_type = get_object_or_404(PortalSetting, school=ud.school, name='program_type').value
+            if program_type == 'classroom' and portal_setting == 'market_enabled':
+                # re-configure the market space if the market has been switched on/off
+                configure_market(request, ud, enabled)
+    except:
+        messages.warning(request, portal_setting + ' does not exist')
 
 def submit_settings_admin(request):
     if request.user.is_authenticated:
@@ -577,8 +613,6 @@ def submit_settings_admin(request):
         if request.user.groups.filter(name='gcadmin').exists():
             context = {}
             if 'save' in request.POST:
-                # enabling market for students
-                update_setting(request, ud, 'market_enabled')
                 # enabling ajax
                 update_setting(request, ud, 'ajax_enabled')
                 # enabling bug bounty for students
@@ -645,6 +679,20 @@ def submit_settings_admin(request):
                         aats = get_object_or_404(PortalSetting, school=ud.school, name='amount_allowed_to_send')
                         aats.value = str(amount_allowed_to_send)
                         aats.save()
+                # setting up the program type
+                if 'program_type' in request.POST:
+                    try:
+                        pt = request.POST.get('program_type')
+                        if pt != 'camp' and pt != 'classroom':
+                            raise
+                    except:
+                        messages.warning(request, 'Program type does not exist or it is of incorrect type')
+                    else:
+                        program_type = get_object_or_404(PortalSetting, school=ud.school, name='program_type')
+                        program_type.value = pt
+                        program_type.save()
+                # enabling market for students
+                update_setting(request, ud, 'market_enabled')
     return HttpResponseRedirect(reverse('user:settings-admin'))
 
 def settings_admin(request):
