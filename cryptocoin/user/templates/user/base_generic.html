@@ -118,17 +118,17 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'user:code-generator' %}">Code Generator</a></li>
+                            <li><a href="{% url 'user:code-generator' %}">Generate Codes</a></li>
                             {% if not request.user.is_superuser %}
-                            <li><a href="{% url 'user:market-admin' %}">Market Editor</a></li>
-                            <li><a href="{% url 'user:achievements-admin' %}">Activity Editor</a></li>
-                            <li><a href="{% url 'user:extras-social-engineering-admin' %}">Reconnaissance Editor</a></li>
+                            <li><a href="{% url 'user:market-admin' %}">Edit Market</a></li>
+                            <li><a href="{% url 'user:achievements-admin' %}">Edit Activities</a></li>
+                            <li><a href="{% url 'user:extras-social-engineering-admin' %}">Edit Reconnaissance</a></li>
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:nominations-admin' %}">Activity Nomination</a></li>
+                            <li><a href="{% url 'user:nominations-admin' %}">Nominate Activities</a></li>
                             <li><a href="{% url 'user:student-carts-admin' %}">Student Orders</a></li>
                             <li><a href="{% url 'user:student-manager-admin' %}">Student Manager</a></li>
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:settings-admin' %}">Display Settings</a></li>
+                            <li><a href="{% url 'user:settings-admin' %}">Settings</a></li>
                             {% endif %}
                             <hr style="margin: 2px;">
                             <li><a href="{% url 'user:show-feedback-admin' %}">Show Feedback</a></li>
@@ -162,9 +162,9 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
 <!-- Designed and developed by Dr. Vitaly Ford, https://vford.me -->
-                    <p class="lead">Copyright &copy; Dr. Vitaly Ford (<span style="color: #0000ff;">fordv@arcadia.edu</span>)<br>
+                    <p class="lead"><small>Copyright &copy; Dr. Vitaly Ford (<span style="color: #0000ff;">fordv@arcadia.edu</span>)<br>
                         Collaborator: Cybersecurity Education Research and Outreach Center (Dr. Ambareen Siraj)<br>in support for the NSA/NSF GenCyber Program
-                    </p>
+                    </small></p>
                 </div>
             </div>
         </div>
