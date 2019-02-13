@@ -7,7 +7,7 @@ import os
 
 # Create your models here.
 class School(models.Model):
-    name  = models.CharField(max_length=80)
+    name  = models.CharField(max_length=100)
     brand = models.CharField(max_length=300, default="GenCyberCoin")
     title = models.CharField(max_length=300, default="GenCyber | Where security meets opportunity")
     student_mode_for_admins = models.BooleanField(default=False)
@@ -15,10 +15,10 @@ class School(models.Model):
         return str(self.id) + " " + self.name
 
 class UserData(models.Model):
-    username   = models.CharField(max_length=30)
-    first_name = models.CharField(max_length=30)
-    last_name  = models.CharField(max_length=30)
-    password   = models.CharField(max_length=30, default="author:vitaly_ford")
+    username   = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name  = models.CharField(max_length=100)
+    password   = models.CharField(max_length=100, default="author:vitaly_ford")
     honory_coins    = models.IntegerField(default=settings.DEFAULT_HONORARY_COINS)
     permanent_coins = models.IntegerField(default=settings.DEFAULT_PERMANENT_COINS)
     items_bought    = models.IntegerField(default=0)
@@ -36,18 +36,18 @@ class UserData(models.Model):
         return "ID = " + str(self.id) + " " + self.username + ", " + self.first_name + " " + self.last_name + ", Team # = " + str(self.team_number) + " Driplets: " + str(self.driplets_score)
 
 class PassRecQuestions(models.Model):
-    question = models.CharField(max_length=255)
+    question = models.CharField(max_length=300)
     def __str__(self):
         return self.question
 
 class UserAnswers(models.Model):
     data       = models.OneToOneField(UserData, on_delete=models.CASCADE, primary_key=True,)
-    question1  = models.CharField(max_length=255)
-    question2  = models.CharField(max_length=255)
-    question3  = models.CharField(max_length=255)
-    answer1    = models.CharField(max_length=30)
-    answer2    = models.CharField(max_length=30)
-    answer3    = models.CharField(max_length=30)
+    question1  = models.CharField(max_length=300)
+    question2  = models.CharField(max_length=300)
+    question3  = models.CharField(max_length=300)
+    answer1    = models.CharField(max_length=100)
+    answer2    = models.CharField(max_length=100)
+    answer3    = models.CharField(max_length=100)
     was_hacked = models.IntegerField(default=0)
     def __str__(self):
         return self.data.username
@@ -55,8 +55,8 @@ class UserAnswers(models.Model):
         return was_hacked > 0
 
 class Code(models.Model):
-    allowed_hash = models.CharField(max_length=20)
-    name         = models.CharField(max_length=70, default="registration")
+    allowed_hash = models.CharField(max_length=100)
+    name         = models.CharField(max_length=100, default="registration")
     value        = models.IntegerField(default=0)
     infinite     = models.BooleanField(default=False)
     school       = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
@@ -69,8 +69,8 @@ class Code(models.Model):
         return output
 
 class CodeRedeemer(models.Model):
-    username = models.CharField(max_length=30)
-    code     = models.CharField(max_length=20)
+    username = models.CharField(max_length=50)
+    code     = models.CharField(max_length=100)
     date     = models.DateTimeField()
     def save(self, *args, **kwargs):
         if not self.id:
@@ -80,8 +80,8 @@ class CodeRedeemer(models.Model):
         return self.username + " has redeemed " + self.code
 
 class TransferLogs(models.Model):
-    sender   = models.CharField(max_length=100)
-    receiver = models.CharField(max_length=100)
+    sender   = models.CharField(max_length=255)
+    receiver = models.CharField(max_length=255)
     date     = models.DateTimeField()
     amount   = models.IntegerField(default=0)
     hash     = models.CharField(max_length=100)
@@ -102,8 +102,8 @@ def image_upload_activities(instance, filename):
     return image_path
 
 class MarketItem(models.Model):
-    name            = models.CharField(max_length=50)
-    description     = models.CharField(max_length=300)
+    name            = models.CharField(max_length=100)
+    description     = models.CharField(max_length=400)
     cost_permanent  = models.IntegerField(default=0)
     image_file      = models.ImageField(upload_to=image_upload_market, default='no-image.jpg')
     quantity        = models.IntegerField(default=1)
@@ -125,8 +125,8 @@ class Cart(models.Model):
 
 class Achievement(models.Model):
     user_data       = models.ManyToManyField(UserData, blank=True)
-    name            = models.CharField(max_length=50)
-    description     = models.CharField(max_length=300)
+    name            = models.CharField(max_length=100)
+    description     = models.CharField(max_length=400)
     image_file      = models.ImageField(upload_to=image_upload_activities, default='no-image.jpg')
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def __str__(self):
@@ -140,12 +140,12 @@ class PortalSetting(models.Model):
         return self.name
 
 class Bugs(models.Model):
-    name            = models.CharField(max_length=30)
+    name            = models.CharField(max_length=50)
     reward          = models.IntegerField(default=20)
     user_data       = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     date            = models.DateTimeField()
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
-    link            = models.CharField(max_length=300)
+    link            = models.CharField(max_length=400)
     def save(self, *args, **kwargs):
         if not self.id:
             self.date = timezone.now()

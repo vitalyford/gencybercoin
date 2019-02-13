@@ -119,7 +119,7 @@ def submit_wallet(request):
                 save_coins(request, ud)
         if 'inputCode' in request.POST:
             ud = get_object_or_404(UserData, username=request.user.username)
-            inputCode = str(request.POST.get('inputCode')).lower()
+            inputCode = str(request.POST.get('inputCode')).lower().strip()
             if "<script" in inputCode:
                 # bug bounty
                 run_bug_bounty(request, ud, 'reflected_XSS', 'Congrats! You found a programming bug called reflected cross-site scripting! This bug would allow you to execute malicious javascript code in browsers.', 'https://excess-xss.com/')
@@ -272,7 +272,7 @@ def check_fields(request):
 
 def account_creation(request):
     # check if the registration code is valid
-    code = str(request.POST.get('inputCode')).lower()
+    code = str(request.POST.get('inputCode')).lower().strip()
     uname = request.POST.get('inputUsername')
     fname = request.POST.get('inputFirstname')
     lname = request.POST.get('inputLastname')

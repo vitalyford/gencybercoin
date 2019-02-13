@@ -16,25 +16,25 @@
               <div class="form-group">
                 <label for="iU" class="col-sm-3 control-label">Username</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iU" name="inputUsername" placeholder="Username" maxlength="30" value="{% if username %}{{ username }}{% endif %}" required autofocus>
+                  <input type="text" class="form-control" id="iU" name="inputUsername" placeholder="Username" maxlength="90" value="{% if username %}{{ username }}{% endif %}" required autofocus>
                 </div>
               </div>
               <div class="form-group">
                 <label for="iF" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iF" name="inputFirstname" placeholder="First Name" maxlength="30" value="{% if first_name %}{{ first_name }}{% endif %}" required>
+                  <input type="text" class="form-control" id="iF" name="inputFirstname" placeholder="First Name" maxlength="90" value="{% if first_name %}{{ first_name }}{% endif %}" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="iL" class="col-sm-3 control-label">Last Name</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iL" name="inputLastname" placeholder="Last Name" maxlength="30" value="{% if last_name %}{{ last_name }}{% endif %}" required>
+                  <input type="text" class="form-control" id="iL" name="inputLastname" placeholder="Last Name" maxlength="90" value="{% if last_name %}{{ last_name }}{% endif %}" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="iP" class="col-sm-3 control-label">Password</label>
                 <div class="col-sm-6">
-                  <input type="password" class="form-control" id="iP" name="inputPassword" placeholder="DO NOT USE ANY OF YOUR REAL PASSWORDS" maxlength="30" value="{% if password %}{{ password }}{% endif %}" required>
+                  <input type="password" class="form-control" id="iP" name="inputPassword" placeholder="DO NOT USE ANY OF YOUR REAL PASSWORDS" maxlength="90" value="{% if password %}{{ password }}{% endif %}" required>
                 </div>
               </div>
 
@@ -52,7 +52,7 @@
                   </select>
                 </div>
                 <div class="col-sm-offset-3 col-sm-6" style="padding-top: 10px;">
-                  <input type="text" class="form-control" id="iA{{forloop.counter}}" name="inputA{{forloop.counter}}" placeholder="Answer {{forloop.counter}}" maxlength="30" value="{% if forloop.counter == 1 and a1 %}{{a1}}{% endif %}{% if forloop.counter == 2 and a2 %}{{a2}}{% endif %}{% if forloop.counter == 3 and a3 %}{{a3}}{% endif %}" required>
+                  <input type="text" class="form-control" id="iA{{forloop.counter}}" name="inputA{{forloop.counter}}" placeholder="Answer {{forloop.counter}}" maxlength="90" value="{% if forloop.counter == 1 and a1 %}{{a1}}{% endif %}{% if forloop.counter == 2 and a2 %}{{a2}}{% endif %}{% if forloop.counter == 3 and a3 %}{{a3}}{% endif %}" required>
                 </div>
               </div>
               {% endfor %}
@@ -60,7 +60,7 @@
               <div class="form-group">
                 <label for="iCode" class="col-sm-3 control-label">Enter your registration code (get it from GenCyber Team).</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iCode" name="inputCode" placeholder="Registration Code" maxlength="15" value="{% if code %}{{ code }}{% endif %}" required>
+                  <input type="text" class="form-control" id="iCode" name="inputCode" placeholder="Registration Code" maxlength="90" value="{% if code %}{{ code }}{% endif %}" required>
                 </div>
               </div>
               <div class="form-group">

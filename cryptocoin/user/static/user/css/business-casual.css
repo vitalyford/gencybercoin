@@ -90,6 +90,7 @@
 .gccell {
     width: 130px;
     background-color: rgb(249,249,249,0.6);
+    word-wrap: break-word;
 }
 
 .margin-marketitems-admin {

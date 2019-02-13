@@ -40,7 +40,7 @@ def submit_code_generator(request):
                     raise
             except:
                 count = 0
-                messages.warning(request, 'The code must be an integer > 0')
+                messages.warning(request, 'The count must be an integer > 0')
             # get or create a new School, if created => initialize default PortalSettings
             s, created = School.objects.get_or_create(name=school)
             if created:
@@ -57,14 +57,14 @@ def submit_code_generator(request):
             try:
                 count, custom_code = 0, "0"
                 if type == "custom":
-                    custom_code = request.POST.get('inputCount')
+                    custom_code = request.POST.get('inputCount').lower()
                 else:
                     try:
                         count = int(request.POST.get('inputCount'))
                         if count < 0:
                             raise
                     except:
-                        messages.warning(request, 'The code must be an integer > 0')
+                        messages.warning(request, 'The count must be an integer > 0')
                         count = 0
                     if count > 500:
                         count = 500
