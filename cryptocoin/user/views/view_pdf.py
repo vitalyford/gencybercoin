@@ -18,7 +18,7 @@ def pdf_codes_admin(request):
     n = 5
     if code_name == 'award':
         data = Code.objects.filter(school=ud.school, name='award')
-        n = 4
+        #n = 4
     elif code_name == 'registration':
         data = Code.objects.filter(school=ud.school, name='registration')#.values_list('allowed_hash', flat=True)
     else:

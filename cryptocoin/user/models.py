@@ -62,10 +62,16 @@ class Code(models.Model):
     school       = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def __str__(self):
         output = self.allowed_hash
+        # wrap long codes
+        split_on = 10 # split on 10-th character
+        if len(output) > split_on:
+            splitted = [output[i:i+split_on] for i in range(0, len(output), split_on)]
+            output = '\n'.join(splitted)
+        # add more info
         if self.name != "registration":
             output += " \n♥" + str(self.value)
         if self.infinite:
-            return output + "\n(inf)"
+            output += "\n(inf)"
         return output
 
 class CodeRedeemer(models.Model):
