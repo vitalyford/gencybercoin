@@ -9,5 +9,5 @@ def update_header(request):
             school = get_object_or_404(School, name=ud.school.name)
             if brand != '': school.brand = brand
             if title != '': school.title = title
-            school.save()
+            if validate_on_save(request, school): school.save()
     return HttpResponseRedirect(reverse('user:index'))

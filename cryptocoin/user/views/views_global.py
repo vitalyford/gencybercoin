@@ -35,6 +35,23 @@ import json
 from django.http import Http404, HttpResponseNotFound
 import base64
 
+# import for on-save object validation
+from django.core.exceptions import ValidationError
+
+def validate_on_save(request, obj, message_on_success=''):
+    try:
+        obj.full_clean()
+    except ValidationError as e:
+        output = "Trying to break stuff, huh? ;-P Well, here is the message that will tell you what you are doing wrong: "
+        for k, v in enumerate(e.message_dict.items()):
+            output += str(v);
+        messages.warning(request, output)
+        return False
+    else:
+        if message_on_success != '':
+            messages.info(request, message_on_success)
+        return True
+
 def goto_login(request, page_name):
     return render(request, 'user/login.html', {
         'error_message': "You need to login or register to enter the " + page_name,

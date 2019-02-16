@@ -7,6 +7,11 @@
             <hr>
             <h2 class="intro-text text-center">Registration for GenCyberCoin</h2>
             <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
             <form class="form-horizontal" data-toggle="validator" action="{% url 'user:account-creation' %}" method="post">
             {% csrf_token %}
             {% if error_message %}<div class="lead text-center text-warning">{{ error_message }}</div>{% endif %}

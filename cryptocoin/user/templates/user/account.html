@@ -11,8 +11,8 @@
           <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
           {% csrf_token %}
             <div class="form-group">
-              <input type="password" class="form-control" id="iCop" name="inputOldPassword" maxlength="30" placeholder="Your old password" style="margin: 5px;" required>
-              <input type="password" class="form-control" id="iC" name="inputNewPassword" maxlength="30" placeholder="Your new password" style="margin: 5px;" required>
+              <input type="password" class="form-control" id="iCop" name="inputOldPassword" maxlength="90" placeholder="Your old password" style="margin: 5px;" required>
+              <input type="password" class="form-control" id="iC" name="inputNewPassword" maxlength="90" placeholder="Your new password" style="margin: 5px;" required>
               <button type="submit" class="btn btn-primary" name="change" style="margin: 5px;" value="change">Change password</button>
             </div>
           </form>
@@ -39,15 +39,15 @@
                   <tr><th scope="row">School</th><td>{{ userdata.school.name }}</td></tr>
                   <tr>
                     <th scope="row">{{ useranswers.question1 }}</th>
-                    <td><input type="text" class="form-control" id="iSQ1" name="inputSecQ1" maxlength="30" value="{{ useranswers.answer1 }}" required></td>
+                    <td><input type="text" class="form-control" id="iSQ1" name="inputSecQ1" maxlength="90" value="{{ useranswers.answer1 }}" required></td>
                   </tr>
                   <tr>
                     <th scope="row">{{ useranswers.question2 }}</th>
-                    <td><input type="text" class="form-control" id="iSQ2" name="inputSecQ2" maxlength="30" value="{{ useranswers.answer2 }}" required></td>
+                    <td><input type="text" class="form-control" id="iSQ2" name="inputSecQ2" maxlength="90" value="{{ useranswers.answer2 }}" required></td>
                   </tr>
                   <tr>
                     <th scope="row">{{ useranswers.question3 }}</th>
-                    <td><input type="text" class="form-control" id="iSQ3" name="inputSecQ3" maxlength="30" value="{{ useranswers.answer3 }}" required></td>
+                    <td><input type="text" class="form-control" id="iSQ3" name="inputSecQ3" maxlength="90" value="{{ useranswers.answer3 }}" required></td>
                   </tr>
                   {% endif %}
                   {% comment %}<!--<tr style="height: 30px;"><th scope="row"></th><td></td></tr>

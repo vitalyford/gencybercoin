@@ -22,7 +22,7 @@ class UserData(models.Model):
     honory_coins    = models.IntegerField(default=settings.DEFAULT_HONORARY_COINS)
     permanent_coins = models.IntegerField(default=settings.DEFAULT_PERMANENT_COINS)
     items_bought    = models.IntegerField(default=0)
-    date            = models.DateTimeField()
+    date            = models.DateTimeField(auto_now=True)
     is_admin        = models.BooleanField(default=False)
     team_number     = models.IntegerField(default=0)
     tier            = models.IntegerField(default=0)
@@ -75,7 +75,7 @@ class Code(models.Model):
         return output
 
 class CodeRedeemer(models.Model):
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=100)
     code     = models.CharField(max_length=100)
     date     = models.DateTimeField()
     def save(self, *args, **kwargs):
@@ -88,9 +88,9 @@ class CodeRedeemer(models.Model):
 class TransferLogs(models.Model):
     sender   = models.CharField(max_length=255)
     receiver = models.CharField(max_length=255)
-    date     = models.DateTimeField()
+    date     = models.DateTimeField(auto_now=True)
     amount   = models.IntegerField(default=0)
-    hash     = models.CharField(max_length=100)
+    hash     = models.CharField(max_length=150)
     school   = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def save(self, *args, **kwargs):
         if not self.id:
@@ -162,7 +162,7 @@ class Bugs(models.Model):
 
 class SEQuesAnsw(models.Model):
     question        = models.CharField(max_length=500)
-    answer          = models.CharField(max_length=200)
+    answer          = models.CharField(max_length=300)
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
     def __str__ (self):
         return self.question
@@ -176,7 +176,7 @@ class SECorrectAnswer(models.Model):
 class Feedback(models.Model):
     message = models.CharField(max_length=500)
     school  = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True) # one to many relationship
-    date    = models.DateTimeField()
+    date    = models.DateTimeField(auto_now=True)
     def save(self, *args, **kwargs):
         if not self.id:
             self.date = timezone.now()

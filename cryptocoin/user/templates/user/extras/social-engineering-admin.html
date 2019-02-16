@@ -30,8 +30,8 @@
           <form class="form-horizontal" action="{% url 'user:submit-social-engineering-admin' %}" method="post">
           {% csrf_token %}
               <div class="form-group margin-0-10">
-                  <input type="text" class="form-control" name="addQ" maxlength="200" placeholder="Enter a new question" style="margin-bottom: 5px;" required>
-                  <input type="text" class="form-control" name="addA" maxlength="200" placeholder="Enter a new answer" style="margin-bottom: 5px;" required>
+                  <input type="text" class="form-control" name="addQ" maxlength="290" placeholder="Enter a new question" style="margin-bottom: 5px;" required>
+                  <input type="text" class="form-control" name="addA" maxlength="290" placeholder="Enter a new answer" style="margin-bottom: 5px;" required>
                   <button type="submit" class="btn btn-success" name="submitAdd">Add</button>
               </div>
           </form>

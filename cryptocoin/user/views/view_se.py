@@ -70,7 +70,7 @@ def submit_social_engineering_admin(request):
                             answer = request.POST.get(key).lower().replace(" ", "")
                     if question != "" and answer != "":
                         se_ques_answ = SEQuesAnsw(question=question, answer=answer, school=ud.school)
-                        se_ques_answ.save()
+                        if validate_on_save(request, se_ques_answ): se_ques_answ.save()
                     else:
                         messages.warning(request, "Question and answer fields cannot be empty")
                 elif "submitEdit" in request.POST: # if editing existing questions/answers

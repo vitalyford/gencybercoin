@@ -92,7 +92,8 @@ def submit_code_generator(request):
                         c.save()
                 else:
                     c = Code(allowed_hash=custom_code, name='award', value=award_value, school=school_gcadmin, infinite=is_infinite)
-                    c.save()
+                    if validate_on_save(request, c):
+                        c.save()
         elif 'delete' in request.POST:
             if request.POST.get('delete') == "registration":
                 if request.user.is_superuser:
@@ -225,8 +226,9 @@ def add_new_achievements_item(request, ud):
     except:
         messages.warning(request, 'Something went wrong with the new activity, it has not been added')
     else:
-        activity_item.save()
-        messages.info(request, name + ' has been added')
+        if validate_on_save(request, activity_item):
+            activity_item.save()
+            messages.info(request, name + ' has been added')
 
 def submit_achievements_admin(request):
     if request.user.is_authenticated:
@@ -279,7 +281,7 @@ def submit_achievements_admin(request):
                                             messages.warning(request, 'Images should be images when you upload them, non-image files are not allowed')
                                     else:
                                         messages.warning(request, 'Only jpg, jpeg, png, and gif are allowed to be uploaded')
-                                activity_item.save()
+                                if validate_on_save(request, activity_item): activity_item.save()
                             elif update_remove == "remove":
                                 messages.info(request, 'Activity item ' + activity_item.name + ' has been deleted')
                                 if activity_item.image_file.url != "/media/no-image.jpg":
@@ -399,8 +401,9 @@ def add_new_market_item(request, ud):
     except:
         messages.warning(request, 'Something went wrong with the new market item, it has NOT been added')
     else:
-        marketitem.save()
-        messages.info(request, name + ' has been added')
+        if validate_on_save(request, marketitem):
+            marketitem.save()
+            messages.info(request, name + ' has been added')
 
 def process_import_csv(request, ud):
     try:
@@ -549,7 +552,7 @@ def submit_market_admin(request):
                                             messages.warning(request, 'Images should be images when you upload them, non-image files are not allowed')
                                     else:
                                         messages.warning(request, 'Only jpg, jpeg, png, and gif are allowed to be uploaded')
-                                market_item.save()
+                                if validate_on_save(request, market_item): market_item.save()
                                 context = {'status': 'success', 'message': 'Successfully updated ' + market_item.name}
                                 return JsonResponse(context)
                             elif update_remove == "remove":

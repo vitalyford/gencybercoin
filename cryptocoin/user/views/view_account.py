@@ -9,8 +9,8 @@ def update_sec_questions(request):
             ua.answer1 = request.POST.get('inputSecQ1')
             ua.answer2 = request.POST.get('inputSecQ2')
             ua.answer3 = request.POST.get('inputSecQ3')
-            ua.save()
-            messages.info(request, 'Your security questions have been successfully updated')
+            if validate_on_save(request, ua, 'Your security questions have been successfully updated'):
+                ua.save()
 
 def change_password(request):
     if request.user.is_authenticated:
@@ -18,17 +18,18 @@ def change_password(request):
             # update in User table
             u = get_object_or_404(User, username=request.user.username)
             u.set_password(request.POST.get('inputNewPassword'))
-            u.save()
-            # update in UserData table
-            u = get_object_or_404(UserData, username=request.user.username)
-            u.password = request.POST.get('inputNewPassword')
-            u.save()
-            # re-authenticate the user with the new creds
-            user = authenticate(username=request.user.username, password=u.password)
-            if user is not None:
-                request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
-                login(request, user)
-            messages.info(request, 'Your password has been successfully changed')
+            if validate_on_save(request, u):
+                u.save()
+                # update in UserData table
+                u = get_object_or_404(UserData, username=request.user.username)
+                u.password = request.POST.get('inputNewPassword')
+                u.save()
+                # re-authenticate the user with the new creds
+                user = authenticate(username=request.user.username, password=u.password)
+                if user is not None:
+                    request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
+                    login(request, user)
+                messages.info(request, 'Your password has been successfully changed')
         else:
             messages.warning(request, 'Your old password has been entered incorrectly')
 
@@ -102,10 +103,10 @@ def save_coins(request, ud):
         honorary_coins  = int(request.POST.get('honoraryCoins'))
         permanent_coins = int(request.POST.get('permanentCoins'))
         if honorary_coins < 0 or permanent_coins < 0:
-            messages.warning(request, 'Both honorary or earned have to be >= 0')
+            messages.warning(request, 'Both appreciation and earned coins have to be >= 0')
             return
     except:
-        messages.warning(request, 'Both honorary or earned coins have to be integers >= 0')
+        messages.warning(request, 'Both appreciation and earned coins have to be integers >= 0')
     else:
         ud.honory_coins    = honorary_coins
         ud.permanent_coins = permanent_coins
@@ -301,30 +302,43 @@ def account_creation(request):
         context['error_message'] = "Username and password cannot be empty."
         return render(request, 'user/register.html', context)
     # if there is no duplicate user, then continue
+    #try:
+    # create an authenticated account and assign it a group
     try:
-        # create an authenticated account and assign it a group
         user = User.objects.create_user(username=uname, first_name=fname, last_name=lname, email='dummy@email.coin', password=pswd)
-        # if the code belongs to gcadmin, else it belongs to gcstudent
-        if "!" in code:
-            group, _ = Group.objects.get_or_create(name='gcadmin')
-        else:
-            group, _ = Group.objects.get_or_create(name='gcstudent')
-        user.groups.add(group)
-        user.save()
+    except:
+        messages.warning(request, 'Do not mess with the username, first name, last name, and password :) Try to mess with other fields, those are better')
+        return HttpResponseRedirect(reverse('user:register'))
+    # if the code belongs to gcadmin, else it belongs to gcstudent
+    if "!" in code:
+        group, _ = Group.objects.get_or_create(name='gcadmin')
+    else:
+        group, _ = Group.objects.get_or_create(name='gcstudent')
+    user.groups.add(group)
 
-        # add the user data to gencybercoin db
-        is_admin = False
-        if group.name == "gcadmin":
-            is_admin = True
-        ud = UserData(username=uname, first_name=fname,
-            last_name=lname, password=pswd, is_admin=is_admin, school=school_id)
-        ud.save()
-        c = Cart(user_data=ud)
-        c.save()
-        ua = UserAnswers(data=ud, answer1=a1,
-            answer2=a2,
-            answer3=a3, question1=q1,
-            question2=q2, question3=q3)
+    if validate_on_save(request, user): user.save()
+    else: return HttpResponseRedirect(reverse('user:register'))
+
+    # add the user data to gencybercoin db
+    is_admin = True if group.name == "gcadmin" else False
+    ud = UserData(username=uname, first_name=fname, last_name=lname, password=pswd, is_admin=is_admin, school=school_id)
+
+    if validate_on_save(request, ud): ud.save()
+    else:
+        user.delete()
+        return HttpResponseRedirect(reverse('user:register'))
+
+    c = Cart(user_data=ud)
+
+    if validate_on_save(request, c): c.save()
+    else:
+        user.delete()
+        ud.delete()
+        return HttpResponseRedirect(reverse('user:register'))
+
+    ua = UserAnswers(data=ud, answer1=a1, answer2=a2, answer3=a3, question1=q1, question2=q2, question3=q3)
+
+    if validate_on_save(request, ua):
         ua.save()
         if not Code.objects.get(allowed_hash=code).infinite:
             Code.objects.filter(allowed_hash=code)[0].delete()
@@ -332,7 +346,13 @@ def account_creation(request):
         user = authenticate(username=uname, password=pswd)
         request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
         login(request, user)
-    except:
-        return render(request, 'user/register.html', {'error_message': "Something went wrong, whoops. Please contact the GenCyber Team.",})
-    else:
         return HttpResponseRedirect(reverse('user:account'))
+    else:
+        c.delete()
+        user.delete()
+        ud.delete()
+    '''except:
+        return render(request, 'user/register.html', {'error_message': "Something went wrong, whoops. Please contact the GenCyber Team.",})
+    else:'''
+    messages.warning(request, 'Trying to break stuff, huh? Well, see the messages above, they will tell you what you are doing wrong ;-)')
+    return HttpResponseRedirect(reverse('user:register'))
