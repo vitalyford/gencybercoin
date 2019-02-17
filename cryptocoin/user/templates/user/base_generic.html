@@ -110,6 +110,7 @@
                             {% if request.user|has_se %}
                             <hr style="margin: 2px;">
                             <li><a href="{% url 'user:extras-social-engineering' %}">Reconnaissance</a></li>
+                            <li><a href="{% url 'user:extras-osint-ninjas' %}">OSINT Ninjas</a></li>
                             {% endif %}
                             {% comment %}<li><a href="#driplets-game" data-toggle="modal">Mini-Game</a></li>{% endcomment %}
                             <hr style="margin: 2px;">
@@ -166,7 +167,7 @@
                 <div class="col-lg-12 text-center">
 <!-- Designed and developed by Dr. Vitaly Ford, https://vford.me -->
                     <p class="lead"><small>Copyright &copy; Dr. Vitaly Ford (<span style="color: #0000ff;">fordv@arcadia.edu</span>)<br>
-                        Collaborator: Cybersecurity Education Research and Outreach Center (Dr. Ambareen Siraj)<br>in support for the NSA/NSF GenCyber Program
+                        Collaborator: Cybersecurity Education Research and Outreach Center (Dr. Ambareen Siraj)<br>in support of the NSA/NSF GenCyber Program
                     </small></p>
                 </div>
             </div>

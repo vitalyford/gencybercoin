@@ -55,6 +55,30 @@ def extras_social_engineering(request):
             return HttpResponseRedirect(reverse('user:index'))
     return goto_login(request, "social engineering")
 
+def extras_osint_ninjas(request):
+    if request.user.is_authenticated:
+        context = {}
+        ud = get_object_or_404(UserData, username=request.user.username)
+
+        # get the user data to show the ranking
+        userdata = UserData.objects.filter(school=ud.school).values('id', 'first_name', 'last_name')
+        context['usercount'] = userdata.count()
+
+        # get the recon questions and the number of correct answers
+        se_tasks = SEQuesAnsw.objects.filter(school=ud.school).order_by('id')
+        context['school_name'] = ud.school.name
+        context['se_tasks_counts'] = {}
+        for se_task in se_tasks:
+            context['se_tasks_counts'][se_task.question] = se_task.secorrectanswer_set.count()
+
+        # identify how many questions every user answered correctly
+        for u in userdata:
+            u['answers'] = SECorrectAnswer.objects.filter(user_data__id=u['id']).count()
+        context['userdata'] = userdata
+
+        return render(request, 'user/extras/osint-ninjas.html', context)
+    return goto_login(request, "OSINT masters")
+
 def submit_social_engineering_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)

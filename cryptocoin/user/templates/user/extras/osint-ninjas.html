@@ -1,0 +1,160 @@
+{% extends "base_generic.html" %}
+
+{% block customcss %}
+<!-- For table sorting -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">OSINT Ninjas</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            <div class="normal-text">
+                <p class="lead">This page reports on the Open-Source Intelligence (OSINT) ninjas who have answered the most number of the Reconnaissance questions (Features -> Reconnaissance). Additionally, you can see a chart representing the number of times that every question has been answered correctly.</p>
+                <p class="lead">There is a total of {{ usercount }} OSINT ninjas at {{ school_name }}.</p>
+                <div id="chart" class="lead"></div>
+            </div>
+
+
+            {% if userdata %}
+            <div class="table-responsive">
+              <table class="display" id="table-to-sort">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Questions Answered</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for d in userdata|dictsortreversed:"answers" %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{{ d.first_name }}</td>
+                  <td>{{ d.last_name }}</td>
+                  <td>{{ d.answers }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+              </table>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block customjs %}
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+window.onload = function () {
+    var options = {
+        chart: {
+            height: {{ se_tasks_counts|length }} * 70,
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                barHeight: '100%',
+                distributed: true,
+                horizontal: true,
+                dataLabels: {
+                    position: 'bottom'
+                },
+            }
+        },
+        /*colors: ['#84c1ff', '#add6ff', '#d6eaff', '#eaf4ff', '#f8fbff'],*/
+        colors: ['#fe9c8f', '#feb2a8', '#fec8c1', '#fad9c1','#f9caa7'],
+        /*theme: {
+          palette: 'palette1' // upto palette10
+        },*/
+        dataLabels: {
+            enabled: true,
+            textAnchor: 'start',
+            style: {
+                fontFamily: 'Open Sans, Helvetica Neue, Helvetica, sans-serif',
+                fontSize: 18,
+                colors: ['#222']
+            },
+            formatter: function(val, opt) {
+                return opt.w.globals.labels[opt.dataPointIndex] + " : " + val
+            },
+            offsetX: 10,
+        },
+        series: [{
+            data: [
+            {% if se_tasks_counts %}
+                {% for key, value in se_tasks_counts.items %}
+                    {{ value }},
+                {% endfor %}
+            {% endif %}
+            ]
+        }],
+        stroke: {
+            width: 1,
+            colors: ['#fff']
+        },
+        xaxis: {
+            categories: [
+            {% if se_tasks_counts %}
+                {% for key, value in se_tasks_counts.items %}
+                    '{{ key }}',
+                {% endfor %}
+            {% endif %}
+            ],
+        },
+        yaxis: {
+            labels: {
+                show: false
+            }
+        },
+        tooltip: {
+            followCursor: true,
+            theme: 'dark',
+            display: 'flex',
+            x: {
+                show: true
+            },
+            y: {
+                title: {
+                    formatter: function() {
+                        return 'Number of ninjas who answered this: '
+                    }
+                }
+            }
+        }
+    }
+
+   var chart = new ApexCharts(
+        document.querySelector("#chart"),
+        options
+    );
+
+    chart.render();
+};
+
+$(document).ready(function() {
+$('#table-to-sort').DataTable( {
+    columnDefs: [ {
+        targets: [ 0 ],
+        orderData: [ 0, 1 ]
+    }, {
+        targets: [ 1 ],
+        orderData: [ 1, 0 ]
+    } ]
+} );
+});
+</script>
+
+{% endblock %}

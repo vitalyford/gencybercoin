@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^extras/bug-bounty/$', views.extras_bug_bounty, name='extras-bug-bounty'),
     url(r'^extras/hall-of-fame/$', views.extras_hall_of_fame, name='extras-hall-of-fame'),
     url(r'^extras/social-engineering/$', views.extras_social_engineering, name='extras-social-engineering'),
+    url(r'^extras/osint-ninjas/$', views.extras_osint_ninjas, name='extras-osint-ninjas'),
     url(r'^extras/social-engineering-admin/$', views.extras_social_engineering_admin, name='extras-social-engineering-admin'),
     url(r'^extras/social-engineering/submit/$', views.submit_social_engineering, name='submit-social-engineering'),
     url(r'^extras/social-engineering-admin/submit/$', views.submit_social_engineering_admin, name='submit-social-engineering-admin'),
