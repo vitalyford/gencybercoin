@@ -61,7 +61,7 @@ def extras_osint_ninjas(request):
         ud = get_object_or_404(UserData, username=request.user.username)
 
         # get the user data to show the ranking
-        userdata = UserData.objects.filter(school=ud.school).values('id', 'first_name', 'last_name')
+        userdata = UserData.objects.filter(school=ud.school, is_admin=False).values('id', 'first_name', 'last_name')
         context['usercount'] = userdata.count()
 
         # get the recon questions and the number of correct answers
