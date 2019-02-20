@@ -1,8 +1,23 @@
 from .views_global import *
-
+import re
 ##
 ## social engineering pages
 ##
+
+def verify_se_question(correct_answer_line, user_answer):
+    user_answer = user_answer.lower()
+    correct_answers = correct_answer_line.split(";")
+    for correct_answer in correct_answers:
+        # clean up the user answer and leave only whitespace
+        user_answer = re.sub(r'[^\w\s]', '', user_answer)
+        user_answer_words = user_answer.split()
+        for i, word in enumerate(user_answer_words):
+            prev = correct_answer
+            correct_answer = correct_answer.replace(word, '')
+            if prev == correct_answer: break
+            if correct_answer == '':
+                return True if i + 1 == len(user_answer_words) else False
+    return False
 
 def submit_social_engineering(request):
     if request.user.is_authenticated:
@@ -14,7 +29,7 @@ def submit_social_engineering(request):
                     continue
                 try: # to parse out the POST params
                     question_id = int(key)
-                    answer = request.POST.get(key).lower().replace(" ", "")
+                    answer = request.POST.get(key).lower()#.replace(" ", "")
                 except:
                     # bug bounty
                     run_bug_bounty(request, ud, 'html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
@@ -27,7 +42,8 @@ def submit_social_engineering(request):
                         run_bug_bounty(request, ud, 'html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                         # end bug bounty
                     else: # if there is such a question and the answer is correct, then save it
-                        if se_ques_answ.answer == answer and SECorrectAnswer.objects.filter(user_data=ud, se_ques_answ=se_ques_answ).count() == 0:
+                        #if se_ques_answ.answer == answer and SECorrectAnswer.objects.filter(user_data=ud, se_ques_answ=se_ques_answ).count() == 0:
+                        if verify_se_question(se_ques_answ.answer, answer) and SECorrectAnswer.objects.filter(user_data=ud, se_ques_answ=se_ques_answ).count() == 0:
                             se_correct_answer = SECorrectAnswer(user_data=ud, se_ques_answ=se_ques_answ)
                             se_correct_answer.save()
                             award_amount = int(get_object_or_404(PortalSetting, name='se_award_amount', school=ud.school).value)
@@ -69,7 +85,7 @@ def extras_osint_ninjas(request):
         context['school_name'] = ud.school.name
         context['se_tasks_counts'] = {}
         for se_task in se_tasks:
-            context['se_tasks_counts'][se_task.question] = se_task.secorrectanswer_set.count()
+            context['se_tasks_counts'][se_task.question] = se_task.secorrectanswer_set.filter(user_data__is_admin=False).count()
 
         # identify how many questions every user answered correctly
         for u in userdata:
@@ -91,7 +107,8 @@ def submit_social_engineering_admin(request):
                         if "addQ" in key:
                             question = request.POST.get(key)
                         if "addA" in key:
-                            answer = request.POST.get(key).lower().replace(" ", "")
+                            answer = request.POST.get(key)#.lower().replace(" ", "")
+                            answer = re.sub(r'[^\w;]', '', answer.lower())
                     if question != "" and answer != "":
                         se_ques_answ = SEQuesAnsw(question=question, answer=answer, school=ud.school)
                         if validate_on_save(request, se_ques_answ): se_ques_answ.save()
