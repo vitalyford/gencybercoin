@@ -1,40 +1,70 @@
 from django.contrib import admin
 from .models import UserData, UserAnswers, Code, TransferLogs, MarketItem, Cart, Achievement, PassRecQuestions, CodeRedeemer, School, PortalSetting, Bugs, SEQuesAnsw, SECorrectAnswer, Feedback
 from import_export.admin import ImportExportModelAdmin
-#from import_export.admin import ImportExportMixin, ImportMixin, ExportActionModelAdmin
+# from import_export.admin import ImportExportMixin, ImportMixin, ExportActionModelAdmin
 
 from import_export import resources
 
+
 class CodeRedeemerAdmin(ImportExportModelAdmin):
     pass
+
+
 class UserDataAdmin(ImportExportModelAdmin):
     pass
+
+
 class PassRecQuestionsAdmin(ImportExportModelAdmin):
     pass
+
+
 class UserAnswersAdmin(ImportExportModelAdmin):
     pass
+
+
 class CodeAdmin(ImportExportModelAdmin):
     pass
+
+
 class TransferLogsAdmin(ImportExportModelAdmin):
     pass
+
+
 class MarketItemAdmin(ImportExportModelAdmin):
     pass
+
+
 class CartAdmin(ImportExportModelAdmin):
     pass
+
+
 class AchievementAdmin(ImportExportModelAdmin):
     pass
+
+
 class SchoolAdmin(ImportExportModelAdmin):
     pass
+
+
 class PortalSettingAdmin(ImportExportModelAdmin):
     pass
+
+
 class BugsAdmin(ImportExportModelAdmin):
     pass
+
+
 class SEQuesAnswAdmin(ImportExportModelAdmin):
     pass
+
+
 class SECorrectAnswerAdmin(ImportExportModelAdmin):
     pass
+
+
 class FeedbackAdmin(ImportExportModelAdmin):
     pass
+
 
 # Register your models here.
 admin.site.register(CodeRedeemer, CodeRedeemerAdmin)

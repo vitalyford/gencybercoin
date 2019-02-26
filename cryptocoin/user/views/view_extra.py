@@ -1,18 +1,21 @@
 from .views_global import *
 
-##
-## extras pages info
-##
+#
+# extras pages info
+#
+
 
 def extras_cryptocurrency(request):
     if request.user.is_authenticated:
         return render(request, 'user/extras/cryptocurrency.html', {})
     return goto_login(request, "cryptocurrency")
 
+
 def extras_bug_bounty(request):
     if request.user.is_authenticated:
         return render(request, 'user/extras/bug-bounty.html', {})
     return goto_login(request, "bug bounty")
+
 
 def extras_blockchain(request):
     if request.user.is_authenticated:
@@ -27,19 +30,19 @@ def extras_blockchain(request):
             except:
                 transfers = TransferLogs.objects.filter(school=ud.school).order_by('-id')
             else:
-                transfers = TransferLogs.objects.filter(Q(sender=selectedStudent.username ) | Q(receiver=selectedStudent.username), school=ud.school).order_by('-id')
+                transfers = TransferLogs.objects.filter(Q(sender=selectedStudent.username) | Q(receiver=selectedStudent.username), school=ud.school).order_by('-id')
         else:
             transfers = TransferLogs.objects.filter(school=ud.school).order_by('-id')
         if transfers.count() > 0:
             curr_day = ""
             for log in transfers:
                 if ud.is_admin or ud.username == log.sender or ud.username == log.receiver:
-                    if not "GenCyber Team" in log.sender:
+                    if "GenCyber Team" not in log.sender:
                         sender_name = get_object_or_404(UserData, username=log.sender)
                         log.sender = sender_name.first_name + " " + sender_name.last_name
                         if sender_name.is_admin:
                             log.sender += " (GenCyber Team)"
-                    if not "GenCyber Team" in log.receiver:
+                    if "GenCyber Team" not in log.receiver:
                         receiver_name = get_object_or_404(UserData, username=log.receiver)
                         log.receiver = receiver_name.first_name + " " + receiver_name.last_name
                         if receiver_name.is_admin:
@@ -77,6 +80,7 @@ def extras_blockchain(request):
         return render(request, 'user/extras/blockchain.html', context)
     return goto_login(request, "blockchain")
 
+
 def extras_hall_of_fame(request):
     if request.user.is_authenticated:
         context = {}
@@ -99,6 +103,7 @@ def extras_hall_of_fame(request):
         return render(request, 'user/extras/hall-of-fame.html', context)
     return goto_login(request, "hall of fame")
 
+
 def submit_extras_feedback(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -113,9 +118,10 @@ def submit_extras_feedback(request):
                         run_bug_bounty(request, ud, 'stored_XSS', 'Congrats! You found a programming bug called stored cross-site scripting! This bug would allow you to execute malicious javascript code in browsers.', 'https://excess-xss.com/')
                         # end bug bounty
                     messages.info(request, 'Your feedback has been recorded. Thank you so much!')
-            except Exception as e:
+            except:
                 messages.warning(request, 'Something went wrong, your feedback has not been recorded')
     return HttpResponseRedirect(reverse('user:extras-feedback'))
+
 
 def extras_feedback(request):
     if request.user.is_authenticated:

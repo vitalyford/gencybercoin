@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^gcsuperuser/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^5ebe2294ecd0e0f08eab7690d2a6ee69$', views.secret, name='secret'),
-    #url(r'^driblets/$', views.driblets, name='driblets'),
+    # url(r'^driblets/$', views.driblets, name='driblets'),
     url(r'^register/$', views.register, name='register'),
     url(r'^wallet/$', views.wallet, name='wallet'),
     url(r'^update/header/$', views.update_header, name='update-header'),

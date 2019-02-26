@@ -1,21 +1,26 @@
 from .views_global import *
 
+
 def index(request):
     if request.user.is_authenticated:
         return render(request, 'user/index.html', {})
     return goto_login(request, "GenCyberCoin Portal")
 
+
 def get_questions():
     return {'questions': PassRecQuestions.objects.all()}
+
 
 def register(request):
     if request.user.is_authenticated:
         return render(request, 'user/index.html', {})
     return render(request, 'user/register.html', get_questions())
 
+
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('user:index'))
+
 
 def driblets(request):
     if request.user.is_authenticated:
@@ -23,10 +28,10 @@ def driblets(request):
             r = request.POST.get('data')[:-7]
             r = base64.b64decode(r).decode('utf-8')
             r = r.replace('\"', '')
-            #print(r)
+            # print(r)
             received_list = str(r).split(':')
             if len(received_list) == 3:
-                #print("Base64 success:" + received_list[1] + " total: " + received_list[2] + "done")
+                # print("Base64 success:" + received_list[1] + " total: " + received_list[2] + "done")
                 try:
                     amount = 30
                     success = float(int(received_list[1]))
@@ -48,8 +53,10 @@ def driblets(request):
     response_data = {'status': "success"}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+
 def user_login(request):
     return render(request, 'user/login.html')
+
 
 def password_recovery(request):
     # check if the user already entered the username to recover the password for
@@ -79,11 +86,12 @@ def password_recovery(request):
                     user = authenticate(username=request.POST.get('inputUsername'), password=useranswers.data.password)
                     request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
                     login(request, user)
-                    ##useranswers.was_hacked = useranswers.was_hacked + 1
-                    ##useranswers.save()
+                    # useranswers.was_hacked = useranswers.was_hacked + 1
+                    # useranswers.save()
                     return HttpResponseRedirect(reverse('user:index'))
                 context['error_message'] = "Only " + str(sum(answers)) + " answers are correct, try again"
     return render(request, 'user/password-recovery.html', context)
+
 
 def secret(request):
     if request.user.is_authenticated:

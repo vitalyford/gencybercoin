@@ -1,5 +1,6 @@
 from .views_global import *
 
+
 def submit_cart(request):
     if request.user.is_authenticated:
         for key in request.POST:
@@ -38,7 +39,7 @@ def submit_cart(request):
                             item_price = md.cost_permanent
                             if int(request.POST.get('checkers')) != md.cost_permanent:
                                 raise
-                        else: # if program type is camp or any other one
+                        else:  # if program type is camp or any other one
                             item_price = int(request.POST.get('checkers'))
                             if item_price < 0:
                                 raise
@@ -48,7 +49,7 @@ def submit_cart(request):
                         # end bug bounty
                         break
                     # save only if the user can afford it in the cart
-                    if item_price <= ud.permanent_coins:#+ cart.cost_permanent <= available_coins:
+                    if item_price <= ud.permanent_coins:  # + cart.cost_permanent <= available_coins:
                         md.cost_permanent = item_price
                         ud.cart.market_items.add(md)
                         ud.cart.save()
@@ -72,6 +73,7 @@ def submit_cart(request):
         return HttpResponseRedirect(reverse('user:market') + "?page=" + request.GET.get('page'))
     return HttpResponseRedirect(reverse('user:market'))
 
+
 def get_cart(request, ud):
     context = {}
     curr_sum = 0
@@ -86,6 +88,7 @@ def get_cart(request, ud):
         curr_sum = int(c.aggregate(cost=Sum('cost_permanent'))['cost'])
     context['total'] = str(curr_sum)
     return context
+
 
 def remove_cart_item(request, key, ud):
     market_enabled = get_object_or_404(PortalSetting, name="market_enabled", school=ud.school).value
@@ -110,6 +113,7 @@ def remove_cart_item(request, key, ud):
     ud.items_bought = ud.items_bought - 1
     ud.save()
 
+
 def set_market_prices(marketdata, ud):
     # this can be refactored to speed up (something to think about later)
     # this commented part is an algorithm that takes into account all top_players
@@ -125,6 +129,7 @@ def set_market_prices(marketdata, ud):
     for m in marketdata:
         m.cost_permanent = randint(min_coins, max_coins)
 
+
 def market_queue(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -133,6 +138,7 @@ def market_queue(request):
         context['status'] = "success"
         return JsonResponse(context)
     return goto_login(request, "market")
+
 
 def market(request):
     context = {}
@@ -186,6 +192,7 @@ def market(request):
         return render(request, 'user/market.html', context)
     return goto_login(request, "market")
 
+
 def get_top_players(request, ud):
     context = {}
     program_type = get_object_or_404(PortalSetting, school=ud.school, name='program_type').value
@@ -204,12 +211,13 @@ def get_top_players(request, ud):
                 context['top_player'] = "true"
                 context['player_tier'] = user.tier
         context['top_players'] = top_users
-        #top_students_number = get_object_or_404(PortalSetting, school=ud.school, name="top_students_number")
-        #queue_capacity = int(top_students_number.value)
+        # top_students_number = get_object_or_404(PortalSetting, school=ud.school, name="top_students_number")
+        # queue_capacity = int(top_students_number.value)
         context['top_students_number'] = users.count()
-    else: # for camp and all others
+    else:  # for camp and all others
         return camp_top_players(request, ud)
     return context
+
 
 def camp_top_players(request, ud):
     context = {}
@@ -228,7 +236,7 @@ def camp_top_players(request, ud):
         roof = min(total_users, max(queue_capacity, 3) + 3)
         # check if someone started ordering
         someone_started_ordering = False
-        try: # just in case if a cart has not been created yet
+        try:  # just in case if a cart has not been created yet
             latest_time = users[0].cart.date
         except:
             for user in users:

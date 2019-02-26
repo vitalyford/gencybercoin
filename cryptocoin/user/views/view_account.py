@@ -1,5 +1,6 @@
 from .views_global import *
 
+
 def update_sec_questions(request):
     if request.user.is_authenticated:
         if 'inputSecQ1' in request.POST and 'inputSecQ2' in request.POST and 'inputSecQ3' in request.POST:
@@ -11,6 +12,7 @@ def update_sec_questions(request):
             ua.answer3 = request.POST.get('inputSecQ3')
             if validate_on_save(request, ua, 'Your security questions have been successfully updated'):
                 ua.save()
+
 
 def change_password(request):
     if request.user.is_authenticated:
@@ -33,6 +35,7 @@ def change_password(request):
         else:
             messages.warning(request, 'Your old password has been entered incorrectly')
 
+
 def get_context(request, get_all_users):
     context = {}
     userdata = get_object_or_404(UserData, username=request.user.username)
@@ -43,9 +46,10 @@ def get_context(request, get_all_users):
         useranswers = get_object_or_404(UserAnswers, data=userdata)
         context['useranswers'] = useranswers
     except:
-        pass # pass for the superuser, other users should have the useranswers
+        pass  # pass for the superuser, other users should have the useranswers
     context['userdata'] = userdata
     return context
+
 
 def is_number(s):
     try:
@@ -53,6 +57,7 @@ def is_number(s):
         return True
     except ValueError:
         return False
+
 
 def user_account(request):
     if request.user.is_authenticated:
@@ -73,6 +78,7 @@ def user_account(request):
         return render(request, 'user/account.html', context)
     return goto_login(request, "account")
 
+
 def submit_user_account(request):
     if request.user.is_superuser:
         if 'inputNewPassword' in request.POST:
@@ -83,6 +89,7 @@ def submit_user_account(request):
         elif 'inputSecQ1' in request.POST and 'inputSecQ2' in request.POST and 'inputSecQ3' in request.POST:
             update_sec_questions(request)
     return HttpResponseRedirect(reverse('user:account'))
+
 
 def wallet(request):
     if request.user.is_authenticated:
@@ -98,6 +105,7 @@ def wallet(request):
         return render(request, 'user/wallet.html', context)
     return goto_login(request, "wallet")
 
+
 def save_coins(request, ud):
     try:
         honorary_coins  = int(request.POST.get('honoraryCoins'))
@@ -111,6 +119,7 @@ def save_coins(request, ud):
         ud.honory_coins    = honorary_coins
         ud.permanent_coins = permanent_coins
         ud.save()
+
 
 def submit_wallet(request):
     if request.user.is_authenticated:
@@ -162,6 +171,7 @@ def submit_wallet(request):
         return HttpResponseRedirect(reverse('user:wallet'))
     return goto_login(request, "wallet")
 
+
 def transfer(request):
     if not request.user.is_authenticated:
         return goto_login(request, "transfer")
@@ -171,12 +181,12 @@ def transfer(request):
     sender = get_object_or_404(UserData, username=request.user.username)
     # check password match for non-admins
     if not sender.is_admin:
-        if not 'userPassword' in request.POST:
+        if 'userPassword' not in request.POST:
             return HttpResponseRedirect(reverse('user:wallet'))
         if not check_password(request.POST.get('userPassword'), request.user.password):
             messages.warning(request, 'Wrong password, try again')
             return HttpResponseRedirect(reverse('user:wallet'))
-    try:#settings.MAX_AMOUNT_ALLOWED_TO_SEND
+    try:  # settings.MAX_AMOUNT_ALLOWED_TO_SEND
         max_amount_allowed_to_send = int(get_object_or_404(PortalSetting, school=sender.school, name='amount_allowed_to_send').value)
         if max_amount_allowed_to_send < 0:
             raise
@@ -201,7 +211,7 @@ def transfer(request):
             amount = int(amount_str)
         except:
             amount_not_integer = True
-        if amount_not_integer: # if all but the first character are not digits
+        if amount_not_integer:  # if all but the first character are not digits
             messages.warning(request, 'You can send only integer values!')
         elif amount < 0 or coins < 0:
             messages.warning(request, 'You can send only positive integer values!')
@@ -243,6 +253,7 @@ def transfer(request):
                                 messages.info(request, 'You sent ' + str(amount) + ' to ' + receiver.username + '!')
     return HttpResponseRedirect(reverse('user:wallet'))
 
+
 def user_login_process(request):
     username = request.POST.get('inputUsername')
     password = request.POST.get('inputPassword')
@@ -260,16 +271,18 @@ def user_login_process(request):
         if username == "admin" and password == "forgot_my_password":
             return render(request, 'user/extras/broken-admin.html', {})
         # end bug bounty
-        return render(request, 'user/login.html', {'error_message': "Invalid login! Try again.",})
+        return render(request, 'user/login.html', {'error_message': "Invalid login! Try again."})
+
 
 def check_fields(request):
-    if not 'inputUsername' in request.POST or not 'inputPassword' in request.POST:
+    if 'inputUsername' not in request.POST or 'inputPassword' not in request.POST:
         return False
     uname = request.POST.get('inputUsername')
     pswd = request.POST.get('inputPassword')
     if uname.strip() == "" or pswd.strip() == "":
         return False
     return True
+
 
 def account_creation(request):
     # check if the registration code is valid
@@ -287,7 +300,7 @@ def account_creation(request):
     questions = PassRecQuestions.objects.all()
     context = {'username': uname, 'password': pswd, 'first_name': fname, 'last_name': lname, 'q1': q1, 'q2': q2, 'q3': q3, 'a1': a1, 'a2': a2, 'a3': a3, 'code': code, 'questions': questions}
     try:
-        if not "#" in code and not "!" in code:
+        if "#" not in code and "!" not in code:
             raise
         school_id = Code.objects.filter(allowed_hash=code)[0].school
     except:
@@ -302,7 +315,6 @@ def account_creation(request):
         context['error_message'] = "Username and password cannot be empty."
         return render(request, 'user/register.html', context)
     # if there is no duplicate user, then continue
-    #try:
     # create an authenticated account and assign it a group
     try:
         user = User.objects.create_user(username=uname, first_name=fname, last_name=lname, email='dummy@email.coin', password=pswd)

@@ -5,6 +5,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 from django.http import HttpResponse
 
+
 def pdf_codes_admin(request):
     if not request.user.is_authenticated or request.user.is_superuser:
         return HttpResponseRedirect(reverse('user:index'))
@@ -18,9 +19,9 @@ def pdf_codes_admin(request):
     n = 5
     if code_name == 'award':
         data = Code.objects.filter(school=ud.school, name='award')
-        #n = 4
+        # n = 4
     elif code_name == 'registration':
-        data = Code.objects.filter(school=ud.school, name='registration')#.values_list('allowed_hash', flat=True)
+        data = Code.objects.filter(school=ud.school, name='registration')  # .values_list('allowed_hash', flat=True)
     else:
         messages.warning(request, 'The code request should be either for registration or reward codes')
         return HttpResponseRedirect(reverse('user:code-generator'))
@@ -35,19 +36,19 @@ def pdf_codes_admin(request):
     # draw codes on the pdf
     if data:
         # split 1d data into 2d
-        data = [data[i:i+n] for i in range(0, len(data), n)]
+        data = [data[i:i + n] for i in range(0, len(data), n)]
         # create and draw the table
         t = Table(data)
         t.setStyle(TableStyle([
-             ('ALIGN',(0,0),(-1,-1),'CENTER'),
-             ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
-             ('INNERGRID',(0,0),(-1,-1),0.25,colors.black),
-             ('BOX',(0,0),(-1,-1),0.25,colors.black),
-             ('LEFTPADDING',(0,0),(-1,-1),15),
-             ('RIGHTPADDING',(0,0),(-1,-1),15),
-             ('BOTTOMPADDING',(0,0),(-1,-1),20),
-             ('TOPPADDING',(0,0),(-1,-1),20),
-             ('FONTSIZE',(0,0),(-1,-1),14),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+            ('LEFTPADDING', (0, 0), (-1, -1), 15),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 15),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 20),
+            ('TOPPADDING', (0, 0), (-1, -1), 20),
+            ('FONTSIZE', (0, 0), (-1, -1), 14),
         ]))
         elements.append(t)
         # write the document to disk

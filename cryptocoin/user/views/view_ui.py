@@ -1,5 +1,6 @@
 from .views_global import *
 
+
 def update_header(request):
     if request.user.is_authenticated and request.method == 'POST' and 'brand' in request.POST and 'title' in request.POST:
         ud = get_object_or_404(UserData, username=request.user.username)

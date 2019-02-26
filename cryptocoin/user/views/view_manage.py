@@ -1,13 +1,11 @@
 from .views_global import *
 from .view_market import market
 from tablib import Dataset
-import csv, codecs
 from ..resources import MarketItemResource
 
-##
-## management portal
-##
-VALID_IMAGE_EXTENSIONS = [".jpg",".jpeg",".png",".gif"]
+
+VALID_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
+
 
 def generate_gencyber_code():
     done = 1
@@ -24,13 +22,13 @@ def generate_gencyber_code():
             break
     return data
 
+
 def submit_code_generator(request):
     if request.user.is_authenticated and request.method == 'POST':
         # check if the code is infinite
         is_infinite = False
         if "infinite" in request.POST:
             is_infinite = (request.POST.get('infinite') == 'on')
-        context = {}
         # 'key' consists of the school id + "!" or "#" + code itself
         if request.user.is_superuser and ('inputSchool' in request.POST) and ('inputCount' in request.POST):
             school = request.POST.get('inputSchool')
@@ -107,6 +105,7 @@ def submit_code_generator(request):
                 Code.objects.filter(school=school_gcadmin, name='award').delete()
     return HttpResponseRedirect(reverse('user:code-generator'))
 
+
 def code_generator(request):
     if request.user.is_authenticated:
         context = {}
@@ -150,6 +149,7 @@ def code_generator(request):
             return render(request, 'user/code-generator.html', context)
     return HttpResponseRedirect(reverse('user:index'))
 
+
 def submit_nominations_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -187,6 +187,7 @@ def submit_nominations_admin(request):
                     messages.warning(request, 'Some of the students or activities have not been assigned')
     return HttpResponseRedirect(reverse('user:nominations-admin'))
 
+
 def nominations_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -196,6 +197,7 @@ def nominations_admin(request):
             context['students'] = UserData.objects.filter(school=ud.school).order_by('first_name', 'last_name').values('first_name', 'last_name', 'username', 'id')
             return render(request, 'user/nominations-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
+
 
 def add_new_achievements_item(request, ud):
     try:
@@ -219,7 +221,7 @@ def add_new_achievements_item(request, ud):
         messages.warning(request, 'Please check the restrictions: quantity >= 0 and 1 <= tier <= 10')
         return
     try:
-        if image_file == "" or not image_file: # use defaults for image_file
+        if image_file == "" or not image_file:  # use defaults for image_file
             activity_item = Achievement(name=name, description=descr, school=ud.school)
         else:
             activity_item = Achievement(name=name, description=descr, image_file=image_file, school=ud.school)
@@ -230,11 +232,11 @@ def add_new_achievements_item(request, ud):
             activity_item.save()
             messages.info(request, name + ' has been added')
 
+
 def submit_achievements_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            context = {}
             if request.method == 'POST':
                 try:
                     if "addNewItem" in request.POST:
@@ -293,6 +295,7 @@ def submit_achievements_admin(request):
         return market(request)
     return HttpResponseRedirect(reverse('user:index'))
 
+
 def achievements_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -302,6 +305,7 @@ def achievements_admin(request):
             context['achievements'] = achievements
             return render(request, 'user/achievements-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
+
 
 def market_admin(request):
     if request.user.is_authenticated:
@@ -322,6 +326,7 @@ def market_admin(request):
         return market(request)
     return HttpResponseRedirect(reverse('user:index'))
 
+
 def crop_image(image, x, y, w, h):
     width, height = image.size
     size = 300, 300
@@ -336,13 +341,15 @@ def crop_image(image, x, y, w, h):
             return image
         else:
             cropped_image.thumbnail(size, Image.ANTIALIAS)
-            #rotated_image = cropped_image.rotate(r)
-            #cropped_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+            # rotated_image = cropped_image.rotate(r)
+            # cropped_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
             return cropped_image
+
 
 def image_upload_market(ud, filename):
     image_path = '{school}/market/{filename}'.format(school=ud.school.id, filename=filename)
     return image_path
+
 
 def save_image(request, ud, image_file, id):
     im = Image.open(image_file)
@@ -364,6 +371,7 @@ def save_image(request, ud, image_file, id):
         return im_content
     except:
         return image_file
+
 
 def add_new_market_item(request, ud):
     try:
@@ -394,7 +402,7 @@ def add_new_market_item(request, ud):
         messages.warning(request, 'Please check the restrictions: quantity >= 0 and 1 <= tier <= 10')
         return
     try:
-        if image_file == "" or not image_file: # use defaults for image_file
+        if image_file == "" or not image_file:  # use defaults for image_file
             marketitem = MarketItem(name=name, description=descr, quantity=quantity, tier=tier, school=ud.school)
         else:
             marketitem = MarketItem(name=name, description=descr, quantity=quantity, tier=tier, image_file=image_file, school=ud.school)
@@ -405,6 +413,7 @@ def add_new_market_item(request, ud):
             marketitem.save()
             messages.info(request, name + ' has been added')
 
+
 def process_import_csv(request, ud):
     try:
         market_resource = MarketItemResource()
@@ -414,7 +423,7 @@ def process_import_csv(request, ud):
             messages.warning(request, 'The file does not exist')
         else:
             try:
-                imported_data = dataset.load(new_items.read().decode("utf-8"))
+                dataset.load(new_items.read().decode("utf-8"))
                 # add school id and header
                 school_id_list = ()
                 for i in range(dataset.height):
@@ -438,6 +447,7 @@ def process_import_csv(request, ud):
                     messages.warning(request, result.errors())
     except Exception as e:
         messages.warning(request, e)
+
 
 def process_export_csv(school_id):
     market_resource = MarketItemResource()
@@ -468,6 +478,7 @@ def process_export_csv(school_id):
     response.write(dataset_for_school.csv)
     return response
 
+
 def delete_all_market_items(request, school):
     try:
         market_items = MarketItem.objects.filter(school=school)
@@ -478,6 +489,7 @@ def delete_all_market_items(request, school):
         messages.warning(request, 'Something went wrong, not all items have been deleted')
     else:
         messages.info(request, 'Successfully deleted all market items')
+
 
 def submit_market_admin(request):
     if request.user.is_authenticated:
@@ -566,6 +578,7 @@ def submit_market_admin(request):
         return market(request)
     return HttpResponseRedirect(reverse('user:index'))
 
+
 def configure_market(request, ud, enabled):
     MAX_TIERS = 10
     try:
@@ -574,7 +587,7 @@ def configure_market(request, ud, enabled):
     except:
         queue_capacity = 5
     # set the tier values for the top students
-    if enabled == "true": # the market is enabled
+    if enabled == "true":  # the market is enabled
         top_students = UserData.objects.filter(school=ud.school, is_admin=False).order_by('-permanent_coins')[:queue_capacity]
         tier_number = MAX_TIERS
         multiplier = 0
@@ -589,11 +602,12 @@ def configure_market(request, ud, enabled):
         for m in marketdata:
             m.cost_permanent = m.tier * multiplier
             m.save()
-    else: # if market is turned off then reset all students' tier values to 0
+    else:  # if market is turned off then reset all students' tier values to 0
         students = UserData.objects.filter(school=ud.school, tier__gt=0, is_admin=False)
         for student in students:
             student.tier = 0
             student.save()
+
 
 def update_setting(request, ud, portal_setting):
     # enabling portal_setting
@@ -610,11 +624,11 @@ def update_setting(request, ud, portal_setting):
     except:
         messages.warning(request, portal_setting + ' does not exist')
 
+
 def submit_settings_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            context = {}
             if 'save' in request.POST:
                 # enabling ajax
                 update_setting(request, ud, 'ajax_enabled')
@@ -698,6 +712,7 @@ def submit_settings_admin(request):
                 update_setting(request, ud, 'market_enabled')
     return HttpResponseRedirect(reverse('user:settings-admin'))
 
+
 def settings_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -706,6 +721,7 @@ def settings_admin(request):
             return render(request, 'user/settings-admin.html', context)
         return render(request, 'user/account.html', {})
     return HttpResponseRedirect(reverse('user:index'))
+
 
 def student_carts_admin(request):
     if request.user.is_authenticated:
@@ -716,13 +732,14 @@ def student_carts_admin(request):
             for s in students:
                 # try-except in case if cart does not exists
                 try:
-                    carts[s.first_name + " " +s.last_name + " (aka " + s.username + ")"] = s.cart.market_items.all().values_list('name', flat=True)
+                    carts[s.first_name + " " + s.last_name + " (aka " + s.username + ")"] = s.cart.market_items.all().values_list('name', flat=True)
                 except:
                     pass
             context = {'carts': carts}
             return render(request, 'user/student-carts-admin.html', context)
         return render(request, 'user/account.html', {})
     return HttpResponseRedirect(reverse('user:index'))
+
 
 def submit_student_manager_admin(request):
     if request.user.is_authenticated and request.method == 'POST':
@@ -755,6 +772,7 @@ def submit_student_manager_admin(request):
                         messages.info(request, 'The user ' + username + ' and all user\'s data have been deleted')
     return HttpResponseRedirect(reverse('user:student-manager-admin'))
 
+
 def student_manager_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -764,6 +782,7 @@ def student_manager_admin(request):
             return render(request, 'user/student-manager-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
 
+
 def change_mode_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
@@ -772,6 +791,7 @@ def change_mode_admin(request):
             ud.school.save()
             return HttpResponseRedirect(reverse('user:index'))
     return HttpResponseRedirect(reverse('user:index'))
+
 
 def show_feedback_admin(request):
     context = {}
@@ -795,13 +815,14 @@ def show_feedback_admin(request):
             return render(request, 'user/show-feedback-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
 
+
 def submit_feedback_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
             if request.method == 'POST' and 'deleteAll' in request.POST:
                 try:
-                    feedback_messages = Feedback.objects.filter(school=ud.school).delete()
+                    Feedback.objects.filter(school=ud.school).delete()
                 except:
                     messages.warning(request, 'Something went wrong, not all messages have been deleted')
                 else:
