@@ -16,7 +16,7 @@
     <link href="{% static 'user/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <!-- Custom CSS -->
     <link href="{% static 'user/css/business-casual.min.css' %}" rel="stylesheet">
@@ -93,28 +93,28 @@
                     <li><a href="{% url 'user:wallet' %}">Wallet</a></li>
                     {% endif %}
                 {% else %}
-                    <li><a href="{% url 'user:account' %}">My account</a></li>
+                    <li><a href="{% url 'user:account' %}">Account</a></li>
                 {% endif %}
                 {% if not request.user.is_superuser and request.user.is_authenticated and not request.user|has_group:"gcadmin" %}
                     <li><a href="{% url 'user:market' %}">Market</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Features<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'user:extras-cryptocurrency' %}">Cryptocurrency</a></li>
-                            <li><a href="{% url 'user:extras-blockchain' %}">Blockchain</a></li>
+                            <li><a href="{% url 'user:extras-cryptocurrency' %}"><i class="fab fa-bitcoin"></i>  Cryptocurrency</a></li>
+                            <li><a href="{% url 'user:extras-blockchain' %}"><i class="fas fa-link"></i>  Blockchain</a></li>
                             {% if request.user|has_bug_bounty %}
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:extras-bug-bounty' %}">Bug Bounty</a></li>
-                            <li><a href="{% url 'user:extras-hall-of-fame' %}">Hall of Fame</a></li>
+                            <li><a href="{% url 'user:extras-bug-bounty' %}"><i class="fas fa-bug"></i>  Bug Bounty</a></li>
+                            <li><a href="{% url 'user:extras-hall-of-fame' %}"><i class="fab fa-jedi-order"></i>  Hall of Fame</a></li>
                             {% endif %}
                             {% if request.user|has_se %}
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:extras-social-engineering' %}">Reconnaissance</a></li>
-                            <li><a href="{% url 'user:extras-osint-ninjas' %}">OSINT Ninjas</a></li>
+                            <li><a href="{% url 'user:extras-social-engineering' %}"><i class="fab fa-searchengin"></i>  Reconnaissance</a></li>
+                            <li><a href="{% url 'user:extras-osint-ninjas' %}"><i class="fas fa-user-ninja"></i>  OSINT Ninjas</a></li>
                             {% endif %}
                             {% comment %}<li><a href="#driplets-game" data-toggle="modal">Mini-Game</a></li>{% endcomment %}
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:extras-feedback' %}">Leave Feedback</a></li>
+                            <li><a href="{% url 'user:extras-feedback' %}"><i class="fas fa-comments"></i>  Leave Feedback</a></li>
                         </ul>
                     </li>
                 {% endif %}
@@ -122,20 +122,20 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'user:code-generator' %}">Generate Codes</a></li>
+                            <li><a href="{% url 'user:code-generator' %}"><i class="fas fa-key"></i>  Generate Codes</a></li>
                             {% if not request.user.is_superuser %}
-                            <li><a href="{% url 'user:market-admin' %}">Edit Market</a></li>
-                            <li><a href="{% url 'user:achievements-admin' %}">Edit Activities</a></li>
-                            <li><a href="{% url 'user:extras-social-engineering-admin' %}">Edit Reconnaissance</a></li>
+                            <li><a href="{% url 'user:market-admin' %}"><i class="fas fa-store"></i>  Edit Market</a></li>
+                            <li><a href="{% url 'user:achievements-admin' %}"><i class="fas fa-edit"></i>  Edit Activities</a></li>
+                            <li><a href="{% url 'user:extras-social-engineering-admin' %}"><i class="fab fa-searchengin"></i>  Edit Reconnaissance</a></li>
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:nominations-admin' %}">Nominate Activities</a></li>
-                            <li><a href="{% url 'user:student-carts-admin' %}">Student Orders</a></li>
-                            <li><a href="{% url 'user:student-manager-admin' %}">Student Manager</a></li>
+                            <li><a href="{% url 'user:nominations-admin' %}"><i class="fas fa-exchange-alt"></i>  Nominate Activities</a></li>
+                            <li><a href="{% url 'user:student-carts-admin' %}"><i class="fas fa-shopping-cart"></i>  Student Orders</a></li>
+                            <li><a href="{% url 'user:student-manager-admin' %}"><i class="fas fa-user-edit"></i>  Student Manager</a></li>
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:settings-admin' %}">Settings</a></li>
+                            <li><a href="{% url 'user:settings-admin' %}"><i class="fas fa-cogs"></i>  Settings</a></li>
                             {% endif %}
                             <hr style="margin: 2px;">
-                            <li><a href="{% url 'user:show-feedback-admin' %}">Show Feedback</a></li>
+                            <li><a href="{% url 'user:show-feedback-admin' %}"><i class="fas fa-comments"></i>  Show Feedback</a></li>
                         </ul>
                     </li>
                     <!--<li><a href="#">Student View</a></li>-->
