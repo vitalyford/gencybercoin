@@ -23,6 +23,7 @@
                         <select class="form-control" name="selectedStudent" onchange="this.form.submit()">
                           <option value="-1">Select a user</option>
                           <option value="-1">Show everyone</option>
+                          <option disabled>________________</option>
                           {% for au in allusers %}
                             {% if au.username != request.user.username %}
                               <option value="{{ au.id }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
