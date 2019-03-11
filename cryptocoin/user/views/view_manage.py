@@ -7,6 +7,13 @@ from ..resources import MarketItemResource
 VALID_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
 
 
+def delete_school(request):
+    if request.user.is_authenticated and request.user.is_superuser and 'delete' in request.POST and 'school' in request.POST:
+        School.objects.filter(name=request.POST.get('school')).delete()
+        messages.info(request, 'Successfully deleted ' + request.POST.get('school') + ' and all its data')
+    return HttpResponseRedirect(reverse('user:code-generator'))
+
+
 def generate_gencyber_code():
     done = 1
     data = ""
@@ -748,10 +755,10 @@ def submit_student_manager_admin(request):
             if request.POST.get('hiddenDelete') == "All":
                 users = UserData.objects.filter(~Q(username=ud.username) & Q(school=ud.school))
                 for user in users:
-                    CodeRedeemer.objects.filter(username=user.username).delete()
-                    User.objects.filter(username=user.username).delete()
+                    # CodeRedeemer.objects.filter(user_data=user).delete()
+                    get_object_or_404(User, username=user.username).delete()
                 TransferLogs.objects.filter(school=ud.school).delete()
-                UserData.objects.filter(~Q(username=ud.username) & Q(school=ud.school)).delete()
+                users.delete()
                 messages.info(request, 'All user data except yours have been deleted')
             else:
                 try:
@@ -766,7 +773,7 @@ def submit_student_manager_admin(request):
                         messages.warning(request, 'User ID does not exist')
                     else:
                         TransferLogs.objects.filter(Q(sender=username) | Q(receiver=username)).delete()
-                        CodeRedeemer.objects.filter(username=username).delete()
+                        # CodeRedeemer.objects.filter(user_data=deleteUser).delete()
                         deleteUser.delete()
                         get_object_or_404(User, username=username).delete()
                         messages.info(request, 'The user ' + username + ' and all user\'s data have been deleted')

@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^manage/change-mode-admin/$', views.change_mode_admin, name='change-mode-admin'),
     url(r'^manage/code-generator/$', views.code_generator, name='code-generator'),
     url(r'^manage/submit-code-generator/$', views.submit_code_generator, name='submit-code-generator'),
+    url(r'^manage/delete-school/$', views.delete_school, name='delete-school'),
     url(r'^manage/nominations-admin/$', views.nominations_admin, name='nominations-admin'),
     url(r'^manage/submit-nominations-admin/$', views.submit_nominations_admin, name='submit-nominations-admin'),
     url(r'^manage/achievements-admin/$', views.achievements_admin, name='achievements-admin'),

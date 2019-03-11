@@ -135,14 +135,21 @@ def submit_wallet(request):
                 run_bug_bounty(request, ud, 'reflected_XSS', 'Congrats! You found a programming bug called reflected cross-site scripting! This bug would allow you to execute malicious javascript code in browsers.', 'https://excess-xss.com/')
                 # end bug bounty
             # if the code was not redeemed by this user before, only then give coins to the user
-            was_redeemed_counter = CodeRedeemer.objects.filter(username=request.user.username, code=inputCode).count()
+            was_redeemed_counter = CodeRedeemer.objects.filter(user_data=ud, code=inputCode).count()
             if was_redeemed_counter > 0:
                 messages.warning(request, 'You have already redeemed this code before!')
             else:
                 # if the code exists
-                code_counter = Code.objects.filter(allowed_hash=inputCode, school=ud.school)
-                if code_counter:
-                    real_code = code_counter[0]
+                try:
+                    real_code = get_object_or_404(Code, allowed_hash=inputCode, school=ud.school)
+                except:
+                    # bug bounty
+                    if inputCode == "$broken-auth":
+                        run_bug_bounty(request, ud, 'broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
+                    # end bug bounty
+                    else:
+                        messages.warning(request, 'Wrong code!')
+                else:
                     # cancel if the code is not an award
                     if real_code.name != "award":
                         messages.warning(request, 'Wrong code! Only reward codes can be redeemed')
@@ -151,23 +158,17 @@ def submit_wallet(request):
                         # add coins to the user
                         ud.permanent_coins = ud.permanent_coins + money_earned
                         ud.save()
+                        # record that the code has been redeemed by this particular user
+                        code_record = CodeRedeemer(user_data=ud, code=inputCode)
+                        code_record.save()
+                        # delete the code unless it is set to infinite
                         if not real_code.infinite:
                             real_code.delete()
-                        # record that the code has been redeemed by this particular user
-                        code_record = CodeRedeemer(username=request.user.username, code=inputCode)
-                        code_record.save()
                         messages.info(request, 'The code is successfully redeemed, you got ' + str(money_earned) + '!')
                         # record the code on the blockchain
                         sender_name = 'GenCyber Team (' + inputCode + ')'
                         tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=money_earned, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                         tl.save()
-                else:
-                    # bug bounty
-                    if inputCode == "$broken-auth":
-                        run_bug_bounty(request, ud, 'broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
-                    # end bug bounty
-                    else:
-                        messages.warning(request, 'Wrong code!')
         return HttpResponseRedirect(reverse('user:wallet'))
     return goto_login(request, "wallet")
 

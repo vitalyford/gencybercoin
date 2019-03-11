@@ -88,17 +88,15 @@ class Code(models.Model):
 
 
 class CodeRedeemer(models.Model):
-    username = models.CharField(max_length=100)
-    code     = models.CharField(max_length=100)
-    date     = models.DateTimeField()
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.date = timezone.now()
-        return super(CodeRedeemer, self).save(*args, **kwargs)
+    user_data = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship
+    code = models.CharField(max_length=255, default="nothing-is-here-cant-touch-this!")
+    date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.username + " has redeemed " + self.code
+        if self.user_data:
+            return self.user_data.first_name + " " + self.user_data.last_name + " has redeemed " + self.code
+        else:
+            return self.id
 
 
 class TransferLogs(models.Model):
