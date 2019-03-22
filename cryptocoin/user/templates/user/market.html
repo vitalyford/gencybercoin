@@ -170,7 +170,7 @@
                   if (top_player == "true" && top_player == json['top_player']) {
                       /* do not update the page if the user is already a top player */
                   }
-                  else if (top_player != json['top_player'] {% if program_type == "camp" %}top_students_number != json['top_students_number'] || {% endif %}|| cart_size != json['cart_size']) {
+                  else if (top_player != json['top_player'] {% if program_type == "camp" %}|| top_students_number != json['top_students_number'] {% endif %}|| cart_size != json['cart_size']) {
                       window.location = window.location.href;
                   }
               }
