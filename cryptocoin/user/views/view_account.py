@@ -311,68 +311,74 @@ def account_creation(request):
     except:
         context['error_message'] = "Registration code is not valid! Check it again or contact the GenCyber Squad for help."
         return render(request, 'user/register.html', context)
-    # check for duplicates
-    user_with_the_same_name = User.objects.filter(username=uname)
-    if user_with_the_same_name.count() > 0 or uname == "admin":
-        context['error_message'] = "Sorry, a user named \"" + uname + "\" already exists. Try again =P"
-        return render(request, 'user/register.html', context)
-    if not check_fields(request):
-        context['error_message'] = "Username and password cannot be empty."
-        return render(request, 'user/register.html', context)
-    # validate the username
-    pattern = re.compile(r'^[\w.@+-]+$')
-    if pattern.match(uname) is None:
-        context['error_message'] = "Enter a valid username. This value may contain only letters, numbers, space, and @/./+/-/_ characters."
-        return render(request, 'user/register.html', context)
-    # if there is no duplicate user, then continue
-    # create an authenticated account and assign it a group
-    try:
-        user = User.objects.create_user(username=uname, first_name=fname, last_name=lname, email='dummy@email.coin', password=pswd)
-    except:
-        messages.warning(request, 'Do not mess with the username, first name, last name, and password :) Try to mess with other fields, those are better')
+    # check for intentionally long input
+    all_input = [len(uname), len(fname), len(lname), len(pswd), len(q1), len(q2), len(q3), len(a1), len(a2), len(a3)]
+    if all(a < 90 for a in all_input):
+        # check for duplicates
+        user_with_the_same_name = User.objects.filter(username=uname)
+        if user_with_the_same_name.count() > 0 or uname == "admin":
+            context['error_message'] = "Sorry, a user named \"" + uname + "\" already exists. Try again =P"
+            return render(request, 'user/register.html', context)
+        if not check_fields(request):
+            context['error_message'] = "Username and password cannot be empty."
+            return render(request, 'user/register.html', context)
+        # validate the username
+        pattern = re.compile(r'^[\w.@+-]+$')
+        if pattern.match(uname) is None:
+            context['error_message'] = "Enter a valid username. This value may contain only letters, numbers, space, and @/./+/-/_ characters."
+            return render(request, 'user/register.html', context)
+        # if there is no duplicate user, then continue
+        # create an authenticated account and assign it a group
+        try:
+            user = User.objects.create_user(username=uname, first_name=fname, last_name=lname, email='dummy@email.coin', password=pswd)
+        except:
+            messages.warning(request, 'Do not mess with the username, first name, last name, and password :) Try to mess with other fields, those are better')
+            return HttpResponseRedirect(reverse('user:register'))
+        # if the code belongs to gcadmin, else it belongs to gcstudent
+        if "!" in code:
+            group, _ = Group.objects.get_or_create(name='gcadmin')
+        else:
+            group, _ = Group.objects.get_or_create(name='gcstudent')
+        user.groups.add(group)
+
+        if validate_on_save(request, user): user.save()
+        else: return HttpResponseRedirect(reverse('user:register'))
+
+        # add the user data to gencybercoin db
+        is_admin = True if group.name == "gcadmin" else False
+        ud = UserData(username=uname, first_name=fname, last_name=lname, password=pswd, is_admin=is_admin, school=school_id)
+
+        if validate_on_save(request, ud): ud.save()
+        else:
+            user.delete()
+            return HttpResponseRedirect(reverse('user:register'))
+
+        c = Cart(user_data=ud)
+
+        if validate_on_save(request, c): c.save()
+        else:
+            user.delete()
+            ud.delete()
+            return HttpResponseRedirect(reverse('user:register'))
+
+        ua = UserAnswers(data=ud, answer1=a1, answer2=a2, answer3=a3, question1=q1, question2=q2, question3=q3)
+
+        if validate_on_save(request, ua):
+            ua.save()
+            if not Code.objects.get(allowed_hash=code).infinite:
+                Code.objects.filter(allowed_hash=code)[0].delete()
+
+            user = authenticate(username=uname, password=pswd)
+            request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
+            login(request, user)
+            return HttpResponseRedirect(reverse('user:account'))
+        else:
+            c.delete()
+            user.delete()
+            ud.delete()
+
+        messages.warning(request, 'Trying to break stuff, huh? Well, see the messages above, they will tell you what you are doing wrong ;-)')
         return HttpResponseRedirect(reverse('user:register'))
-    # if the code belongs to gcadmin, else it belongs to gcstudent
-    if "!" in code:
-        group, _ = Group.objects.get_or_create(name='gcadmin')
     else:
-        group, _ = Group.objects.get_or_create(name='gcstudent')
-    user.groups.add(group)
-
-    if validate_on_save(request, user): user.save()
-    else: return HttpResponseRedirect(reverse('user:register'))
-
-    # add the user data to gencybercoin db
-    is_admin = True if group.name == "gcadmin" else False
-    ud = UserData(username=uname, first_name=fname, last_name=lname, password=pswd, is_admin=is_admin, school=school_id)
-
-    if validate_on_save(request, ud): ud.save()
-    else:
-        user.delete()
-        return HttpResponseRedirect(reverse('user:register'))
-
-    c = Cart(user_data=ud)
-
-    if validate_on_save(request, c): c.save()
-    else:
-        user.delete()
-        ud.delete()
-        return HttpResponseRedirect(reverse('user:register'))
-
-    ua = UserAnswers(data=ud, answer1=a1, answer2=a2, answer3=a3, question1=q1, question2=q2, question3=q3)
-
-    if validate_on_save(request, ua):
-        ua.save()
-        if not Code.objects.get(allowed_hash=code).infinite:
-            Code.objects.filter(allowed_hash=code)[0].delete()
-
-        user = authenticate(username=uname, password=pswd)
-        request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
-        login(request, user)
-        return HttpResponseRedirect(reverse('user:account'))
-    else:
-        c.delete()
-        user.delete()
-        ud.delete()
-
-    messages.warning(request, 'Trying to break stuff, huh? Well, see the messages above, they will tell you what you are doing wrong ;-)')
-    return HttpResponseRedirect(reverse('user:register'))
+        context['error_message'] = "Good try. Really. But you do not want to mess with the maxlength here :-)"
+        return render(request, 'user/register.html', context)
