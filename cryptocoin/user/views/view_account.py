@@ -17,21 +17,24 @@ def update_sec_questions(request):
 def change_password(request):
     if request.user.is_authenticated:
         if 'inputOldPassword' in request.POST and 'inputNewPassword' in request.POST and check_password(request.POST.get('inputOldPassword'), request.user.password):
-            # update in User table
-            u = get_object_or_404(User, username=request.user.username)
-            u.set_password(request.POST.get('inputNewPassword'))
-            if validate_on_save(request, u):
-                u.save()
-                # update in UserData table
-                u = get_object_or_404(UserData, username=request.user.username)
-                u.password = request.POST.get('inputNewPassword')
-                u.save()
-                # re-authenticate the user with the new creds
-                user = authenticate(username=request.user.username, password=u.password)
-                if user is not None:
-                    request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
-                    login(request, user)
-                messages.info(request, 'Your password has been successfully changed')
+            if len(request.POST.get('inputNewPassword')) > 100:
+                messages.warning(request, 'I see how it goes... Well, try to play with maxlength somewhere else ;-). Your password has not been changed.')
+            else:
+                # update in User table
+                u = get_object_or_404(User, username=request.user.username)
+                u.set_password(request.POST.get('inputNewPassword'))
+                if validate_on_save(request, u):
+                    u.save()
+                    # update in UserData table
+                    u = get_object_or_404(UserData, username=request.user.username)
+                    u.password = request.POST.get('inputNewPassword')
+                    u.save()
+                    # re-authenticate the user with the new creds
+                    user = authenticate(username=request.user.username, password=u.password)
+                    if user is not None:
+                        request.session.set_expiry(settings.SESSION_EXPIRY_TIME)
+                        login(request, user)
+                    messages.info(request, 'Your password has been successfully changed')
         else:
             messages.warning(request, 'Your old password has been entered incorrectly')
 
