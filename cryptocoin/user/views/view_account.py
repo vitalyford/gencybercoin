@@ -1,4 +1,5 @@
 from .views_global import *
+import re
 
 
 def update_sec_questions(request):
@@ -318,6 +319,11 @@ def account_creation(request):
     if not check_fields(request):
         context['error_message'] = "Username and password cannot be empty."
         return render(request, 'user/register.html', context)
+    # validate the username
+    pattern = re.compile(r'^[\w.@+-]+$')
+    if pattern.match(uname) is None:
+        context['error_message'] = "Enter a valid username. This value may contain only letters, numbers, space, and @/./+/-/_ characters."
+        return render(request, 'user/register.html', context)
     # if there is no duplicate user, then continue
     # create an authenticated account and assign it a group
     try:
@@ -367,8 +373,6 @@ def account_creation(request):
         c.delete()
         user.delete()
         ud.delete()
-    '''except:
-        return render(request, 'user/register.html', {'error_message': "Something went wrong, whoops. Please contact the GenCyber Team.",})
-    else:'''
+
     messages.warning(request, 'Trying to break stuff, huh? Well, see the messages above, they will tell you what you are doing wrong ;-)')
     return HttpResponseRedirect(reverse('user:register'))
