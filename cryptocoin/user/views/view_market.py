@@ -45,7 +45,7 @@ def submit_cart(request):
                                 raise
                     except:
                         # bug bounty
-                        run_bug_bounty(request, ud, 'client_side_input_validation', 'Congrats! You found a programming bug on client-side/hidden-field input validation. This bug would allow you to get the money back for the item you have just bought => direct profit!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+                        run_bug_bounty(request, ud, 'bug#11:client_side_input_validation', 'Congrats! You found a programming bug on client-side/hidden-field input validation. This bug would allow you to get the money back for the item you have just bought => direct profit!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                         # end bug bounty
                         break
                     # save only if the user can afford it in the cart
@@ -67,7 +67,7 @@ def submit_cart(request):
                     break
                 else:
                     # bug bounty
-                    run_bug_bounty(request, ud, 'race_condition_when_ordering', 'Congrats! You found a programming bug on adding an item when it was not your turn! This bug would allow you to add any item regardless of your turn in the queue.', 'https://www.owasp.org/index.php/Testing_for_Race_Conditions_%28OWASP-AT-010%29')
+                    run_bug_bounty(request, ud, 'bug#12:race_condition_when_ordering', 'Congrats! You found a programming bug on adding an item when it was not your turn! This bug would allow you to add any item regardless of your turn in the queue.', 'https://www.owasp.org/index.php/Testing_for_Race_Conditions_%28OWASP-AT-010%29')
                     # end bug bounty
     if 'page' in request.GET:
         return HttpResponseRedirect(reverse('user:market') + "?page=" + request.GET.get('page'))
@@ -99,7 +99,7 @@ def remove_cart_item(request, key, ud):
         id = int(key.replace("remove", ""))
         # bug bounty
         if c.market_items.filter(id=id).count() == 0:
-            run_bug_bounty(request, ud, 'refresh_on_remove', 'Congrats! You found a programming bug on refreshing (resubmitting) the page after you removed an item from the cart! This bug would allow you to get the money back as many times as you want for the item you have just removed. Also, it would add more available items in the market itself.', 'https://en.wikipedia.org/wiki/Replay_attack')
+            run_bug_bounty(request, ud, 'bug#13:refresh_on_remove', 'Congrats! You found a programming bug on refreshing (resubmitting) the page after you removed an item from the cart! This bug would allow you to get the money back as many times as you want for the item you have just removed. Also, it would add more available items in the market itself.', 'https://en.wikipedia.org/wiki/Replay_attack')
             return
         # end bug bounty
         md = get_object_or_404(MarketItem, id=id)
@@ -179,7 +179,7 @@ def market(request):
                     if page_int < 1 or page_int > paginator.num_pages:
                         raise
                 except:
-                    context['available_coins'] += run_bug_bounty(request, ud, 'local_file_inclusion', 'Congrats! You found a programming bug that can cause a local file inclusion. This bug would allow you to potentially read every file on the server!', 'https://www.owasp.org/index.php/Testing_for_Local_File_Inclusion')
+                    context['available_coins'] += run_bug_bounty(request, ud, 'bug#10:local_file_inclusion', 'Congrats! You found a programming bug that can cause a local file inclusion. This bug would allow you to potentially read every file on the server!', 'https://www.owasp.org/index.php/Testing_for_Local_File_Inclusion')
             # end bug bounty
             items = paginator.get_page(page)
             if program_type == 'camp':

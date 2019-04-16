@@ -34,14 +34,14 @@ def submit_social_engineering(request):
                     answer = request.POST.get(key).lower()  # .replace(" ", "")
                 except:
                     # bug bounty
-                    run_bug_bounty(request, ud, 'html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+                    run_bug_bounty(request, ud, 'bug#8:html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                     # end bug bounty
                 else:
                     try:  # to find the correct question that the student tried to answer
                         se_ques_answ = get_object_or_404(SEQuesAnsw, school=ud.school, id=question_id)
                     except:
                         # bug bounty
-                        run_bug_bounty(request, ud, 'html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+                        run_bug_bounty(request, ud, 'bug#8:html_editing_on_social_eng', 'Congrats! You found a programming bug on client-side input validation. This bug would allow you to break the normal flow of checking social engineering answers and show you a trace of errors on the page!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                         # end bug bounty
                     else:  # if there is such a question and the answer is correct, then save it
                         # if se_ques_answ.answer == answer and SECorrectAnswer.objects.filter(user_data=ud, se_ques_answ=se_ques_answ).count() == 0:

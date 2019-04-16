@@ -136,7 +136,7 @@ def submit_wallet(request):
             inputCode = str(request.POST.get('inputCode')).lower().strip()
             if "<script" in inputCode:
                 # bug bounty
-                run_bug_bounty(request, ud, 'reflected_XSS', 'Congrats! You found a programming bug called reflected cross-site scripting! This bug would allow you to execute malicious javascript code in browsers.', 'https://excess-xss.com/')
+                run_bug_bounty(request, ud, 'bug#5:reflected_XSS', 'Congrats! You found a programming bug called reflected cross-site scripting! This bug would allow you to execute malicious javascript code in browsers.', 'https://excess-xss.com/')
                 # end bug bounty
             # if the code was not redeemed by this user before, only then give coins to the user
             was_redeemed_counter = CodeRedeemer.objects.filter(user_data=ud, code=inputCode).count()
@@ -149,11 +149,11 @@ def submit_wallet(request):
                 except:
                     # bug bounty
                     if inputCode == "$broken-auth":
-                        run_bug_bounty(request, ud, 'broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
+                        run_bug_bounty(request, ud, 'bug#2:broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
                     elif inputCode == "$security-txt-policy!":
-                        run_bug_bounty(request, ud, 'security.txt', 'You found security.txt page! This is a useful location to remember when you are working on real bug bounty hunting. Good luck!', 'https://securitytxt.org/')
+                        run_bug_bounty(request, ud, 'bug#3:security.txt', 'You found security.txt page! This is a useful location to remember when you are working on real bug bounty hunting. Good luck!', 'https://securitytxt.org/')
                     elif inputCode == "$good-old-404-error":
-                        run_bug_bounty(request, ud, '404_error', 'You learned about 404 errors! This is a page that is typically shown on the website when you are trying to access a page that does not exist.', 'https://en.wikipedia.org/wiki/HTTP_404')
+                        run_bug_bounty(request, ud, 'bug#14:404_error', 'You learned about 404 errors! This is a page that is typically shown on the website when you are trying to access a page that does not exist.', 'https://en.wikipedia.org/wiki/HTTP_404')
                     # end bug bounty
                     else:
                         messages.warning(request, 'Wrong code!')
@@ -225,7 +225,7 @@ def transfer(request):
         elif amount < 0 or coins < 0:
             messages.warning(request, 'You can send only positive integer values!')
             # bug bounty
-            run_bug_bounty(request, sender, 'transfer_negative_amount', 'Congrats! You found a programming bug on sending a negative amount of money to someone! This bug would allow you to drain honorary coins from any user to your account without them knowing it.', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+            run_bug_bounty(request, sender, 'bug#7:transfer_negative_amount', 'Congrats! You found a programming bug on sending a negative amount of money to someone! This bug would allow you to drain honorary coins from any user to your account without them knowing it.', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
             # end bug bounty
         else:
             if receiver is not None:
@@ -249,7 +249,7 @@ def transfer(request):
                         sender.save()
                         # bug bounty
                         if receiver.username == sender.username:
-                            run_bug_bounty(request, sender, 'html_editing_on_transfer', 'Congrats! You found an easter egg! This is not really a bug but you had to tweak something in the HTML code, so you get a reward.', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
+                            run_bug_bounty(request, sender, 'bug#9:html_editing_on_transfer', 'Congrats! You found an easter egg! This is not really a dangerous bug but you had to tweak something in the HTML code, so you get a reward.', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                         # end bug bounty
                         # log the sender/receiver and timestamp only if amount > 0
                         if amount > 0:
