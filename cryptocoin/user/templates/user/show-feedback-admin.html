@@ -43,12 +43,12 @@
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
               {% endfor %}
             {% endif %}
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="word-wrap: break-word;">
                     {% for f in feedbackFirst %}
                     <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
                     {% endfor %}
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="word-wrap: break-word;">
                     {% for f in feedbackSecond %}
                     <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
                     {% endfor %}
