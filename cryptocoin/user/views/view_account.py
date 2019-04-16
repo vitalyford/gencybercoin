@@ -150,6 +150,8 @@ def submit_wallet(request):
                     # bug bounty
                     if inputCode == "$broken-auth":
                         run_bug_bounty(request, ud, 'broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
+                    elif inputCode == "$secuirty-txt-policy!":
+                        run_bug_bounty(request, ud, 'security.txt', 'You found security.txt page! This is a useful location to remember when you are working on real bug bounty hunting. Good luck!', 'https://securitytxt.org/')
                     # end bug bounty
                     else:
                         messages.warning(request, 'Wrong code!')

@@ -17,6 +17,10 @@ def extras_bug_bounty(request):
     return goto_login(request, "bug bounty")
 
 
+def extras_security_txt(request):
+    return render(request, 'user/extras/security.html', {})
+
+
 def extras_blockchain(request):
     if request.user.is_authenticated:
         context = {}

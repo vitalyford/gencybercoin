@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^manage/pdf-codes-admin/$', views.pdf_codes_admin, name='pdf-codes-admin'),
     url(r'^extras/cryptocurrency/$', views.extras_cryptocurrency, name='extras-cryptocurrency'),
     url(r'^extras/bug-bounty/$', views.extras_bug_bounty, name='extras-bug-bounty'),
+    url(r'^.well-known/security.txt$', views.extras_security_txt, name='extras-security-txt'),
     url(r'^extras/hall-of-fame/$', views.extras_hall_of_fame, name='extras-hall-of-fame'),
     url(r'^extras/social-engineering/$', views.extras_social_engineering, name='extras-social-engineering'),
     url(r'^extras/osint-ninjas/$', views.extras_osint_ninjas, name='extras-osint-ninjas'),
