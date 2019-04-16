@@ -153,7 +153,7 @@ def submit_wallet(request):
                     elif inputCode == "$security-txt-policy!":
                         run_bug_bounty(request, ud, 'security.txt', 'You found security.txt page! This is a useful location to remember when you are working on real bug bounty hunting. Good luck!', 'https://securitytxt.org/')
                     elif inputCode == "$good-old-404-error":
-                        run_bug_bounty(request, ud, '404 error', 'You learned about 404 errors! This is a page that is typically shown on the website when you are trying to access a page that does not exist.', 'https://en.wikipedia.org/wiki/HTTP_404')
+                        run_bug_bounty(request, ud, '404_error', 'You learned about 404 errors! This is a page that is typically shown on the website when you are trying to access a page that does not exist.', 'https://en.wikipedia.org/wiki/HTTP_404')
                     # end bug bounty
                     else:
                         messages.warning(request, 'Wrong code!')
