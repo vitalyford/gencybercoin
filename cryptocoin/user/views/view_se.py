@@ -92,8 +92,15 @@ def extras_osint_ninjas(request):
             context['se_tasks_counts'][se_task.question] = se_task.secorrectanswer_set.filter(user_data__is_admin=False).count()
 
         # identify how many questions every user answered correctly
+        usercount_who_answered_all_questions = 0
+        total_task_number = len(context['se_tasks_counts'])
         for u in userdata:
             u['answers'] = SECorrectAnswer.objects.filter(user_data__id=u['id']).count()
+            if u['answers'] == total_task_number:
+                usercount_who_answered_all_questions = usercount_who_answered_all_questions + 1
+        context['percentage_who_answered_all_questions'] = 0
+        if context['usercount'] != 0:
+            context['percentage_who_answered_all_questions'] = int((float(usercount_who_answered_all_questions) / float(context['usercount'])) * 100.0)
         context['userdata'] = userdata
 
         return render(request, 'user/extras/osint-ninjas.html', context)
