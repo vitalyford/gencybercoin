@@ -1,5 +1,53 @@
 {% extends "base_generic.html" %}
 
+{% block customcss %}
+<style>
+.checkbox label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+}
+
+.checkbox .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.checkbox label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .crr {
+    opacity: .5;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Account info -->
 <div class="row">
@@ -32,9 +80,12 @@
                 <input type="text" class="form-control margin-top" id="iC" name="inputCount" maxlength="100" placeholder="Number of codes" required/>
                 <button type="submit" class="btn btn-success margin-top" name="generate" value="generate">Generate</button>
                 <br>
-                <label class="checkbox-inline">
-                    <input type="checkbox" name="infinite">Infinite (can be only redeemed once per student but used by all of them)
-                </label>
+                <div class="checkbox" style="padding-top: 20px;">
+                    <label>
+                        <input type="checkbox" name="infinite">
+                        <span class="cr"><i class="cr-icon fa fa-rocket"></i></span>Infinite (can be only redeemed once per student but used by all of them)
+                    </label>
+                </div>
           </form>
         </div>
     </div>
