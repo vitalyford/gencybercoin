@@ -1,6 +1,10 @@
 from .views_global import *
 
 
+def handler404(request):
+    return render(request, 'user/extras/404.html', status=404)
+
+
 def index(request):
     if request.user.is_authenticated:
         return render(request, 'user/index.html', {})
