@@ -65,7 +65,7 @@
             {% endfor %}
           {% endif %}
           <p class="lead text-center">Available Coins: &hearts;{{ available_coins }}</p>
-          {% if market_enabled == "false" %}<p class="text-center text-warning">The market items are not currently available to order.{% if program_type == "camp" %}<br>We will open it at the end of the camp!{% endif %}</p>{% endif %}
+          {% if market_enabled == "false" %}<p class="lead text-center text-warning">The market items are not currently available to order. Most likely, it will open at the end of the camp/class. Keep an eye on it.</p>{% endif %}
 
           {% for item in marketdata %}
             {% if forloop.first %}
@@ -99,7 +99,9 @@
                   <form class="form-horizontal" {% if top_player == "true" and market_enabled == "true" and item.quantity != 0 %}action="{% url 'user:submit-cart' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post"{% endif %}>
                   {% csrf_token %}
                       <input type="hidden" name="checkers" value="{{ item.cost_permanent }}"/>
+                  {% endif %}
                       <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
+                  {% if market_enabled == "true" %}
                       {% if program_type == "classroom" %}
                             <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}>Add to cart</button>
                       {% else %}
@@ -178,6 +180,7 @@
       }, seconds);
     });
 </script>
+{% endif %}
 <script>
     $(document).ready(function(){
         $("[data-toggle=tooltip]").tooltip({ placement: 'top'});
@@ -185,5 +188,4 @@
         $('#cart-info').tooltip();
     });
 </script>
-{% endif %}
 {% endblock %}
