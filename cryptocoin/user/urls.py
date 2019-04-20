@@ -7,7 +7,7 @@ from . import views
 
 app_name = 'user'
 
-urlpatterns = [
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^gcsuperuser/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^5ebe2294ecd0e0f08eab7690d2a6ee69$', views.secret, name='secret'),
@@ -59,4 +59,4 @@ urlpatterns = [
     url(r'^extras/submit-feedback/$', views.submit_extras_feedback, name='submit-extras-feedback'),
     url(r'^404/$', views.handler404, name='handler404'),
     url(r'^.*$', RedirectView.as_view(permanent=False, url='/404/')),
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
