@@ -15,7 +15,7 @@
               {% for name, cart in carts.items %}
                   <tr>
                     <td scope="row">
-                        <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#{{ forloop.counter }}"><p class="lead">{{ name }} ordered:</p></button>
+                        <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#{{ forloop.counter }}"><p class="lead">{{ name }} ordered {{ cart|length }}:</p></button>
                     </td>
                     <td scope="row">
                         <div id="{{ forloop.counter }}" class="collapse">
