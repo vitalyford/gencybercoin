@@ -63,6 +63,10 @@
           {% endif %}
           {% if error_message %}<div class="lead text-center text-warning">{{ error_message }}</div>{% endif %}
           <p class="lead text-center">Generate codes for {% if is_gcadmin %}students{% endif %}{% if is_superuser %}admins{% endif %}</p>
+          <div class="normal-text">
+              <p class="lead">Registration codes allow students to register on this website. You can make a code that works for everyone (infinite checkbox) or you can make multiple one-time codes, download them, cut, and give them to students.</p>
+              <p class="lead">Same applies to the random award coins. Also, if you want, you can make custom reward codes.</p>
+          </div>
           <form class="form-inline text-center" action="{% url 'user:submit-code-generator' %}" method="post">
           {% csrf_token %}
               {% if is_gcadmin %}
