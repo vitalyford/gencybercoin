@@ -45,7 +45,7 @@
                               <td scope="row" class="text-left">
                                   <input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="ajax_enabled" {% if ajax_enabled == "true" %}checked{% endif %}>
                               </td>
-                              <td scope="row" class="text-justify col-sm6"><p class="lead">Enabled AJAX will allow to auto-update the queue on the market and students will not need to refresh the market page to check for their turn.<br>Be advised that if adding items in the market lags, switch AJAX off.</p></td>
+                              <td scope="row" class="text-justify col-sm6"><p class="lead">Enabled AJAX will allow to auto-update the queue on the market and students will not need to refresh the market page to check for their turn.<br>Be advised that if the market page lags, switch AJAX off.</p></td>
                           </tr>
                           <tr>
                               <td scope="row" class="text-right"><p class="lead">Market pagination is</p></td>
@@ -62,7 +62,7 @@
                                       <input type="number" class="form-control" name="top_students_number" value="{{ top_students_number }}" size="4" min="1">
                                   </div>
                               </td>
-                              <td scope="row" class="text-justify"><p class="lead">Defines how many students with the highest number of coins will be able to order items from the market at the same time.<br>The rest of the students will have to wait their turn.<br>If you want to allow all students to order at the same time (free-for-all), set this setting to a number higher than the total number of students in the camp.<br>As soon as a student orders an item, s/he will be put at the end of the queue to allow others to order.</p></td>
+                              <td scope="row" class="text-justify"><p class="lead">Defines how many students with the highest number of coins will be able to order items from the market at the same time.<br>The rest of the students will have to wait their turn.<br>If you want to allow all students to order at the same time (free-for-all), set this setting to a number higher than the total number of students in the camp/class.<br>As soon as a student orders an item, s/he will be put at the end of the queue to allow others to order.</p></td>
                           </tr>
                           <tr>
                               <td scope="row" class="text-right">
@@ -118,7 +118,7 @@
                                       <input type="number" class="form-control" name="se_award_amount" value="{{ se_award_amount }}" size="4" min="0">
                                   </div>
                               </td>
-                              <td scope="row" class="text-justify"><p class="lead">If enabled, the students will see a menu option to perform Reconnaissance and social engineering on the GenCyber faculty/mentors/students under Features. They will be rewarded the amount of coins set here for every correct answer.<br>But first, you should add/edit the questions in the Admin->Reconnaissance editor menu.</p></td>
+                              <td scope="row" class="text-justify"><p class="lead">If enabled, the students will see a menu option to perform Reconnaissance and social engineering on the GenCyber faculty/mentors/students under Features. They will be rewarded the amount of coins set here for every correct answer.<br>But first, you should add/edit the questions in the Edit Reconnaissance menu.</p></td>
                           </tr>
                           <tr>
                               <td scope="row" class="text-right">
@@ -144,7 +144,7 @@
                                       </select>
                                   </div>
                               </td>
-                              <td scope="row" class="text-justify"><p class="lead">There are two program types: (1) camp, (2) classroom. This option defines the way the market works.<br>If classroom is selected, then when you open the market, only top-{{ top_students_number }} students will be able to order at this round.<br>Depending on their rank, the top-{{ top_students_number }} students will be allowed to order only those items that are equal to or below their rank (the number of coins they have). No other students will be able to order anything.<br>If the camp is selected, then all students will be put in a priority queue based on their rank and all of them will be able to order items at some point.<br>In the camp mode, students can remove their bought items from the cart but in the classroom mode - they cannot.</p></td>
+                              <td scope="row" class="text-justify"><p class="lead">There are two program types: (1) camp, (2) classroom. This option defines the way the market works.<br>If classroom is selected, then when you open the market, only top-{{ top_students_number }} students will be able to order at this round.<br>Depending on their rank, the top-{{ top_students_number }} students will be allowed to order only those items that are equal to or below their rank (the number of coins they have). No other students will be able to order anything.<br>If the camp is selected, then all students will be put in a priority queue based on their rank and all of them will be able to order items at some point.<br>In the camp mode, students can remove their bought items from the cart but in the classroom mode - they cannot.<br>If you want to switch between modes, you will not lose any data.</p></td>
                           </tr>
                       </tbody>
                   </small>
