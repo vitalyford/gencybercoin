@@ -132,6 +132,7 @@ def submit_social_engineering_admin(request):
                                 id = int(key.replace("q", ""))
                                 question = request.POST.get(key)
                                 answer = request.POST.get("a" + str(id)).lower().replace(" ", "")
+                                answer = re.sub(r'[^\w;]', '', answer)
                                 se_ques_answ = get_object_or_404(SEQuesAnsw, id=id)
                                 se_ques_answ.question = question
                                 se_ques_answ.answer = answer
