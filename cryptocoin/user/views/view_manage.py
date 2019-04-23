@@ -9,6 +9,9 @@ VALID_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
 
 def delete_school(request):
     if request.user.is_authenticated and request.user.is_superuser and 'delete' in request.POST and 'school' in request.POST:
+        users = UserData.objects.filter(school__name=request.POST.get('school'))
+        for user in users:
+            get_object_or_404(User, username=user.username).delete()
         School.objects.filter(name=request.POST.get('school')).delete()
         messages.info(request, 'Successfully deleted ' + request.POST.get('school') + ' and all its data')
     return HttpResponseRedirect(reverse('user:code-generator'))
