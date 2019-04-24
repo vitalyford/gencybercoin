@@ -4,7 +4,7 @@ Django settings for GenCyberCoin project.
 """
 
 #import dj_database_url #dj-database-url==0.4.1
-import os 
+import os
 if 'RDS_DB_NAME' in os.environ:
     from cryptocoin.aws.conf import *
 
@@ -20,7 +20,7 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gencybercoin.tk', 'www.gencybercoin.tk', '.elasticbeanstalk.com', '34.202.109.150', '52.71.151.103', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -155,4 +155,4 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 DEFAULT_HONORARY_COINS = 50
 DEFAULT_PERMANENT_COINS = 0
 
-SESSION_EXPIRY_TIME = 7200
+SESSION_EXPIRY_TIME = 21600
