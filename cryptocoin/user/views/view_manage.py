@@ -805,23 +805,24 @@ def change_mode_admin(request):
 
 def show_feedback_admin(request):
     context = {}
+    cutout_length = 20
     if request.user.is_superuser:
-        feedback = Feedback.objects.all().order_by('id')
-        count = feedback.count() // 2
+        feedback = paginate_list(request, Feedback.objects.all().order_by('id'), cutout_length)
+        count = int(ceil(len(feedback) / 2))
         for f in feedback:
             f.date = f.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
-        context['feedbackFirst'] = feedback[:count]
-        context['feedbackSecond'] = feedback[count:]
+        context['feedbackdata'] = feedback
+        context['columnsplitter'] = str(count)
         return render(request, 'user/show-feedback-admin.html', context)
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            feedback = Feedback.objects.filter(school=ud.school).order_by('id')
-            count = feedback.count() // 2
+            feedback = paginate_list(request, Feedback.objects.filter(school=ud.school).order_by('id'), cutout_length)
+            count = int(ceil(len(feedback) / 2))
             for f in feedback:
                 f.date = f.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
-            context['feedbackFirst'] = feedback[:count]
-            context['feedbackSecond'] = feedback[count:]
+            context['feedbackdata'] = feedback
+            context['columnsplitter'] = str(count)
             return render(request, 'user/show-feedback-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
 

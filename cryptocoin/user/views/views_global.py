@@ -6,6 +6,7 @@ from django.db.models import Sum, Min
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
+from math import ceil
 
 # imports for image
 from PIL import Image
@@ -37,6 +38,13 @@ import base64
 
 # import for on-save object validation
 from django.core.exceptions import ValidationError
+
+
+def paginate_list(request, input, cutout_length):
+    paginator = Paginator(input, cutout_length)
+    page = request.GET.get('page')
+    if not page: page = 1
+    return paginator.get_page(page)
 
 
 def validate_on_save(request, obj, message_on_success=''):

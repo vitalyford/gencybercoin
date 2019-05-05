@@ -44,16 +44,42 @@
               {% endfor %}
             {% endif %}
             <div class="col-sm-6" style="word-wrap: break-word;">
-                    {% for f in feedbackFirst %}
-                    <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
+                {% with slice_count=":"|add:columnsplitter %}
+                    {% for f in feedbackdata|slice:slice_count %}
+                        <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
                     {% endfor %}
+                {% endwith %}
             </div>
             <div class="col-sm-6" style="word-wrap: break-word;">
-                    {% for f in feedbackSecond %}
-                    <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
+                {% with slice_count=columnsplitter|add:":" %}
+                    {% for f in feedbackdata|slice:slice_count %}
+                        <p class="sublead">{% if request.user.is_superuser %}{{ f.school.name }}: {% endif %}<span class="fixed-date">{{ f.date }}</span><br>{{ f.message }}</p>
                     {% endfor %}
+                {% endwith %}
             </div>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="box text-center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination pagination-lg">
+            <li{% if feedbackdata.has_previous %}{% else %} class="disabled"{% endif %}>
+              <a href="{% if feedbackdata.has_previous %}?page={{ feedbackdata.previous_page_number }}{% else %}#{% endif %}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% for i in "x"|rjust:feedbackdata.paginator.num_pages %}
+            <li{% if feedbackdata.number == forloop.counter %} class="active"{% endif %}><a href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+            {% endfor %}
+            <li{% if feedbackdata.has_next %}{% else %} class="disabled"{% endif %}>
+              <a href="{% if feedbackdata.has_next %}?page={{ feedbackdata.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
     </div>
 </div>
 {% endblock %}
