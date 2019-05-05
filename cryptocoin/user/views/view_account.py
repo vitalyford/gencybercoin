@@ -150,6 +150,8 @@ def submit_wallet(request):
                     # bug bounty
                     if inputCode == "$broken-auth":
                         run_bug_bounty(request, ud, 'bug#2:broken_authentication', 'You found broken authentication! Great job.', 'https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication')
+                    elif inputCode == "$wonder-why-wonder-how":
+                        run_bug_bounty(request, ud, 'bug#15:weak_hash', 'You found a way to crack the weak hash, most likely via a dictionary attack!', 'https://en.wikipedia.org/wiki/Dictionary_attack')
                     elif inputCode == "$security-txt-policy!":
                         run_bug_bounty(request, ud, 'bug#3:security.txt', 'You found security.txt page! This is a useful location to remember when you are working on real bug bounty hunting. Good luck!', 'https://securitytxt.org/')
                     elif inputCode == "$good-old-404-error":
@@ -279,6 +281,8 @@ def user_login_process(request):
         # bug bounty
         if username == "admin" and password == "forgot_my_password":
             return render(request, 'user/extras/broken-admin.html', {})
+        elif username == "wonderwoman" and password == "dontforget":
+            return render(request, 'user/extras/wonderwoman.html', {})
         # end bug bounty
         return render(request, 'user/login.html', {'error_message': "Invalid login! Try again."})
 
@@ -320,7 +324,7 @@ def account_creation(request):
     if all(a < 90 for a in all_input):
         # check for duplicates
         user_with_the_same_name = User.objects.filter(username=uname)
-        if user_with_the_same_name.count() > 0 or uname == "admin":
+        if user_with_the_same_name.count() > 0 or uname == "admin" or uname == "wonderwoman":
             context['error_message'] = "Sorry, a user named \"" + uname + "\" already exists. Try again =P"
             return render(request, 'user/register.html', context)
         if not check_fields(request):

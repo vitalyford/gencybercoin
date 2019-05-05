@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">Wonderwoman</h2>
+            <hr>
+            {% if messages %}
+              {% for message in messages %}
+                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            <div class="normal-text">
+                <p class="lead">Congrats! You cracked the hash or may have found it online :) The point is, passwords are not stored in plain text. Instead, they are hidden behind a mathematical function called "hash" that produces a fixed-length string, which is impossible to revert back to the real password. However, there are dictionary and brute-force attacks that allow you to crack those hashes. Make your password stronger by making it longer.</p>
+                <p class="lead">By the way, you can check if your password and email account have been leaked on <a href="https://haveibeenpwned.com/" target="_blank" rel="noopener noreferrer">haveibeenpwned</a> website.</p>
+            </div>
+            <div class="normal-text text-center">
+                <hr>
+                <h2 class="intro-text text-center">Marvel</h2>
+                <hr>
+                <p class="lead">Wonderwoman</p>
+                <p class="lead">Black Panther</p>
+                <p class="lead">Spider-Man</p>
+                <p class="lead">Code to redeem: $wonder-why-wonder-how</p>
+                <p class="lead">Iron Man</p>
+                <p class="lead">Ant-Man</p>
+                <p class="lead">Captain Marvel</p>
+                <p class="lead">Captain America</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
