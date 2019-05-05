@@ -8,51 +8,63 @@
     <div class="box">
       <div class="col-lg-3">
         <hr>
-        <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item and then buy it again for a smaller/larger price" id="cart-info"></i>{% endif %}</h2>
-        <hr>
-{% if cart %}
-        {% if program_type == "camp" %}<p class="text-right" style="font-size: 16px;">Remove</p>{% endif %}
-        <table class="table table-hover table-responsive" style="margin: 0 auto;">
-          <tbody>
-          {% for c in cart %}
-          <small class="lead">
-          <tr>
-            <td scope="row">{{ c.name }}</td>
-            <td scope="row" class="text-right">&hearts;{{ c.cost_permanent }}</td>
-            {% if program_type == "camp" %}
-            <td scope="row" class="text-center">
-                <form class="form-horizontal" action="{% url 'user:market' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post">
-                {% csrf_token %}
-                    <input type="hidden" name="checkers" value="{{ c.cost_permanent }}"/>
-                    <button type="submit" class="btn btn-default btn-xs" name="remove{{ c.id }}" value="{{ c.id }}">X</button>
-                </form>
-            </td>
-            {% endif %}
-          </tr>
-          </small>
-          {% endfor %}
-          {% if total %}
-          <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td>{% if program_type == "camp" %}<td></td>{% endif %}</tr>
-          {% endif %}
-          </tbody>
-        </table>
-{% elif market_enabled == "true" %}
-        <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
-{% endif %}
-        <hr>
-        <h2 class="intro-text text-center">Purchase Priority Queue <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick{% if program_type == 'camp' %} and then be put at the back of the queue. This number will automatically change as time goes on so you will be able to order soon.{% endif %}" id="queue-info"></i></h2>
-        <hr>
-{% if market_enabled == "true" %}
-        <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% if program_type == "camp" %}, please wait your turn{% endif %}{% endif %}</p>
-        <div id="students_list">
-        {% for u in top_players %}
-          <p class="lead">{{ forloop.counter }}. {{ u }}</p>
-          {% if forloop.counter == top_students_number|add:"0" %}<hr style="border-top: dashed 1px;" />{% endif %}
-        {% empty %}
-        <p class="lead text-center">No students are registered yet</p>
-        {% endfor %}
+        <div class="text-center">
+            <button type="button" class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#user_cart" style="white-space: normal;">
+                <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item and then buy it again for a smaller/larger price" id="cart-info"></i>{% endif %}</h2>
+            </button>
         </div>
+        <hr>
+        <div id="user_cart" class="collapse in">
+{% if cart %}
+            {% if program_type == "camp" %}<p class="text-right" style="font-size: 16px;">Remove</p>{% endif %}
+            <table class="table table-hover table-responsive" style="margin: 0 auto;">
+              <tbody>
+              {% for c in cart %}
+              <small class="lead">
+              <tr>
+                <td scope="row">{{ c.name }}</td>
+                <td scope="row" class="text-right">&hearts;{{ c.cost_permanent }}</td>
+                {% if program_type == "camp" %}
+                <td scope="row" class="text-center">
+                    <form class="form-horizontal" action="{% url 'user:market' %}{% if marketdata.number %}?page={{ marketdata.number }}{% endif %}" method="post">
+                    {% csrf_token %}
+                        <input type="hidden" name="checkers" value="{{ c.cost_permanent }}"/>
+                        <button type="submit" class="btn btn-default btn-xs" name="remove{{ c.id }}" value="{{ c.id }}">X</button>
+                    </form>
+                </td>
+                {% endif %}
+              </tr>
+              </small>
+              {% endfor %}
+              {% if total %}
+              <tr style="background-color: #00ffff"><td scope="row"><p class="lead">Total</p></td><td class="text-right"><p class="lead">{{ total }}<p></td>{% if program_type == "camp" %}<td></td>{% endif %}</tr>
+              {% endif %}
+              </tbody>
+            </table>
+{% elif market_enabled == "true" %}
+            <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
 {% endif %}
+        </div>
+        <hr>
+        <div class="text-center">
+            <button type="button" class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#user_queue" style="white-space: normal;">
+                <h2 class="intro-text text-center">Purchase <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick{% if program_type == 'camp' %} and then be put at the back of the queue. This number will automatically change as time goes on so you will be able to order soon.{% endif %}" id="queue-info"></i> Priority Queue</h2>
+            </button>
+        </div>
+        <hr>
+        <div id="user_queue" class="collapse in">
+{% if market_enabled == "true" %}
+            <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% if program_type == "camp" %}, please wait your turn{% endif %}{% endif %}</p>
+            <div id="students_list">
+            {% for u in top_players %}
+              <p class="lead">{{ forloop.counter }}. {{ u }}</p>
+              {% if forloop.counter == top_students_number|add:"0" %}<hr style="border-top: dashed 1px;" />{% endif %}
+            {% empty %}
+            <p class="lead text-center">No students are registered yet</p>
+            {% endfor %}
+            </div>
+{% endif %}
+        </div>
       </div>
       <div class="col-lg-9">
           <hr>
