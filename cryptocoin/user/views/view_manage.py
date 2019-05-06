@@ -817,12 +817,20 @@ def show_feedback_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            feedback = paginate_list(request, Feedback.objects.filter(school=ud.school).order_by('id'), cutout_length)
+            scripts_hidden, scripts_hidden_created = PortalSetting.objects.get_or_create(name="scripts_hidden", school=ud.school)
+            if scripts_hidden_created:
+                scripts_hidden.value = "false"
+                scripts_hidden.save()
+            if scripts_hidden.value == "true":
+                feedback = paginate_list(request, Feedback.objects.filter(school=ud.school).exclude(message__contains="<script").order_by('id'), cutout_length)
+            else:
+                feedback = paginate_list(request, Feedback.objects.filter(school=ud.school).order_by('id'), cutout_length)
             count = int(ceil(len(feedback) / 2))
             for f in feedback:
                 f.date = f.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
             context['feedbackdata'] = feedback
             context['columnsplitter'] = str(count)
+            context['scripts_hidden'] = scripts_hidden.value
             return render(request, 'user/show-feedback-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
 
@@ -838,4 +846,11 @@ def submit_feedback_admin(request):
                     messages.warning(request, 'Something went wrong, not all messages have been deleted')
                 else:
                     messages.info(request, 'Successfully deleted all feedback messages')
+            elif request.method == 'POST' and 'hideScripts' in request.POST:
+                scripts_hidden, scripts_hidden_created = PortalSetting.objects.get_or_create(name="scripts_hidden", school=ud.school)
+                if scripts_hidden_created:
+                    scripts_hidden.value = "true"
+                else:
+                    scripts_hidden.value = "true" if scripts_hidden.value == "false" else "false"
+                scripts_hidden.save()
     return HttpResponseRedirect(reverse('user:show-feedback-admin'))

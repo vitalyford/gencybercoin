@@ -9,10 +9,17 @@
             <h2 class="intro-text text-center">Feedback Messages</h2>
             <hr>
             <!-- Delete all items -->
-            <form class="form-horizontal">
+            <form class="form-horizontal" action="{% url 'user:submit-feedback-admin' %}" method="post">
                 {% csrf_token %}
-                <div class="form-group">
-                    <button type="button" class="btn btn-default pull-right" name="deleteAll" data-toggle="modal" data-target="#confirmModal">Delete all feedback messages</button>
+                <div class="col-sm-6 text-center">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" name="hideScripts">{% if scripts_hidden == "true" %}Show{% else %}Hide{% endif %} &lt;script&gt; messages</button>
+                    </div>
+                </div>
+                <div class="col-sm-6 text-center">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-danger" name="deleteAll" data-toggle="modal" data-target="#confirmModal">Delete all feedback messages</button>
+                    </div>
                 </div>
             </form>
             <!-- Confirm modal -->
