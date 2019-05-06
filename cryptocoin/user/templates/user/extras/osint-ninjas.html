@@ -147,12 +147,13 @@ window.onload = function () {
 
 $(document).ready(function() {
 $('#table-to-sort').DataTable( {
+    "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
     columnDefs: [ {
-        targets: [ 0 ],
-        orderData: [ 0, 1 ]
-    }, {
         targets: [ 1 ],
-        orderData: [ 1, 0 ]
+        orderData: [ 1, 2 ]
+    }, {
+        targets: [ 2 ],
+        orderData: [ 2, 1 ]
     } ]
 } );
 });
