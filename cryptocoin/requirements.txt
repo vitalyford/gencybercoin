@@ -10,7 +10,7 @@ odfpy
 openpyxl
 Pillow
 pip-review
-psycopg2
+psycopg2-binary
 pytz
 PyYAML
 reportlab
