@@ -104,6 +104,8 @@ def extras_hall_of_fame(request):
             for k in sorted(students, key=lambda k: len(students[k]), reverse=True):
                 students_list.append({k: students[k]})
             context['students'] = students_list
+        else:
+            messages.warning(request, 'Nobody found any bugs yet, you can be the first one!')
         return render(request, 'user/extras/hall-of-fame.html', context)
     return goto_login(request, "hall of fame")
 

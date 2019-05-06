@@ -1,6 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% load static %}
+
+{% block customcss %}
+<!-- For table sorting -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="box">
@@ -15,39 +21,47 @@
             {% endif %}
             <div class="normal-text">
                 <div class="table-responsive">
-                <table class="table table-hover gctable">
-                  <tbody>
-                    <tr>
-                      <td scope="row">
-                          <p class="lead">Name</p>
-                      </td>
-                      <td scope="row">
-                          <p class="lead">Discovered Bugs{% if students %}<br>[Click to learn more]{% endif %}</p>
-                      </td>
-                      <td scope="row">
-                          <p class="lead">Date/Time</p>
-                      </td>
-                    </tr>
-                    {% for student in students %}
-                    {% for name, bounties in student.items %}
-                    <tr>
-                      <td scope="row">
-                          <p class="lead">{{ name }}</p>
-                      </td>
-                      <td scope="row">
-                          {% for b in bounties %}
-                          <p class="lead"><a href="{{ b.link }}" target="_blank" rel="noopener noreferrer">{{ b.name }}</a></p>
-                          {% endfor %}
-                      </td>
-                      <td scope="row">
-                          {% for b in bounties %}
-                          <p class="lead fixed-date">{{ b.date }}</p>
-                          {% endfor %}
-                      </td>
-                    </tr>
-                    {% endfor %}
-                    {% endfor %}
-                  </tbody>
+                <table class="display" id="table-to-sort"><!-- table table-hover gctable  -->
+                    <thead>
+                        <tr>
+                          <th scope="row">
+                              <p class="lead"># of Bugs</p>
+                          </th>
+                          <th scope="row">
+                              <p class="lead">Name</p>
+                          </th>
+                          <th scope="row">
+                              <p class="lead">Discovered Bugs{% if students %}<br>[Click on the bug to learn more]{% endif %}</p>
+                          </th>
+                          <th scope="row">
+                              <p class="lead">Date/Time</p>
+                          </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        {% for name, bounties in student.items %}
+                        <tr>
+                          <td>
+                              <p class="lead text-center">{{ bounties|length }}</p>
+                          </td>
+                          <td scope="row">
+                              <p class="lead">{{ name }}</p>
+                          </td>
+                          <td scope="row">
+                              {% for b in bounties %}
+                              <p class="lead"><a href="{{ b.link }}" target="_blank" rel="noopener noreferrer">{{ b.name }}</a></p>
+                              {% endfor %}
+                          </td>
+                          <td scope="row">
+                              {% for b in bounties %}
+                              <p class="lead fixed-date">{{ b.date }}</p>
+                              {% endfor %}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
                 </table>
                 </div>
             </div>
@@ -58,4 +72,16 @@
 
 {% block customjs %}
     <script src="{% static 'user/js/timetolocal.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table-to-sort').DataTable( {
+                "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                columnDefs: [ {
+                  'bSortable' : false,
+                  'aTargets' : [ 2, 3 ]
+                } ]
+            } );
+        } );
+    </script>
 {% endblock %}
