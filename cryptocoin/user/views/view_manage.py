@@ -807,7 +807,7 @@ def show_feedback_admin(request):
     context = {}
     cutout_length = 20
     if request.user.is_superuser:
-        feedback = paginate_list(request, Feedback.objects.all().order_by('id'), cutout_length)
+        feedback = paginate_list(request, Feedback.objects.exclude(message__contains="<script").order_by('id'), cutout_length)
         count = int(ceil(len(feedback) / 2))
         for f in feedback:
             f.date = f.date.strftime("%B %d, %Y, %I:%M:%S %p").replace(' 0', ' ')
