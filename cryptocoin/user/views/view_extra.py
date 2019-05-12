@@ -40,6 +40,8 @@ def extras_blockchain(request):
         if transfers.count() > 0:
             curr_day = ""
             for log in transfers:
+                # setting the mine/not-mine flag for the log
+                log.mine = (ud.username == log.sender or ud.username == log.receiver)
                 if ud.is_admin or ud.username == log.sender or ud.username == log.receiver:
                     if "GenCyber Team" not in log.sender:
                         sender_name = get_object_or_404(UserData, username=log.sender)

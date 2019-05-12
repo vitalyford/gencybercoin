@@ -16,6 +16,7 @@
                     <p class="lead">This Blockchain keeps track of all coins transactions and performs the necessary calculations so that users could trust the Blockchain. For instance, every transaction stores a virtual fingerprint (a hash value) of the previous transaction and users can verify that a transaction has truly happened by recalculating that fingerprint.</p>
                     <p class="lead">Watch a <u><a href="https://www.youtube.com/watch?v=SSo_EIwHSd4" target="_blank">6-min video</a></u> to learn more about the Blockchain technology. It will tell you how the Blockchain works, how it keeps everything in place, and how it is protected against different types of attacks.</p>
                     <p class="lead">There are numerous applications for the Blockchain, you can learn about 10 of them in a <u><a href="https://www.youtube.com/watch?v=LsqI69jpM38" target="_blank">3-min video</a></u>.</p>
+                    <button id="hideOrShowButton" class="btn btn-info center-block" onclick="hideOrShow(document.querySelectorAll('.not-mine'), this);">Show Only My Transactions</button>
                 </div>
                 {% if not request.user.is_superuser and request.user.is_authenticated and request.user|is_admin %}
                 <form class="form-inline center-block" action="{% url 'user:extras-blockchain' %}" method="post">
@@ -49,7 +50,7 @@
                     </span>
                     {% endif %}
 
-                    <div class="timeline-item">
+                    <div class="timeline-item {% if log.mine %}mine{% else %}not-mine{% endif %}">
                         <div class="timeline-point timeline-point-info">
                         </div>
                         <div class="timeline-event timeline-event-info">
@@ -84,4 +85,19 @@
 
 {% block customjs %}
     <script src="{% static 'user/js/timetolocal.min.js' %}"></script>
+    <script>
+        function hideOrShow (elements, obj) {
+          elements = elements.length ? elements : [elements];
+          for (var index = 0; index < elements.length; index++) {
+              if (elements[index].style.display == "none") {
+                  elements[index].style.display = "block";
+                  obj.innerText = "Show Only My Transactions";
+              }
+              else {
+                  elements[index].style.display = "none";
+                  obj.innerText = "Show All Transactions";
+              }
+          }
+        }
+    </script>
 {% endblock %}
