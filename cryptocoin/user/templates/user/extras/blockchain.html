@@ -50,7 +50,7 @@
                     </span>
                     {% endif %}
 
-                    <div class="timeline-item {% if log.mine %}mine{% else %}not-mine{% endif %}">
+                    <div class="timeline-item {% if log.mine %}mine{% else %}not-mine{% endif %}"{% if log.mine %} id="{{ log.student_id }}"{% endif %}>
                         <div class="timeline-point timeline-point-info">
                         </div>
                         <div class="timeline-event timeline-event-info">
