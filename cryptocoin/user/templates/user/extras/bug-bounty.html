@@ -1,5 +1,6 @@
 {% extends "base_generic.html" %}
 
+{% load auth_extras %}
 {% block content %}
 <div class="row">
     <div class="box">
@@ -8,6 +9,10 @@
             <h2 class="intro-text text-center">Bug Bounty</h2>
             <hr>
             <div class="normal-text">
+                {% if request.user|is_admin %}
+                <p class="lead text-danger">MESSAGE FOR GENCYBER TEAM, your students cannot see this: the walk-through video on solving the bug bounty challenges is available upon request (please email me).</p>
+                <hr>
+                {% endif %}
                 <p class="lead">GenCyberCoin website has a bug bounty program! This program will reward you with coins if you find bugs (problems, errors) on the website.</p>
                 <p class="lead">Try to do something that the website would not expect a normal user to do. Afterwards, you may see a message that you found a bug and you will automatically receive a reward for that! For instance, if you submit something on the website, the information will be processed by the server and the result will be shown to you on the page. What if you send something that a normal user would never think to send? Maybe you find a place where you could request a certain type of information from the server or you can try to tinker around on the page itself.</p>
                 <p class="lead">Bug Bounty hunting is a real thing and people receive monetary $$ rewards on such websites as <u><a href="https://www.hackerone.com/" target="_blank">HackerOne</a></u> and <u><a href="https://www.bugcrowd.com/bug-bounty-list/" target="_blank">BugCrowd</a></u>. It can be quite profitable to participate in these "ethical hacking" But Bounty programs. For example, a <u><a href="https://www.theverge.com/tech/2016/5/3/11579972/facebook-10-year-old-hacking-instagram-security-bug-10k" target="_blank">10-year-old was rewarded $10,000 by Facebook in 2016</a></u> for finding a serious bug on Instagram.</p>
