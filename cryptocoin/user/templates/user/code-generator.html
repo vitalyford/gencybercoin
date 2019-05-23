@@ -108,7 +108,8 @@
         </form>
         {% endif %}
 {% if is_superuser %}
-            <table class="table table-hover table-responsive gctable">
+        <div class="table-responsive">
+            <table class="table table-hover gctable">
                 <tbody>
                   <small class="lead">
                       <tr>
@@ -121,21 +122,29 @@
                   <small class="lead">
                   <tr>
                       <td scope="row">
-                          <p class="lead"><a role="button" name="{{ school }}" id="delete-school-{{ forloop.counter0 }}" data-toggle="modal" data-target="#confirmModal" onclick="submitMe(this)" data-toggle="tooltip" title="Delete {{ school }} and all its data"><i class="far fa-trash-alt"></i></a> {{ school }}</p>
-                          <form class="form-inline" action="{% url 'user:submit-code-generator' %}" method="post">
-                          {% csrf_token %}
-                              <input type="hidden" name="school" value="{{ school }}">
-                              <button type="submit" class="btn btn-default" name="delete" value="registration">Delete codes</button>
-                          </form>
+                          <p class="lead"><a role="button" name="{{ school.name }}" id="delete-school-{{ forloop.counter0 }}" data-toggle="modal" data-target="#confirmModal" onclick="submitMe(this)" data-toggle="tooltip" title="Delete {{ school.name }} and all its data"><i class="far fa-trash-alt"></i></a> {{ school.name }}</p>
+                          <ul>
+                              <li class="sublead">Students: {{ school.total_students }}</li>
+                              <li class="sublead">Bugs found: {{ school.bugs_found }}</li>
+                              <li class="sublead">Reconnaisance questions: {{ school.se_asked }}</li>
+                              <li class="sublead">Reconnaisance answered: {{ school.se_answered }}</li>
+                              <li class="sublead">Activities: {{ school.activities }}</li>
+                              <li class="sublead">Market items: {{ school.market_items }}</li>
+                          </ul>
                       </td>
                       <td scope="row">
-                    {% for c in code_items %}
-                      <p class="lead">{{ c }}</p>
-                    {% endfor %}
+                          <form class="form-inline" action="{% url 'user:submit-code-generator' %}" method="post">
+                          {% csrf_token %}
+                              <input type="hidden" name="school" value="{{ school.name }}">
+                              <button type="submit" class="btn btn-default" name="delete" value="registration">Delete codes</button>
+                          </form>
+                        {% for c in code_items %}
+                          <p class="lead">{{ c }}</p>
+                        {% endfor %}
                       </td>
                       <td scope="row">
                     {% for admin in admins %}
-                    {% if admin.school__name == school %}
+                    {% if admin.school__name == school.name %}
                       <p class="lead">{{ admin.first_name }} {{ admin.last_name }}</p>
                     {% endif %}
                     {% empty %}
@@ -151,6 +160,7 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
 {% endif %}
 {% if is_gcadmin %}
             <table class="table table-hover table-responsive gctable">
