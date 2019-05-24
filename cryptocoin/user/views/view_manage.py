@@ -126,6 +126,15 @@ def code_generator(request):
             context['is_superuser'] = "true"
             schools = School.objects.all()
             codes_output = {}
+            all_schools_object = SchoolObject()
+            all_schools_object.schools = School.objects.all().count()
+            all_schools_object.total_students = UserData.objects.filter(is_admin=False).count()
+            all_schools_object.bugs_found = Bugs.objects.all().count()
+            all_schools_object.se_asked = SEQuesAnsw.objects.all().count()
+            all_schools_object.se_answered = SECorrectAnswer.objects.all().count()
+            all_schools_object.activities = Achievement.objects.all().count()
+            all_schools_object.market_items = MarketItem.objects.all().count()
+            context['all_schools_object'] = all_schools_object
             for s in schools:
                 school_object = SchoolObject()
                 school_object.name = s.name

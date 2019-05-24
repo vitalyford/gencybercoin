@@ -109,6 +109,41 @@
         {% endif %}
 {% if is_superuser %}
         <div class="table-responsive">
+            <table class="table table-hover gctable lead">
+                <tbody>
+                    <tr>
+                        <td>Schools</td>
+                        <td>{{ all_schools_object.schools }}</td>
+                    </tr>
+                    <tr>
+                        <td>Students</td>
+                        <td>{{ all_schools_object.total_students }}</td>
+                    </tr>
+                    <tr>
+                        <td>Bugs found</td>
+                        <td>{{ all_schools_object.bugs_found }}</td>
+                    </tr>
+                    <tr>
+                        <td>Reconnaisance questions</td>
+                        <td>{{ all_schools_object.se_asked }}</td>
+                    </tr>
+                    <tr>
+                        <td>Reconnaisance answered</td>
+                        <td>{{ all_schools_object.se_answered }}</td>
+                    </tr>
+                    <tr>
+                        <td>Activities</td>
+                        <td>{{ all_schools_object.activities }}</td>
+                    </tr>
+                    <tr>
+                        <td>Market items</td>
+                        <td>{{ all_schools_object.market_items }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="table-responsive">
             <table class="table table-hover gctable">
                 <tbody>
                   <small class="lead">
