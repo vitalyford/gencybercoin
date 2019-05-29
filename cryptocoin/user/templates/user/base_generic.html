@@ -34,7 +34,7 @@
         }
         {% if request.user and request.user|check_atlantis %}
         body {
-            background: url("{% static 'user/img/atlantis.jpg' %}") no-repeat center center fixed;
+            background: url("/static/user/img/atlantis.jpg") no-repeat center center fixed;
         }
         {% endif %}
     </style>
