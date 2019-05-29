@@ -5,6 +5,10 @@ from .views_global import *
 #
 
 
+def csrf_failure(request, reason=""):
+    return render(request, 'user/extras/csrf-failure.html', {})
+
+
 def atlantis(request):
     if request.user.is_authenticated:
         if 'username' in request.POST and 'password' in request.POST:

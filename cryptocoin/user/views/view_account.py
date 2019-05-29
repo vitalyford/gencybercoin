@@ -156,6 +156,8 @@ def submit_wallet(request):
                         run_bug_bounty(request, ud, 'bug#3:security.txt', 'You found security.txt page! This is a useful location to remember when you are working on real bug bounty hunting. Good luck!', 'https://securitytxt.org/')
                     elif inputCode == "$good-old-404-error":
                         run_bug_bounty(request, ud, 'bug#14:404_error', 'You learned about 404 errors! This is a page that is typically shown on the website when you are trying to access a page that does not exist.', 'https://en.wikipedia.org/wiki/HTTP_404')
+                    elif inputCode == "$csrf-failure-takeover#":
+                        run_bug_bounty(request, ud, 'bug#17:csrf_failure', 'You learned about Cross-Site Request Forgery! This is an attack that allows to send legitimate-looking requests on your behalf to banks, social websites, etc.', 'https://medium.com/@charithra/introduction-to-csrf-a329badfca49')
                     # end bug bounty
                     else:
                         messages.warning(request, 'Wrong code!')

@@ -148,6 +148,8 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 MEDIA_URL = '/media/'
 
+CSRF_FAILURE_VIEW = 'user.views.csrf_failure'
+
 # Secure settings
 #SSLIFY_DISABLE = True
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
