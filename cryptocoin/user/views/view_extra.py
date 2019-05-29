@@ -19,6 +19,8 @@ def atlantis(request):
                 # bug bounty
                 run_bug_bounty(request, ud, 'bug#16:forgotten_form', 'Congrats! You found a hidden form that admins forgot to delete from the source code, which could result in an unexpected behavior. That could relate to old backups, forgotten files, etc. You unlocked Atlantis on this website!', 'https://www.owasp.org/index.php/Review_Old,_Backup_and_Unreferenced_Files_for_Sensitive_Information_(OTG-CONFIG-004)')
                 # end bug bounty
+            else:
+                messages.warning(request, 'Wrong credentials')
         return render(request, 'user/extras/cryptocurrency.html', {})
     return goto_login(request, "atlantis")
 
