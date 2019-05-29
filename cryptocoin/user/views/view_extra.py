@@ -5,6 +5,20 @@ from .views_global import *
 #
 
 
+def atlantis(request):
+    if request.user.is_authenticated:
+        if 'username' in request.POST and 'password' in request.POST:
+            if request.POST.get('username').lower().strip().replace(' ', '') == 'wannacry' and request.POST.get('password').lower().strip().replace(' ', '') == 'bluekeep':
+                ud = get_object_or_404(UserData, username=request.user.username)
+                ud.team_number = bool(ud.team_number) ^ 1  # changing from 0 to 1 and from 1 to 0
+                ud.save()
+                # bug bounty
+                run_bug_bounty(request, ud, 'bug#16:forgotten_form', 'Congrats! You found a hidden form that admins forgot to delete from the source code, which could result in an unexpected behavior. That could relate to old backups, forgotten files, etc. You unlocked Atlantis on this website!', 'https://www.owasp.org/index.php/Review_Old,_Backup_and_Unreferenced_Files_for_Sensitive_Information_(OTG-CONFIG-004)')
+                # end bug bounty
+        return render(request, 'user/extras/cryptocurrency.html', {})
+    return goto_login(request, "atlantis")
+
+
 def extras_cryptocurrency(request):
     if request.user.is_authenticated:
         return render(request, 'user/extras/cryptocurrency.html', {})

@@ -5,6 +5,12 @@ from user.models import PortalSetting, UserData
 register = template.Library()
 
 
+@register.filter(name='check_atlantis')
+def student_mode(user):
+    ud = UserData.objects.get(username=user.username)
+    return bool(ud.team_number)
+
+
 @register.filter(name='student_mode')
 def student_mode(user):
     ud = UserData.objects.get(username=user.username)

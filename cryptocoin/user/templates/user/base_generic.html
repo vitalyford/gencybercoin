@@ -32,6 +32,11 @@
           margin: 0;
           vertical-align: middle;
         }
+        {% if request.user and request.user|check_atlantis %}
+        body {
+            background: url("{% static 'user/img/atlantis.jpg' %}") no-repeat center center fixed;
+        }
+        {% endif %}
     </style>
 
     <!-- Custom favicon -->
