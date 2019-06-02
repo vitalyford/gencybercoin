@@ -53,6 +53,10 @@
                   <p class="lead">In the "classroom" mode, the tiers are used to define which items the students can buy, depending on their rank in the queue, being sorted based on their total number of coins.</p>
                   <p class="lead">Say, you selected top-4 as the "Number of students with the most coins who are allowed to order items" and "classroom" as the Program mode in the Settings menu. The top-4 students will be queued up based on the number of coins they earned when you turn on the market (by the way, when everyone is finished ordering, turn the market off to prepare for the next round/day). The 1st student will be automatically assigned tier 10, the 2nd - tier 8, the 3rd - tier 6, the 4th - tier 4 (the tier decreases by 2 and when it reaches a value below 2, it stays 1).</p>
                   <p class="lead">The student's tier will define what market items that student will be able to order. For example, if Ana is tier-10, she will be able to order items that are tier 10 and below; and if Greg is tier-6, he will be able to order items that are tier 6 and below. Thus, if you want all 4 students to be able to order anything, then set all items to tier 1 in the Edit Market menu.</p>
+                  <p class="lead">The price of all market items will be set individually and calculated as:</p>
+                  <p class="lead text-center"><code>tier_of_market_item * (sum_of_top_students_coins / (top_student_queue_capacity * max_number_of_tiers))</code><p>
+                  <p class="lead">In this example, <code>top_student_queue_capacity</code> is 4, <code>max_number_of_tiers</code> is always 10, so the prices will be automatically set according to:</p>
+                  <p class="lead text-center"><code>tier_of_market_item * sum_of_top_4_students_coins / 40</code></p>
                   <hr>
                   <p class="lead">STUDENT ORDERS</p>
                   <p class="lead">Make sure that your market items have distinct titles because you will see students' carts on the "Student Orders" page that will show students' names and the titles of the market items that they have ordered. Students will not be able to order the same item twice. If you want to add t-shirts on the market, add separate market items for different shirt sizes.</p>
@@ -64,10 +68,10 @@
                   <hr>
                   <p class="lead">IMPORT/EXPORT</p>
                   <p class="lead">Market items can be imported via uploading a .csv file that you can either create in Excel or a text editor. The necessary header must contain <i>name</i> and <i>description</i>. In addition, you can use <i>quantity</i> and <i>tier</i> in the header if you know those numbers; otherwise, you will be able to change everything right here after importing in any case. If the item's name or description contain a comma, you must put the whole sentence in double quotes. An example of a .csv file is presented below (notice that the flash drive's description has a comma and we put it in double quotes; we do not know the tier for it yet, so we left it blank but the separating comma is still there). If you add your items in Excel, you do not have to worry about adding quotes or commas, Excel will do that for you as long as you have the correct header (remember to save as .CSV file, not .XLSX).</p>
-                  <code>name,description,quantity,tier</code><br>
+                  <p class="lead"><code>name,description,quantity,tier</code><br>
                   <code>Flash drive,"16GB dlash drive, water/shock resistant",2,</code><br>
                   <code>T-shirt,Small CyberEagles t-shirts,20,5</code><br>
-                  <code>Glasses,TnTech shades,,</code>
+                  <code>Glasses,TnTech shades,,</code></p>
               </div>
               <!-- Import/export -->
               <form class="form-horizontal" action="{% url 'user:submit-market-admin' %}" method="post" enctype="multipart/form-data">
