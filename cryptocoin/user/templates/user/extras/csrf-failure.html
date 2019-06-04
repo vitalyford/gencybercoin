@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="box">
+        <div class="container-fluid">
+            <div class="col-md-12">
+                <hr>
+                <h2 class="intro-text text-center">CSRF Failure</h2>
+                <hr>
+                <div class="normal-text">
+                    <p class="lead">You figured out a way how to cause a CSRF failure! CSRF, or Cross-Site Request Forgery, is an attack that allows to send legitimate-looking requests on your behalf to banks, social websites, etc. In our case, this is not a bug because we had CSRF tokens in place to protect against these kinds of attacks, but you had to play around with the forms, so either way you learned about it! You can find out on Wikipedia that "In 2006, Netflix had numerous CSRF vulnerabilities that allowed an attacker to add a DVD to the victim's rental queue, change the shipping address (meaning that they could technically watch videos for free), and completely compromise the account." This is just one example, there are many more out there. Here is the code for your dedication to bug bounty hunting: $csrf-failure-takeover#</p>
+                    <p class="lead">Thankfully, CSRF vulnerabilities can be protected with CSRF tokens as it is done at GenCyberCoin (there are other, even simpler, ways to do it as well).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

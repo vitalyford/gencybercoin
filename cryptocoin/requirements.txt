@@ -5,6 +5,7 @@ Django>=2.1.2
 django-import-export
 django-storages
 et-xmlfile
+gunicorn
 jdcal
 odfpy
 openpyxl
@@ -13,6 +14,7 @@ pip-review
 psycopg2-binary
 pytz
 PyYAML
+# redis
 reportlab
 tablib
 unicodecsv

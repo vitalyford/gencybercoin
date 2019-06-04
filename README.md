@@ -13,9 +13,24 @@ GenCyberCoin has been successfully deployed at Tennessee Tech's GenCyber summer 
 
 GenCyberCoin reinforces the objectives that the GenCyber program has established. It complements the existing GenCyber camp activities and facilitates building curiosity and passion to pursue cybersecurity and to solve challenges in this field.
 
-A 10-minute summary video on GenCyberCoin platform is available here:
+A 12-minute summary video on GenCyberCoin platform is available here:
 
 [![Watch the video](instructions/img-readme/homepage.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=4a2d137e-e80f-4dd3-bc5e-aa1e00f7b4b7&v=1)
+
+# Bug Bounty
+
+A Bug Bounty walk through (solution video) is available upon request.
+
+# Docker instructions
+
+GenCyberCoin is dockerized (runs on nginx + gunicorn + postgresql + python3.7 + Django) and to run GenCyberCoin through Docker, you would need to install:
+ - Docker,
+ - Docker Compose,
+ - and if you have Mac or Windows, you would need to install Docker Machine.
+
+After installing the above-mentioned software, open the Docker Terminal and navigate to this project's main directory (a place where `build.sh` is located). Then, run `build.sh` from the Docker Terminal (by typing `./build.sh`) and it will build and run the containers. Upon successful execution, the GenCyberCoin will be running on your IP address, port 80. You can navigate to it in your browser and go straight to [creating administrators](#creating-administrators) section.
+
+To stop the containers, type `docker-compose down` from the same place (where `build.sh` is located). All your data will be saved even after stopping and starting the containers back up again.
 
 # Local setup instructions
 

@@ -121,19 +121,37 @@ def code_generator(request):
         context = {}
         # the following returns the list of all codes to show on the page
         if request.user.is_superuser:
+            class SchoolObject():
+                pass
             context['is_superuser'] = "true"
             schools = School.objects.all()
             codes_output = {}
+            all_schools_object = SchoolObject()
+            all_schools_object.schools = School.objects.all().count()
+            all_schools_object.total_students = UserData.objects.filter(is_admin=False).count()
+            all_schools_object.bugs_found = Bugs.objects.all().count()
+            all_schools_object.se_asked = SEQuesAnsw.objects.all().count()
+            all_schools_object.se_answered = SECorrectAnswer.objects.all().count()
+            all_schools_object.activities = Achievement.objects.all().count()
+            all_schools_object.market_items = MarketItem.objects.all().count()
+            context['all_schools_object'] = all_schools_object
             for s in schools:
-                curr_school_name = s.name
-                codes_output[curr_school_name] = []
+                school_object = SchoolObject()
+                school_object.name = s.name
+                school_object.total_students = UserData.objects.filter(school__name=s.name, is_admin=False).count()
+                school_object.bugs_found = Bugs.objects.filter(school__name=s.name).count()
+                school_object.se_asked = SEQuesAnsw.objects.filter(school__name=s.name).count()
+                school_object.se_answered = SECorrectAnswer.objects.filter(se_ques_answ__school__name=s.name).count()
+                school_object.activities = Achievement.objects.filter(school__name=s.name).count()
+                school_object.market_items = MarketItem.objects.filter(school__name=s.name).count()
+                codes_output[school_object] = []
                 codes = Code.objects.filter(school=s)
                 for c in codes:
                     if "!" in c.allowed_hash:
                         if c.infinite:
-                            codes_output[curr_school_name].append(c.allowed_hash + " (inf)")
+                            codes_output[school_object].append(c.allowed_hash + " (inf)")
                         else:
-                            codes_output[curr_school_name].append(c.allowed_hash)
+                            codes_output[school_object].append(c.allowed_hash)
             context['codes'] = codes_output
             context['admins'] = UserData.objects.filter(is_admin=True).values('first_name', 'last_name', 'school__name')
             return render(request, 'user/code-generator.html', context)

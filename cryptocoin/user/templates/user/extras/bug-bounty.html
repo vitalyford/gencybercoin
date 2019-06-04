@@ -1,5 +1,6 @@
 {% extends "base_generic.html" %}
 
+{% load auth_extras %}
 {% block content %}
 <div class="row">
     <div class="box">
@@ -8,12 +9,16 @@
             <h2 class="intro-text text-center">Bug Bounty</h2>
             <hr>
             <div class="normal-text">
+                {% if request.user|is_admin %}
+                <p class="lead text-danger">MESSAGE FOR GENCYBER TEAM, your students cannot see this: the walk-through video on solving the bug bounty challenges is available upon request (please email fordv@arcadia.edu).</p>
+                <hr>
+                {% endif %}
                 <p class="lead">GenCyberCoin website has a bug bounty program! This program will reward you with coins if you find bugs (problems, errors) on the website.</p>
                 <p class="lead">Try to do something that the website would not expect a normal user to do. Afterwards, you may see a message that you found a bug and you will automatically receive a reward for that! For instance, if you submit something on the website, the information will be processed by the server and the result will be shown to you on the page. What if you send something that a normal user would never think to send? Maybe you find a place where you could request a certain type of information from the server or you can try to tinker around on the page itself.</p>
                 <p class="lead">Bug Bounty hunting is a real thing and people receive monetary $$ rewards on such websites as <u><a href="https://www.hackerone.com/" target="_blank">HackerOne</a></u> and <u><a href="https://www.bugcrowd.com/bug-bounty-list/" target="_blank">BugCrowd</a></u>. It can be quite profitable to participate in these "ethical hacking" But Bounty programs. For example, a <u><a href="https://www.theverge.com/tech/2016/5/3/11579972/facebook-10-year-old-hacking-instagram-security-bug-10k" target="_blank">10-year-old was rewarded $10,000 by Facebook in 2016</a></u> for finding a serious bug on Instagram.</p>
                 <p class="lead">Also, read a short essay from a famous Bruce Schneier on "<u><a href="https://www.schneier.com/blog/archives/2006/09/what_is_a_hacke.html" target="_blank">good VS bad hackers</a></u>" and if you are interested in checking out some real top-level security investigations, drop by <u><a href="https://krebsonsecurity.com/" target="_blank">KrebsOnSecurity</a></u>.</p>
                 <p class="lead">What happens if someone performed an attack in an unethical way? They may go to prison and owe a large fine as the <u><a href="https://krebsonsecurity.com/2019/04/marcus-malwaretech-hutchins-pleads-guilty-to-writing-selling-banking-malware/" target="_blank">MalwareTech's case</a></u>. So, make sure that you always, ALWAYS think about ethics first.</p>
-                <p class="lead">For this website though, you can try to break it in any way you want.</p>
+                <p class="lead">For this website though, you can try to break it in any way you want. A helpful hint: you can always right-click on a specific item on any page and select Inspect to see the underlying code.</p>
                 <ol>
                     <li class="sublead">Sensitive data exposure (hidden page that admin left somewhere on the home page's source code)</li>
                     <li class="sublead">Broken authentication (find admin credentials)</li>
@@ -23,13 +28,15 @@
                     <li class="sublead">Stored XSS (btw, did you leave us the feedback yet?)</li>
                     <li class="sublead">User input validation (wallet)</li>
                     <li class="sublead">HTML edits on social engineering page (how does the server know what question relate to what answer?)</li>
-                    <li class="sublead">Have you thought what happens if you transfer coins to yourself? (see in the wallet page source what "id" would be yours and then change it)</li>
+                    <li class="sublead">Have you thought what happens if you transfer coins to yourself? (find in the wallet's page source the numerical values that correspond to users, replace one of them with yours: either guess it or the Blockchain page may help you)</li>
                     <li class="sublead">Local file inclusion (did you see that there are several pages of the items on the market?)</li>
                     <li class="sublead">HTML edits on market items (can you change the price of the items so that the money will actually come to you when you buy, instead of going out of your pocket?)</li>
                     <li class="sublead">Race condition (when market is enabled, notice what changes in every item's HTML code when it is your turn; then, when it is not your turn, can you still try to buy something?)</li>
                     <li class="sublead">Refresh on remove (when market is on)</li>
                     <li class="sublead">Access a page that does not exist</li>
                     <li class="sublead">Break the hash of wonderwoman and log in to her account (you will find it when you solve bug#2)</li>
+                    <li class="sublead">Find a forgotten form on Cryptocurrency page and use it to unlock Atlantis (check out the page source; inspect the elements on the page and look for a form which display is none; find out how to make that form visible)</li>
+                    <li class="sublead">Cause a CSRF failure (learn about CSRF; notice that the forms, where you can submit something, always have some kind of hidden field in it; what happens when you delete it and submit)</li>
                 </ol>
                 <p class="lead">P.S.: If you see a page with yellow-ish background and some random code that does not make sense to you, that means you found a real bug that was not supposed to be there. In that case, please email your findings to <span style="color: #0000ff;">fordv@arcadia.edu</span>
                     <button type="button" class="btn btn-default btn-xs btn-copy js-tooltip js-copy" data-toggle="tooltip" data-placement="bottom" data-copy="fordv@arcadia.edu" title="Copy to clipboard">

@@ -84,6 +84,17 @@ if 'RDS_DB_NAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+elif 'RUN_IN_DOCKER' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'coin_db',
+            'USER': 'coin_admin',
+            'PASSWORD': 'go-figure-me-cow',
+            'HOST': 'postgres',
+            'PORT': '5432',
+        }
+    }
 else:
     DATABASES = {
         'default': {
@@ -136,6 +147,8 @@ STATIC_URL = '/static/'
 # File storage settiings
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CSRF_FAILURE_VIEW = 'user.views.csrf_failure'
 
 # Secure settings
 #SSLIFY_DISABLE = True
