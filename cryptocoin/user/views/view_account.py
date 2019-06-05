@@ -327,7 +327,7 @@ def account_creation(request):
         # check for duplicates
         user_with_the_same_name = User.objects.filter(username=uname)
         if user_with_the_same_name.count() > 0 or uname == "admin" or uname == "wonderwoman":
-            context['error_message'] = "Sorry, a user named \"" + uname + "\" already exists. Try again =P"
+            context['error_message'] = "Username \"" + uname + "\" has been taken! Try another username."
             return render(request, 'user/register.html', context)
         if not check_fields(request):
             context['error_message'] = "Username and password cannot be empty."
