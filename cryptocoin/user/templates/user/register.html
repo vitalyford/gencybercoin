@@ -5,7 +5,7 @@
     <div class="box">
         <div class="col-lg-12">
             <hr>
-            <h2 class="intro-text text-center">Registration for GenCyberCoin</h2>
+            <h2 class="intro-text text-center">Register for GenCyberCoin</h2>
             <hr>
             {% if messages %}
               {% for message in messages %}
@@ -21,25 +21,25 @@
               <div class="form-group">
                 <label for="iU" class="col-sm-3 control-label">Username</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iU" name="inputUsername" placeholder="Username" maxlength="90" value="{% if username %}{{ username }}{% endif %}" required autofocus>
+                  <input type="text" class="form-control" id="iU" name="inputUsername" placeholder="Enter your username" maxlength="90" value="{% if username %}{{ username }}{% endif %}" required autofocus>
                 </div>
               </div>
               <div class="form-group">
                 <label for="iF" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iF" name="inputFirstname" placeholder="First Name" maxlength="90" value="{% if first_name %}{{ first_name }}{% endif %}" required>
+                  <input type="text" class="form-control" id="iF" name="inputFirstname" placeholder="Enter your first name" maxlength="90" value="{% if first_name %}{{ first_name }}{% endif %}" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="iL" class="col-sm-3 control-label">Last Name</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="iL" name="inputLastname" placeholder="Last Name" maxlength="90" value="{% if last_name %}{{ last_name }}{% endif %}" required>
+                  <input type="text" class="form-control" id="iL" name="inputLastname" placeholder="Enter your last name" maxlength="90" value="{% if last_name %}{{ last_name }}{% endif %}" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="iP" class="col-sm-3 control-label">Password</label>
                 <div class="col-sm-6">
-                  <input type="password" class="form-control" id="iP" name="inputPassword" placeholder="DO NOT USE ANY OF YOUR REAL PASSWORDS" maxlength="90" value="{% if password %}{{ password }}{% endif %}" required>
+                  <input type="password" class="form-control" id="iP" name="inputPassword" placeholder="PLEASE DO NOT USE ANY OF YOUR REAL PASSWORDS" maxlength="90" value="{% if password %}{{ password }}{% endif %}" required>
                 </div>
               </div>
 
@@ -63,14 +63,14 @@
               {% endfor %}
 
               <div class="form-group">
-                <label for="iCode" class="col-sm-3 control-label">Enter your registration code (get it from GenCyber Team).</label>
+                <label for="iCode" class="col-sm-3 control-label">Registration Code (Obtained from the GenCyber team)</label>
                 <div class="col-sm-6">
                   <input type="text" class="form-control" id="iCode" name="inputCode" placeholder="Registration Code" maxlength="90" value="{% if code %}{{ code }}{% endif %}" required>
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-6">
-                  <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <div class="col-sm-12 text-center">
+                  <button type="submit" class="btn btn-primary" name="submit">Register</button>
                 </div>
               </div>
             </form>
