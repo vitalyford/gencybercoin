@@ -21,14 +21,14 @@ def submit_cart(request):
                     if md.quantity <= 0:
                         messages.warning(request, 'Sorry, we are out of stock for ' + md.name)
                         break
-                    # if the program is classroom then check for the wrong tier as user validation
                     program_type = get_object_or_404(PortalSetting, school=ud.school, name='program_type').value
-                    if program_type == 'classroom':
+                    # if the program is classroom then check for the wrong tier as user validation
+                    '''if program_type == 'classroom':
                         if md.tier > ud.tier:
                             # bug bounty
                             run_bug_bounty(request, ud, 'server_side_input_validation', 'Congrats! You found a programming bug on server-side validation. This bug would allow you to get the item that you are not supposed to get!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
                             # end bug bounty
-                            break
+                            break'''
                     already_bought = c.filter(name=md.name).count()
                     if already_bought > 0:
                         messages.warning(request, 'Sorry, we have limited supply, you can buy only one ' + md.name)
