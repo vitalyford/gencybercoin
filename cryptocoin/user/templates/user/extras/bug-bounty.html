@@ -10,15 +10,19 @@
             <hr>
             <div class="normal-text">
                 {% if request.user|is_admin %}
-                <p class="lead text-danger">MESSAGE FOR GENCYBER TEAM, your students cannot see this: the walk-through video on solving the bug bounty challenges is available upon request (please email fordv@arcadia.edu).</p>
+                <p class="lead text-danger text-center">MESSAGE FOR GENCYBER TEAM (Students cannot see this): A walkthrough video of solving the bug bounty challenges is available upon request. To request a copy of this video, please contact Vitaly Ford (fordv@arcadia.edu).</p>
                 <hr>
                 {% endif %}
-                <p class="lead">GenCyberCoin website has a bug bounty program! This program will reward you with coins if you find bugs (problems, errors) on the website.</p>
-                <p class="lead">Try to do something that the website would not expect a normal user to do. Afterwards, you may see a message that you found a bug and you will automatically receive a reward for that! For instance, if you submit something on the website, the information will be processed by the server and the result will be shown to you on the page. What if you send something that a normal user would never think to send? Maybe you find a place where you could request a certain type of information from the server or you can try to tinker around on the page itself.</p>
-                <p class="lead">Bug Bounty hunting is a real thing and people receive monetary $$ rewards on such websites as <u><a href="https://www.hackerone.com/" target="_blank">HackerOne</a></u> and <u><a href="https://www.bugcrowd.com/bug-bounty-list/" target="_blank">BugCrowd</a></u>. It can be quite profitable to participate in these "ethical hacking" But Bounty programs. For example, a <u><a href="https://www.theverge.com/tech/2016/5/3/11579972/facebook-10-year-old-hacking-instagram-security-bug-10k" target="_blank">10-year-old was rewarded $10,000 by Facebook in 2016</a></u> for finding a serious bug on Instagram.</p>
-                <p class="lead">Also, read a short essay from a famous Bruce Schneier on "<u><a href="https://www.schneier.com/blog/archives/2006/09/what_is_a_hacke.html" target="_blank">good VS bad hackers</a></u>" and if you are interested in checking out some real top-level security investigations, drop by <u><a href="https://krebsonsecurity.com/" target="_blank">KrebsOnSecurity</a></u>.</p>
-                <p class="lead">What happens if someone performed an attack in an unethical way? They may go to prison and owe a large fine as the <u><a href="https://krebsonsecurity.com/2019/04/marcus-malwaretech-hutchins-pleads-guilty-to-writing-selling-banking-malware/" target="_blank">MalwareTech's case</a></u>. So, make sure that you always, ALWAYS think about ethics first.</p>
-                <p class="lead">For this website though, you can try to break it in any way you want. A helpful hint: you can always right-click on a specific item on any page and select Inspect to see the underlying code.</p>
+                <p class="lead">GenCyberCoin has a bug bounty program! This program will reward you with coins if you can find bugs (problems & errors) on the website.</p>
+                <p class="lead">Try to do something that the website would not expect a normal user to do. If you find a bug, you will see a special message and be rewarded with some coins!</p>
+                <p class="lead">Bug Bounty hunting is a real-world practice where people can receive monetary rewards on websites including <u><a href="https://www.hackerone.com/" target="_blank">HackerOne</a></u> and <u><a href="https://www.bugcrowd.com/bug-bounty-list/" target="_blank">BugCrowd</a></u>. It can be quite profitable to participate in these “ethical hacking” Bug Bounty program events. A 10-year-old was reward $10,000 by Facebook in 2016 for finding a serious bug on Instagram! You can read more about that story here: Click <u><a href="https://www.theverge.com/tech/2016/5/3/11579972/facebook-10-year-old-hacking-instagram-security-bug-10k" target="_blank">here</a></u>.</p>
+                <p class="lead">Bruce Schneier, a very well-known American cryptographer, has his own blog page and writes about current topics and issues in today’s cyberworld.</p>
+                <p class="lead">A short essay on hackers written by Schneier can be read on his website: Click <u><a href="https://www.schneier.com/blog/archives/2006/09/what_is_a_hacke.html" target="_blank">here</a></u>.</p>
+                <p class="lead">You can also check out some current top-level security investigations through this website: Click <u><a href="https://krebsonsecurity.com/" target="_blank">here</a></u>.</p>
+                <p class="lead">IMPORTANT: Before performing a cyberattack, ALWAYS think about the ethics of the attack first. Performing an unethical cyberattack will result in heavy charges (prison time, large fine, etc.) that will be placed upon you.</p>
+                <!--<p class="lead">What happens if someone performed an attack in an unethical way? They may go to prison and owe a large fine as the <u><a href="https://krebsonsecurity.com/2019/04/marcus-malwaretech-hutchins-pleads-guilty-to-writing-selling-banking-malware/" target="_blank">MalwareTech's case</a></u>. So, make sure that you always, ALWAYS think about ethics first.</p> -->
+                <p class="lead">For this website though, you can try to break it in any way you want!</p>
+                <p class="lead">Here's a hint: Right-click on a specific item on any page and select “Inspect” to see the underlying code.</p>
                 <ol>
                     <li class="sublead">Sensitive data exposure (hidden page that admin left somewhere on the home page's source code)</li>
                     <li class="sublead">Broken authentication (find admin credentials)</li>
@@ -38,12 +42,12 @@
                     <li class="sublead">Find a forgotten form on Cryptocurrency page and use it to unlock Atlantis (check out the page source; inspect the elements on the page and look for a form which display is none; find out how to make that form visible)</li>
                     <li class="sublead">Cause a CSRF failure (learn about CSRF; notice that the forms, where you can submit something, always have some kind of hidden field in it; what happens when you delete it and submit)</li>
                 </ol>
-                <p class="lead">P.S.: If you see a page with yellow-ish background and some random code that does not make sense to you, that means you found a real bug that was not supposed to be there. In that case, please email your findings to <span style="color: #0000ff;">fordv@arcadia.edu</span>
+                <p class="lead">Note: If you see a page with a yellow background with random code, this means that you have found an actual bug. Please report this bug to Vitaly Ford (<span style="color: #0000ff;">fordv@arcadia.edu</span>
                     <button type="button" class="btn btn-default btn-xs btn-copy js-tooltip js-copy" data-toggle="tooltip" data-placement="bottom" data-copy="fordv@arcadia.edu" title="Copy to clipboard">
                       <!-- icon from google's material design library -->
                       <svg class="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="12" height="12" viewBox="0 0 24 24"><path d="M17,9H7V7H17M17,13H7V11H17M14,17H7V15H14M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" /></svg>
                     </button>)
-                     with an attached screenshot. Depending on the severity of the real bug, you may be rewarded outside of this camp/class.</p>
+                    with an attached screenshot. Depending on the severity of the bug, you may be rewarded outside of this camp/class.</p>
             </div>
         </div>
     </div>

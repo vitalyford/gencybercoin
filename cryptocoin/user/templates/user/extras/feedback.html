@@ -13,16 +13,17 @@
               {% endfor %}
             {% endif %}
             <div class="normal-text">
-                <p class="lead">What do you feel about GenCyber? How do you feel about this website, the GenCyberCoin? What are your thoughts on the camp itself? Did you enjoy working with the GenCyber organizers? What did you like the most? Is there anything we could improve on? Please let us know and you will make a difference! Every message is stored anonymously which means that nobody will know who wrote it.</p>
-                <p class="lead text-right">Thank you!!!</p>
+                <p class="lead text-center">How do you feel about the current state of GenCyber? How about the website? What are your thoughts of the camp itself? Did you enjoy working with the GenCyber organizers? What did you like the most? Is there anything we can improve on?</p>
+                <p class="lead text-center">Please let us know! Your feedback is appreciated and will help improve GenCyber as a whole. Thank you!</p>
+                <p class="lead text-center">Note: Every message will be stored anonymously to protect your identity.
             </div>
             <form class="form-horizontal" action="{% url 'user:submit-extras-feedback' %}" method="post">
               {% csrf_token %}
               <div class="row center-block" style="width: 300px;">
                   <div class="form-group">
-                      <textarea class="form-control" rows="10" cols="40" name="message" maxlength="500" placeholder="Your message" required></textarea>
+                      <textarea class="form-control" rows="10" cols="40" name="message" maxlength="500" placeholder="Enter feedback here" required></textarea>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group text-center">
                       <button type="submit" class="btn btn-primary" name="send">Send</button>
                   </div>
               </div>

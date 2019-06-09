@@ -12,9 +12,10 @@
           <form class="form-inline text-center" action="{% url 'user:submit-wallet' %}" method="post">
           {% csrf_token %}
             <div class="form-group">
-              <small class="lead" style="font-size: 16px;">Code</small>
-              <input type="text" class="form-control" id="iC" name="inputCode" maxlength="100" placeholder="Enter your code here" style="margin: 5px;" required>
-              <button type="submit" class="btn btn-primary" name="redeem" style="margin: 5px;" value="redeem">Redeem</button>
+              <input type="text" class="form-control text-center" id="iC" name="inputCode" maxlength="100" placeholder="Enter code" style="margin: 5px;" required>
+                <div class="text-align:center">
+                  <button type="submit" class="btn btn-primary" name="redeem" style="margin: 5px;" value="redeem">Redeem</button>
+                </div>
             </div>
           </form>
         </div>
@@ -22,7 +23,7 @@
             <hr>
             <h2 class="intro-text text-center">GenCyberCoin Wallet</h2>
             <hr>
-            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer the reward coins directly to your students without entering the password</p>{% endif %}
+            {% if request.user|is_admin and not request.user|student_mode %}<p class="lead text-center">As an admin, you can transfer REWARD coins directly to your students without entering your password</p>{% endif %}
             {% if messages %}
               {% for message in messages %}
                   <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
@@ -70,18 +71,44 @@
 
             <div class="col-lg-12">
               <p class="lead text-center">Coins Transfer</p>
-              <p class="sublead">You can transfer REWARD coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the REWARD coin as a token of appreciation to that person. It is limited to transfering a maximum of {{ amount_allowed_to_send }} REWARD coins to every peer and you cannot transfer more than once to anyone.</p>
-              <p class="sublead">IMPORTANT: You will use REWARD coins in the market to order real items so think twice before sending your REWARD coins to anyone.</p>
-              <p class="sublead">You can also transfer your APPRECIATION coins (not REWARD) to the GenCyber Team members whom you really appreciated and enjoyed working with by selecting their names and making the transaction.</p>
-              <p class="sublead">NOTE: you can send as many APPRECIATION coins and as many times as you want to the GenCyber Team.</p>
-              <p class="sublead">All transfers are captured in the Features -> Blockchain.{% if not request.user|has_group:"gcadmin" %} Every transaction is verified with your password.{% endif %}</p>
+                <div class="accordion" id="accordion-coin-text">
+                  <div class="card text-center">
+                    <div class="card-header" id="appreciation-coin-card">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#appreciationCoin" aria-expanded="true" aria-controls="appreciationCoin">
+                          APPRECIATION COINS
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="appreciationCoin" class="collapse" aria-labelledby="appreciationCoin-btn" data-parent="#appreciationCoin-collapse">
+                      <div class="card-body">
+                        <p class="sublead"> You can transfer APPRECIATION coins to GENCYBER TEAM MEMBERS; these coins can be given to those you appreciated and enjoyed working with. <br><br> You can transfer any amount of APPRECIATION coins as many times as you want. <br><br> All transfers are recorded in the Features -> Blockchain.{% if not request.user|has_group:"gcadmin" %} Every transaction is verified with your password.{% endif %} </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card text-center">
+                    <div class="card-header" id="reward-coin-card">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#rewardCoin" aria-expanded="false" aria-controls="rewardCoin">
+                          REWARD COINS
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="rewardCoin" class="collapse" aria-labelledby="rewardCoin-btn" data-parent="#rewardCoin-collapse">
+                      <div class="card-body">
+                        <p class="sublead"> You can transfer REWARD coins to your peers for any reason:<br><br>1. A peer unconditionally helped you<br>2. You noticed that one of your peers was a great leader in a team<br>3. You would like to encourage a peer<br>4. As a token of appreciation<br>5. Reward a peer who contributed the most in a team challenge.<br><br>You are limited to ONE transfer of a maximum amount of {{ amount_allowed_to_send }} REWARD coins per peer.<br><br>IMPORTANT: REWARD coins are used to order ITEMS from the market; transfer these coins at your own discretion.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
               {% csrf_token %}
                 <div class="form-group">
-                  <label for="iT" class="col-sm-2 control-label">Transfer to</label>
-                  <div class="input-group col-sm-10">
+                  <label for="iT" class="col-sm-3 control-label">Transfer to:</label>
+                  <div class="input-group col-sm-6">
                     <select class="form-control" id="iT" name="inputTransfer" onchange="updateCurrency(this)">
-                      <option>Who is the lucky one?</option>
+                      <option>Select a member</option>
                       {% for au in allusers %}
                         {% if au.username != request.user.username %}
                           <option value="{{ au.id }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
@@ -91,24 +118,24 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="iA" class="col-sm-2 control-label">Amount</label>
-                  <div class="input-group col-sm-10">
+                  <label for="iA" class="col-sm-3 control-label">Amount</label>
+                  <div class="input-group col-sm-6">
                     <div class="input-group-addon" id="clubs-or-hearts"></div>
-                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Choose the user you want to send the money to" disabled>
-                    <div class="input-group-addon">.00</div>
+                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Input amount here" disabled>
+                    <!-- <div class="input-group-addon">.00</div> This line is unnecessary-->
                   </div>
                 </div>
                 {% if not request.user|has_group:"gcadmin" %}
                 <div class="form-group">
-                  <label for="iP" class="col-sm-2 control-label">Password</label>
-                  <div class="input-group col-sm-10">
-                    <input type="password" class="form-control" id="iP" name="userPassword" placeholder="Enter your password">
+                  <label for="iP" class="col-sm-3 control-label">Password</label>
+                  <div class="input-group col-sm-6">
+                    <input type="password" class="form-control" id="iP" name="userPassword" placeholder="Used to confirm this transaction">
                   </div>
                 </div>
                 {% endif %}
                 <div class="form-group">
                   <div class="col-lg-12 text-center">
-                    <button type="submit" class="btn btn-primary" name="submit">Make a Transaction</button>
+                    <button type="submit" class="btn btn-primary" name="submit">Confirm Transaction</button>
                   </div>
                 </div>
               </form>

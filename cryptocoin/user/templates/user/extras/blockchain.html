@@ -11,11 +11,11 @@
                 <h2 class="intro-text text-center">Blockchain</h2>
                 <hr>
                 <div class="normal-text">
-                    <p class="lead">A Blockchain is a public ledger (a keeper of transactions) that is used in cryptocurrencies. The Blockchain allows users to know exactly what transactions happened at any time.
+                    <p class="lead">A Blockchain is a public ledger that is used in cryptocurrencies to record transactions. This allows users to know exactly which transactions have happened at any given time.
                     </p>
-                    <p class="lead">This Blockchain keeps track of all coins transactions and performs the necessary calculations so that users could trust the Blockchain. For instance, every transaction stores a virtual fingerprint (a hash value) of the previous transaction and users can verify that a transaction has truly happened by recalculating that fingerprint.</p>
-                    <p class="lead">Watch a <u><a href="https://www.youtube.com/watch?v=SSo_EIwHSd4" target="_blank">6-min video</a></u> to learn more about the Blockchain technology. It will tell you how the Blockchain works, how it keeps everything in place, and how it is protected against different types of attacks.</p>
-                    <p class="lead">There are numerous applications for the Blockchain, you can learn about 10 of them in a <u><a href="https://www.youtube.com/watch?v=LsqI69jpM38" target="_blank">3-min video</a></u>.</p>
+                    <p class="lead">The Blockchain keeps track of all coin transactions and performs the necessary calculations in order to validate and certify the Blockchain. Every transaction stores a virtual fingerprint of a hash value of the previous transaction, which allows users to verify that a transaction has been processed properly by recalculating that fingerprint.</p>
+                    <p class="lead">Check out how Blockchain technology works through this video: Click <u><a href="https://www.youtube.com/watch?v=SSo_EIwHSd4" target="_blank">here</a></u>.</p>
+                    <p class="lead">There are a number of uses for Blockchain technology! You can learn some of them through this video: Click <u><a href="https://www.youtube.com/watch?v=LsqI69jpM38" target="_blank">here</a></u>.</p>
                     <button id="hideOrShowButton" class="btn btn-info center-block" onclick="hideOrShow(document.querySelectorAll('.not-mine'), this);">Show Only My Transactions</button>
                 </div>
                 {% if not request.user.is_superuser and request.user.is_authenticated and request.user|is_admin %}
@@ -33,7 +33,7 @@
                             {% endif %}
                           {% endfor %}
                         </select>
-                        <label for="selectedStudent"><p class="sublead">P.S.: this "Select a user" option is not available to students and the blockchain is anonymized for them except their personal transactions</p></label>
+                        <label for="selectedStudent"><p class="sublead">Note: With the exception of personal transactions, every Blockchain transaction will be made anonymous to other students. Therefore, you (and only you!) will only be able to see the transactions you have made.</p></label>
                     </div>
                 </form>
                 {% endif %}
