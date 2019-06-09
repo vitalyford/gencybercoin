@@ -114,11 +114,7 @@
                   {% endif %}
                       <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
                   {% if market_enabled == "true" %}
-                      {% if program_type == "classroom" %}
-                            <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0  or item.tier > player_tier %}disabled{% endif %}>Add to cart</button>
-                      {% else %}
-                            <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 %}disabled{% endif %}>Add to cart</button>
-                      {% endif %}
+                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0 or item.cost_permanent > available_coins %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 or item.cost_permanent > available_coins %}disabled{% endif %}>Add to cart</button>
                       <hr class="visible-xs">
                   </form>
                   {% endif %}
