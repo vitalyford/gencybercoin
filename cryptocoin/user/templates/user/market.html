@@ -10,7 +10,7 @@
         <hr>
         <div class="text-center">
             <button type="button" class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#user_cart" style="white-space: normal;">
-                <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item and then buy it again for a smaller/larger price" id="cart-info"></i>{% endif %}</h2>
+                <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Item prices will vary as the market evolves; removing an item from your cart and adding it again may alter its  price!" id="cart-info"></i>{% endif %}</h2>
             </button>
         </div>
         <hr>
@@ -42,25 +42,25 @@
               </tbody>
             </table>
 {% elif market_enabled == "true" %}
-            <p class="lead text-center">Your cart is empty. It's time to buy some stuff!</p>
+            <p class="lead text-center">Your cart is empty. Buy some cool stuff!</p>
 {% endif %}
         </div>
         <hr>
         <div class="text-center">
             <button type="button" class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#user_queue" style="white-space: normal;">
-                <h2 class="intro-text text-center">Purchase <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick{% if program_type == 'camp' %} and then be put at the back of the queue. This number will automatically change as time goes on so you will be able to order soon.{% endif %}" id="queue-info"></i> Priority Queue</h2>
+                <h2 class="intro-text text-center">Purchase <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Students with the highest amount of earned coins will be able to purchase items first. {% if program_type == 'camp' %} Once they purchase their items, the respective students are then put at the back of the queue. The order of students will automatically update as time goes on, so keep an eye out for your turn to order!{% endif %}" id="queue-info"></i> Priority Queue</h2>
             </button>
         </div>
         <hr>
         <div id="user_queue" class="collapse in">
 {% if market_enabled == "true" %}
-            <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% if program_type == "camp" %}, please wait your turn{% endif %}{% endif %}</p>
+            <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}It's your turn to purchase items! ORDER NOW!{% else %}Only the top {{ top_students_number }} students listed can order items at this time{% if program_type == "camp" %}! Please wait your turn.{% endif %}{% endif %}</p>
             <div id="students_list">
             {% for u in top_players %}
               <p class="lead">{{ forloop.counter }}. {{ u }}</p>
               {% if forloop.counter == top_students_number|add:"0" %}<hr style="border-top: dashed 1px;" />{% endif %}
             {% empty %}
-            <p class="lead text-center">No students are registered yet</p>
+            <p class="lead text-center">No students are registered yet!</p>
             {% endfor %}
             </div>
 {% endif %}
@@ -77,7 +77,7 @@
             {% endfor %}
           {% endif %}
           <p class="lead text-center">Available Coins: &hearts;{{ available_coins }}</p>
-          {% if market_enabled == "false" %}<p class="lead text-center text-warning">The market items are not currently available to order. Most likely, it will open at the end of the camp/class. Keep an eye on it.</p>{% endif %}
+          {% if market_enabled == "false" %}<p class="lead text-center text-warning">Market items are not available for order at this time :( <br>It will likely be open at the end of the camp/class. Check back later!</p>{% endif %}
 
           {% for item in marketdata %}
             {% if forloop.first %}

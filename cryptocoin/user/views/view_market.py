@@ -162,7 +162,7 @@ def market(request):
                 if program_type == 'classroom':
                     messages.info(request, 'You will be able to order next time you get to the top-' + context['top_students_number'])
                 else:
-                    messages.info(request, 'The queue will automatically notify you when it is your turn to order')
+                    messages.info(request, 'The queue will automatically notify you when it is your turn to order!')
             else:
                 messages.info(request, 'Order NOW!')
         # pagination setup

@@ -3,95 +3,101 @@
 {% block content %}
 <!-- Account info -->
 <div class="row">
-    <div class="box">
-        <div class="col-md-3" style="margin: auto 0;">
-          <hr>
-          <h2 class="intro-text text-center">Password Management</h2>
-          <hr>
-          <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
-          {% csrf_token %}
-            <div class="form-group">
-              <input type="password" class="form-control" id="iCop" name="inputOldPassword" maxlength="90" placeholder="Your old password" style="margin: 5px;" required>
-              <input type="password" class="form-control" id="iC" name="inputNewPassword" maxlength="90" placeholder="Your new password" style="margin: 5px;" required>
-              <button type="submit" class="btn btn-primary" name="change" style="margin: 5px;" value="change">Change password</button>
-              <p class="sublead">You (and anybody else) can securely check <a href="https://haveibeenpwned.com/" target="_blank"><u>here</u></a> if your real email and password have been compromised. In a <u><a href="https://www.youtube.com/watch?v=cczlpiiu42M" target="_blank">7-min video</a></u>, you can learn about passwords and hashes.</p>
-            </div>
-          </form>
-        </div>
-        <div class="col-md-9">
-            <hr>
-            <h2 class="intro-text text-center">{{ request.user.first_name }}'s Account Details</h2>
-            <hr>
-            {% if messages %}
-              {% for message in messages %}
-                  <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
-              {% endfor %}
+  <div class="box">
+    <div class="col-md-7">
+      <hr>
+      <h2 class="intro-text text-center">{{ request.user.first_name }}'s Account Details</h2>
+      <hr>
+      {% if messages %}
+      {% for message in messages %}
+      <div class="lead text-center{% if message.tags %} text-{{ message.tags }}{% endif %}">{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+      {% if userdata %}
+      <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <table class="table table-hover table-responsive gctable">
+            <tbody
+            <tr><th scope="row">Username</th><td>{{ userdata.username }}</td></tr>
+            <tr><th scope="row">First Name</th><td>{{ userdata.first_name }}</td></tr>
+            <tr><th scope="row">Last Name</th><td>{{ userdata.last_name }}</td></tr>
+            {% if useranswers %}
+            <tr><th scope="row">School</th><td>{{ userdata.school.name }}</td></tr>
+            <tr>
+              <th scope="row">{{ useranswers.question1 }}</th>
+              <td><input type="text" class="form-control text-center" id="iSQ1" name="inputSecQ1" maxlength="90" value="{{ useranswers.answer1 }}" required></td>
+            </tr>
+            <tr>
+              <th scope="row">{{ useranswers.question2 }}</th>
+              <td><input type="text" class="form-control text-center" id="iSQ2" name="inputSecQ2" maxlength="90" value="{{ useranswers.answer2 }}" required></td>
+            </tr>
+            <tr>
+              <th scope="row">{{ useranswers.question3 }}</th>
+              <td><input type="text" class="form-control text-center" id="iSQ3" name="inputSecQ3" maxlength="90" value="{{ useranswers.answer3 }}" required></td>
+            </tr>
             {% endif %}
-            {% if userdata %}
-            <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
-            {% csrf_token %}
-              <div class="form-group">
-                <table class="table table-hover table-responsive gctable">
-                <tbody
-                  <tr><th scope="row">Username</th><td>{{ userdata.username }}</td></tr>
-                  <tr><th scope="row">First Name</th><td>{{ userdata.first_name }}</td></tr>
-                  <tr><th scope="row">Last Name</th><td>{{ userdata.last_name }}</td></tr>
-                  {% if useranswers %}
-                  <tr><th scope="row">School</th><td>{{ userdata.school.name }}</td></tr>
-                  <tr>
-                    <th scope="row">{{ useranswers.question1 }}</th>
-                    <td><input type="text" class="form-control" id="iSQ1" name="inputSecQ1" maxlength="90" value="{{ useranswers.answer1 }}" required></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">{{ useranswers.question2 }}</th>
-                    <td><input type="text" class="form-control" id="iSQ2" name="inputSecQ2" maxlength="90" value="{{ useranswers.answer2 }}" required></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">{{ useranswers.question3 }}</th>
-                    <td><input type="text" class="form-control" id="iSQ3" name="inputSecQ3" maxlength="90" value="{{ useranswers.answer3 }}" required></td>
-                  </tr>
-                  {% endif %}
-                  {% comment %}<!--<tr style="height: 30px;"><th scope="row"></th><td></td></tr>
-                  <tr class="bg-warning" style="color: #00aa00"><td>The number of times you were hacked is</td><td>{{ useranswers.was_hacked }}. Change your security questions!</td></tr>-->{% endcomment %}
-                </tbody>
-                </table>
-                {% if useranswers %}<button type="submit" class="btn btn-primary" name="update" style="margin: 5px;" value="update">Update security questions</button>{% endif %}
-              </div>
-            </form>
-            {% else %}
-              <p class="lead text-center">No user information is available</p>
-            {% endif %}
+            {% comment %}<!--<tr style="height: 30px;"><th scope="row"></th><td></td></tr>
+              <tr class="bg-warning" style="color: #00aa00"><td>The number of times you were hacked is</td><td>{{ useranswers.was_hacked }}. Change your security questions!</td></tr>-->{% endcomment %}
+            </tbody>
+          </table>
+          {% if useranswers %}<button type="submit" class="btn btn-primary" name="update" style="margin: 5px;" value="update">Update</button>{% endif %}
         </div>
+      </form>
+      {% else %}
+      <p class="lead text-center">No user information is available!</p>
+      {% endif %}
     </div>
+    <div class="col-md-4" style="margin: auto 0;">
+      <hr>
+      <h2 class="intro-text text-center">Password Management</h2>
+      <hr>
+      <div class="lead text-center">Change Password</div>
+      <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="password" class="form-control text-center" id="iCop" name="inputOldPassword" maxlength="90" placeholder="Current password" style="margin: 5px;" required>
+          <div class="text-align:center">
+            <input type="password" class="form-control text-center" id="iC" name="inputNewPassword" maxlength="90" placeholder="New password" style="margin: 5px;" required>
+          </div>
+        <div class="text-align:center">
+          <button type="submit" class="btn btn-primary" name="change" style="margin: 20px;" value="change">Confirm</button>
+        </div>
+          <div class="text-align:center">
+            <p class="sublead">Think your password is unique?<br>Check out this website to see if your password has ever been compromised in a data breach! Click <a href="https://haveibeenpwned.com/" target="_blank"><u>here</u></a>.<br>You can learn more about how passwords are stored by companies in the real world by checking out this video: Click <u><a href="https://www.youtube.com/watch?v=cczlpiiu42M" target="_blank">here</a></u>.</p>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Achievements -->
 <div class="row">
-    <div class="box">
-        <div class="col-lg-12">
-            <hr>
-            <h2 class="intro-text text-center">Activity History</h2>
-            <hr>
-            {% if achievements %}
-            <table class="table table-hover table-responsive gctable">
-              <tbody>
-              {% for a in achievements %}
-              <small class="lead">
-              <tr>
-                <td scope="row" align="center">{% if not 'no-image' in a.image_file.url %}<div class="img-wrapper"><img src="{{ a.image_file.url }}" class="img-responsive img-rounded" alt="{{ a.name }}" style="max-height: 120px;" /></div>{% endif %}</td>
-                <td scope="row">
-                  <p class="lead">{{ a.name }} (&hearts; {{ a.reward }})</p>
-                  <hr style="margin: 0px;">
-                  <small>{{ a.description }}</small>
-                </td>
-              </tr>
-              <tr style="background-color: rgb(221,255,255,0.6);"><td></td><td></td></tr>
-              </small>
-              {% endfor %}
-              </tbody>
-            </table>
-            {% endif %}
-        </div>
+  <div class="box">
+    <div class="col-lg-12">
+      <hr>
+      <h2 class="intro-text text-center">Activity History</h2>
+      <hr>
+      {% if achievements %}
+      <table class="table table-hover table-responsive gctable">
+        <tbody>
+          {% for a in achievements %}
+          <small class="lead">
+            <tr>
+              <td scope="row" align="center">{% if not 'no-image' in a.image_file.url %}<div class="img-wrapper"><img src="{{ a.image_file.url }}" class="img-responsive img-rounded" alt="{{ a.name }}" style="max-height: 120px;" /></div>{% endif %}</td>
+              <td scope="row">
+                <p class="lead">{{ a.name }} (&hearts; {{ a.reward }})</p>
+                <hr style="margin: 0px;">
+                <small>{{ a.description }}</small>
+              </td>
+            </tr>
+            <tr style="background-color: rgb(221,255,255,0.6);"><td></td><td></td></tr>
+          </small>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
     </div>
+  </div>
 </div>
 {% endblock %}

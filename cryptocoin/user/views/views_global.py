@@ -68,7 +68,7 @@ def validate_on_save(request, obj, message_on_success=''):
 
 def goto_login(request, page_name):
     return render(request, 'user/login.html', {
-        'error_message': "You need to login or register to enter the " + page_name,
+        'error_message': "Login or register to enter the " + page_name,
     })
 
 
