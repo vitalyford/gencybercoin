@@ -30,9 +30,15 @@
                     <li class="sublead">HTML edits on social engineering page (how does the server know what question relate to what answer?)</li>
                     <li class="sublead">Have you thought what happens if you transfer coins to yourself? (find in the wallet's page source the numerical values that correspond to users, replace one of them with yours: either guess it or the Blockchain page may help you)</li>
                     <li class="sublead">Local file inclusion (did you see that there are several pages of the items on the market?)</li>
+                {% if market_enabled == "true" %}
                     <li class="sublead">HTML edits on market items (can you change the price of the items so that the money will actually come to you when you buy, instead of going out of your pocket?)</li>
                     <li class="sublead">Race condition (when market is enabled, notice what changes in every item's HTML code when it is your turn; then, when it is not your turn, can you still try to buy something?)</li>
                     <li class="sublead">Refresh on remove (when market is on)</li>
+                {% else %}
+                    <li class="sublead">Not available right now [only available when the market is turned on]</li>
+                    <li class="sublead">Not available right now [only available when the market is turned on]</li>
+                    <li class="sublead">Not available right now [only available when the market is turned on]</li>
+                {% endif %}
                     <li class="sublead">Access a page that does not exist</li>
                     <li class="sublead">Break the hash of wonderwoman and log in to her account (you will find it when you solve bug#2)</li>
                     <li class="sublead">Find a forgotten form on Cryptocurrency page and use it to unlock Atlantis (check out the page source; inspect the elements on the page and look for a form which display is none; find out how to make that form visible)</li>

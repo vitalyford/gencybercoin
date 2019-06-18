@@ -33,7 +33,10 @@ def extras_cryptocurrency(request):
 
 def extras_bug_bounty(request):
     if request.user.is_authenticated:
-        return render(request, 'user/extras/bug-bounty.html', {})
+        ud = get_object_or_404(UserData, username=request.user.username)
+        market_enabled = get_object_or_404(PortalSetting, name="market_enabled", school=ud.school).value
+        context = {'market_enabled': market_enabled}
+        return render(request, 'user/extras/bug-bounty.html', context)
     return goto_login(request, "bug bounty")
 
 
