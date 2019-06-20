@@ -43,6 +43,9 @@ def submit_cart(request):
                             item_price = int(request.POST.get('checkers'))
                             if item_price < 0:
                                 raise
+                            # resetting the price to a random one
+                            set_market_prices([md], ud)
+                            item_price = md.cost_permanent
                     except:
                         # bug bounty
                         run_bug_bounty(request, ud, 'bug#11:client_side_input_validation', 'Congrats! You found a programming bug on client-side/hidden-field input validation. This bug would allow you to get the money back for the item you have just bought => direct profit!', 'https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet')
