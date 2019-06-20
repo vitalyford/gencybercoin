@@ -17,7 +17,11 @@ def submit_cart(request):
                         c.save()
                         messages.warning(request, 'You cart has not been created before for some reason. It exists now though so try to order again!')
                         break
-                    md = get_object_or_404(MarketItem, id=int(key.replace("add", "")))
+                    try:
+                        md = get_object_or_404(MarketItem, id=int(key.replace("add", "")), school=ud.school)
+                    except:
+                        messages.warning(request, 'Hmm, trying to mess with us, huh. Nope ;-)')
+                        break
                     if md.quantity <= 0:
                         messages.warning(request, 'Sorry, we are out of stock for ' + md.name)
                         break
