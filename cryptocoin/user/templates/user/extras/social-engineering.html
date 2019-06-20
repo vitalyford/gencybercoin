@@ -20,6 +20,8 @@
             {% if allquestions %}
             <div class="col-sm-2"></div>
             <div class="col-sm-8" style="padding-top: 20px;">
+                <form class="form-horizontal" action="{% url 'user:submit-social-engineering' %}" method="post">
+                    {% csrf_token %}
             {% if correctanswers %}
                 <div class="text-center"><button type="button" class="btn btn-link btn-lg" data-toggle="collapse" data-target="#admin_show_info" style="white-space: normal;">Show correctly answered challenges</button></div>
                 <div id="admin_show_info" class="collapse">
@@ -27,7 +29,7 @@
                         {% if q.id in correctanswers %}
                             <div class="form-group{% if q.id in correctanswers %} has-success has-feedback{% endif %}">
                                 <label for="q{{ q.id }}">{{ q.question }}</label>
-                                <input type="text" class="form-control" id="q{{ q.id }}" name="{{ q.id }}" maxlength="200" value="{{ q.answer }}" aria-describedby="q{{ q.id }}Status" readonly="readonly">
+                                <input type="text" class="form-control" id="q{{ q.id }}" name="{{ q.id }}" maxlength="200" value="{{ q.answer }}" aria-describedby="q{{ q.id }}Status">
                                 <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                                 <span id="q{{ q.id }}Status" class="sr-only">(success)</span>
                             </div>
@@ -35,8 +37,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-                <form class="form-horizontal" action="{% url 'user:submit-social-engineering' %}" method="post">
-                {% csrf_token %}
                     {% for q in allquestions %}
                         {% if q.id not in correctanswers %}
                             <div class="form-group{% if q.id in correctanswers %} has-success has-feedback{% endif %}">
