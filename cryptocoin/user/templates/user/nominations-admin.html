@@ -64,7 +64,7 @@
                     {% for g in groups %}
                         <button type="button" class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#team{{ forloop.counter }}">Team #{{ forloop.counter }}</button>
                         <div id="team{{ forloop.counter }}" class="collapse{% if request.user|group_number_equals:g %} in{% endif %}">
-                            <select multiple class="form-control" name="selectedStudents[]" id="selectedStudents" size="{{ g.students|length }}">
+                            <select multiple class="form-control" name="selectedStudents[]" id="selectedStudents" size="{{ g|length }}">
                                 {% for s in g %}
                                 <option value="{{ s.id }}">{{ s.first_name }} {{ s.last_name }} (aka {{ s.username }})</option>
                                 {% endfor %}
