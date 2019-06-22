@@ -2,6 +2,7 @@ from .views_global import *
 from .view_market import market
 from tablib import Dataset
 from ..resources import MarketItemResource
+from django.db.models import Max
 
 
 VALID_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
@@ -178,41 +179,64 @@ def code_generator(request):
     return HttpResponseRedirect(reverse('user:index'))
 
 
+def group_students(request, ud):
+    next_group_number = UserData.objects.filter(school=ud.school).aggregate(Max('group_number'))['group_number__max'] + 1
+    selectedStudents = request.POST.getlist('selectedStudents[]')
+    print(selectedStudents)
+    for s in selectedStudents:
+        u = get_object_or_404(UserData, id=int(s), school=ud.school)
+        u.group_number = next_group_number
+        u.save()
+
+
+def ungroup_students(request, ud):
+    selectedStudents = request.POST.getlist('selectedStudents[]')
+    for s in selectedStudents:
+        u = get_object_or_404(UserData, id=int(s), school=ud.school)
+        u.group_number = 0
+        u.save()
+
+
 def submit_nominations_admin(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         if request.user.groups.filter(name='gcadmin').exists():
-            all_is_good = True
-            try:
-                activity_award_amount = int(request.POST.get('activity_award_amount'))
-            except:
-                messages.warning(request, 'The activity reward amount has been set to 0')
-                activity_award_amount = 0
-            selectedStudents   = request.POST.getlist('selectedStudents')
-            selectedActivities = request.POST.getlist('selectedActivities')
-            if selectedStudents and selectedActivities:
-                for a in selectedActivities:
-                    for s in selectedStudents:
-                        try:
-                            ud = get_object_or_404(UserData, id=int(s))
-                            activity = get_object_or_404(Achievement, id=int(a))
-                        except:
-                            messages.warning(request, 'ERROR: Student with id=' + s + ' or activity with id=' + a + ' has not been added')
-                            all_is_good = False
-                        else:
-                            activity.user_data.add(ud)
-                            # assign the activity reward if not zero
-                            if activity_award_amount != 0:
-                                ud.permanent_coins = ud.permanent_coins + activity_award_amount
-                                ud.save()
-                                # record the activity on the blockchain
-                                sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
-                                tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=activity_award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
-                                tl.save()
-                if all_is_good:
-                    messages.info(request, 'All students and activities have been successfully assigned')
-                else:
-                    messages.warning(request, 'Some of the students or activities have not been assigned')
+            if 'group' in request.POST:
+                group_students(request, ud)
+            elif 'ungroup' in request.POST:
+                ungroup_students(request, ud)
+            else:
+                all_is_good = True
+                try:
+                    activity_award_amount = int(request.POST.get('activity_award_amount'))
+                except:
+                    messages.warning(request, 'The activity reward amount has been set to 0')
+                    activity_award_amount = 0
+                selectedStudents   = request.POST.getlist('selectedStudents[]')
+                selectedActivities = request.POST.getlist('selectedActivities')
+                if selectedStudents and selectedActivities:
+                    for a in selectedActivities:
+                        for s in selectedStudents:
+                            try:
+                                u = get_object_or_404(UserData, id=int(s), school=ud.school)
+                                activity = get_object_or_404(Achievement, id=int(a))
+                            except:
+                                messages.warning(request, 'ERROR: Student with id=' + s + ' or activity with id=' + a + ' has not been added')
+                                all_is_good = False
+                            else:
+                                activity.user_data.add(u)
+                                # assign the activity reward if not zero
+                                if activity_award_amount != 0:
+                                    u.permanent_coins = u.permanent_coins + activity_award_amount
+                                    u.save()
+                                    # record the activity on the blockchain
+                                    sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                                    tl = TransferLogs(sender=sender_name, receiver=u.username, amount=activity_award_amount, school=u.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                                    tl.save()
+                    if all_is_good:
+                        messages.info(request, 'All students and activities have been successfully assigned')
+                    else:
+                        messages.warning(request, 'Some of the students or activities have not been assigned')
     return HttpResponseRedirect(reverse('user:nominations-admin'))
 
 
@@ -222,7 +246,18 @@ def nominations_admin(request):
         if request.user.groups.filter(name='gcadmin').exists():
             context = {}
             context['achievements'] = Achievement.objects.filter(school=ud.school).order_by('name')
-            context['students'] = UserData.objects.filter(school=ud.school).order_by('first_name', 'last_name').values('first_name', 'last_name', 'username', 'id')
+            context['students'] = UserData.objects.filter(school=ud.school, group_number=0).order_by('first_name', 'last_name').values('group_number', 'first_name', 'last_name', 'username', 'id')
+            users = UserData.objects.filter(Q(school=ud.school) & ~Q(group_number=0)).order_by('group_number', 'first_name', 'last_name').values('group_number', 'first_name', 'last_name', 'username', 'id')
+            groups = []
+            curr_group = -1
+            last_group_index = -1
+            for u in users:
+                if curr_group != u['group_number']:
+                    curr_group = u['group_number']
+                    groups.append([])
+                    last_group_index = len(groups) - 1
+                groups[last_group_index].append(u)
+            context['groups'] = groups
             return render(request, 'user/nominations-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))
 

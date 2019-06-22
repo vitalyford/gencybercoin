@@ -5,6 +5,20 @@ from user.models import PortalSetting, UserData
 register = template.Library()
 
 
+@register.filter(name='group_number_equals')
+def has_group(user, group):
+    try:
+        ud = UserData.objects.get(username=user.username)
+        print('nice')
+        print(group)
+        for s in group:
+            if ud.group_number == s['group_number']:
+                return True
+        return False
+    except:
+        return False
+
+
 @register.filter(name='check_atlantis')
 def student_mode(user):
     ud = UserData.objects.get(username=user.username)

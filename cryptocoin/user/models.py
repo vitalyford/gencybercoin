@@ -30,6 +30,7 @@ class UserData(models.Model):
     team_number     = models.IntegerField(default=0)
     tier            = models.IntegerField(default=0)
     driplets_score  = models.IntegerField(default=0)
+    group_number    = models.IntegerField(default=0)  # starts with 1, 0 means not grouped
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship
 
     def save(self, *args, **kwargs):
