@@ -182,7 +182,6 @@ def code_generator(request):
 def group_students(request, ud):
     next_group_number = UserData.objects.filter(school=ud.school).aggregate(Max('group_number'))['group_number__max'] + 1
     selectedStudents = request.POST.getlist('selectedStudents[]')
-    print(selectedStudents)
     for s in selectedStudents:
         u = get_object_or_404(UserData, id=int(s), school=ud.school)
         u.group_number = next_group_number
