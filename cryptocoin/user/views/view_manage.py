@@ -545,7 +545,8 @@ def delete_all_market_items(request, school):
     try:
         market_items = MarketItem.objects.filter(school=school)
         for i in market_items:
-            i.image_file.delete()
+            if i.image_file.url != "/media/no-image.jpg":
+                i.image_file.delete()
             i.delete()
     except:
         messages.warning(request, 'Something went wrong, not all items have been deleted')
