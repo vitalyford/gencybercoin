@@ -128,8 +128,8 @@ def image_upload_activities(instance, filename):
 
 
 class MarketItem(models.Model):
-    name            = models.CharField(max_length=100)
-    description     = models.CharField(max_length=400)
+    name            = models.CharField(max_length=100, default='-')
+    description     = models.CharField(max_length=400, default='-')
     cost_permanent  = models.IntegerField(default=0)
     image_file      = models.ImageField(upload_to=image_upload_market, default='no-image.jpg')
     quantity        = models.IntegerField(default=1)
