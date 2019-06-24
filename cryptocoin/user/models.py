@@ -156,8 +156,8 @@ class Cart(models.Model):
 
 class Achievement(models.Model):
     user_data       = models.ManyToManyField(UserData, blank=True)
-    name            = models.CharField(max_length=100)
-    description     = models.CharField(max_length=400)
+    name            = models.CharField(max_length=100, default='-')
+    description     = models.CharField(max_length=400, default='-')
     image_file      = models.ImageField(upload_to=image_upload_activities, default='no-image.jpg')
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship
 
