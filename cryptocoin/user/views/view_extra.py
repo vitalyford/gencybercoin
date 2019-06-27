@@ -103,7 +103,18 @@ def extras_blockchain(request):
                     log.switch_next_day = True
                 else:
                     log.switch_next_day = False
-            context['transfers'] = transfers
+            pagination_enabled = get_object_or_404(PortalSetting, name='pagination_enabled', school=ud.school)
+            blockchains_per_page = 10
+            if 'selectedStudent' in request.POST and selectedStudentID >= 0:
+                blockchains_per_page = len(transfers)
+            if pagination_enabled.value == "true":
+                paginator = Paginator(transfers, blockchains_per_page)
+                page = request.GET.get('page')
+                if not page: page = 1
+                context['transfers'] = paginator.get_page(page)
+            else:
+                context['transfers'] = transfers
+            context['pagination_enabled'] = pagination_enabled.value
         # add users if it's the admin
         if ud.is_admin:
             allusers = UserData.objects.filter(school=ud.school).values('id', 'first_name', 'last_name', 'is_admin').order_by('first_name', 'last_name')

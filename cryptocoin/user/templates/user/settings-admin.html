@@ -48,11 +48,6 @@
                               <td scope="row" class="text-justify col-sm6"><p class="lead">Enabled AJAX will allow to auto-update the queue on the market and students will not need to refresh the market page to check for their turn.<br>Be advised that if the market page lags, switch AJAX off.</p></td>
                           </tr>
                           <tr>
-                              <td scope="row" class="text-right"><p class="lead">Market pagination is</p></td>
-                              <td scope="row" class="text-left"><input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="pagination_enabled" {% if pagination_enabled == "true" %}checked{% endif %}></td>
-                              <td scope="row" class="text-justify col-sm6"><p class="lead">If enabled, the market will be split into pages (useful when you have a lot of items).<br>If disabled, the students and you will see all market items on one page.</p></td>
-                          </tr>
-                          <tr>
                               <td scope="row" class="text-right">
                                   <p class="lead">Number of students with the most<br>coins who are allowed to order items is</p>
                               </td>
@@ -145,6 +140,11 @@
                                   </div>
                               </td>
                               <td scope="row" class="text-justify"><p class="lead">There are two program modes: (1) camp, (2) classroom. This option defines the way the market works.<br>If classroom is selected, then when you open the market, only top-{{ top_students_number }} students will be able to order at this round.<br>Depending on their rank, the top-{{ top_students_number }} students will be allowed to order only those items that are equal to or below their rank (the number of coins they have). No other students will be able to order anything.<br>If the camp is selected, then all students will be put in a priority queue based on their rank and all of them will be able to order items at some point.<br>In the camp mode, students can remove their bought items from the cart but in the classroom mode - they cannot.<br>If you want to switch between modes, you will not lose any data.<br>Learn more on the Edit Market page.</p></td>
+                          </tr>
+                          <tr>
+                              <td scope="row" class="text-right"><p class="lead">Market and blockchain pagination is</p></td>
+                              <td scope="row" class="text-left"><input type="checkbox" data-toggle="toggle" data-on="enabled" data-off="disabled" name="pagination_enabled" {% if pagination_enabled == "true" %}checked{% endif %}></td>
+                              <td scope="row" class="text-justify col-sm6"><p class="lead">If enabled, the market and blockchain will be split into pages (useful when you have a lot of items).<br>If disabled, the students and you will see all market and blockchain items on one page.</p></td>
                           </tr>
                       </tbody>
                   </small>
