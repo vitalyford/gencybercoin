@@ -72,4 +72,13 @@ Contact Vitaly Ford fordv@arcadia.edu with one of the following subject lines, d
 
 We thank [NSA/NSF GenCyber program](https://www.gen-cyber.com/ "NSA/NSF GenCyber Program") for funding the implementation of this project.
 
-We also thank Andy Malinsky, a Computer Science and Mathematics student at Arcadia University, for bug hunting, testing the project's code, and helping with writing these instructions.
+We also thank Andy Malinsky and Ivan Zhang, a Computer Science and Mathematics students at Arcadia University, for bug hunting, testing the project's code, and helping with writing these instructions.
+
+# Hall of Fame
+
+A list of students from different schools who contributed to identifying security flaws on this platform (alphabetic order) and sharing those with us.
+
+1. Diego Mannikarote
+2. Logan Warren
+3. Pierce Mannikarote
+4. Ryan Glendenning
