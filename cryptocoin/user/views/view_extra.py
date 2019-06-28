@@ -104,7 +104,7 @@ def extras_blockchain(request):
                 else:
                     log.switch_next_day = False
             pagination_enabled = get_object_or_404(PortalSetting, name='pagination_enabled', school=ud.school)
-            blockchains_per_page = 10
+            blockchains_per_page = 60
             if 'selectedStudent' in request.POST and selectedStudentID >= 0:
                 blockchains_per_page = len(transfers)
             if pagination_enabled.value == "true":
