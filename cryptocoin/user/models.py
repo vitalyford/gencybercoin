@@ -22,8 +22,8 @@ class UserData(models.Model):
     first_name = models.CharField(max_length=100)
     last_name  = models.CharField(max_length=100)
     password   = models.CharField(max_length=100, default="author:vitaly_ford")
-    honory_coins    = models.IntegerField(default=settings.DEFAULT_HONORARY_COINS)
-    permanent_coins = models.IntegerField(default=settings.DEFAULT_PERMANENT_COINS)
+    honory_coins    = models.BigIntegerField(default=settings.DEFAULT_HONORARY_COINS)
+    permanent_coins = models.BigIntegerField(default=settings.DEFAULT_PERMANENT_COINS)
     items_bought    = models.IntegerField(default=0)
     date            = models.DateTimeField(auto_now=True)
     is_admin        = models.BooleanField(default=False)
@@ -176,7 +176,7 @@ class PortalSetting(models.Model):
 
 class Bugs(models.Model):
     name            = models.CharField(max_length=50)
-    reward          = models.IntegerField(default=20)
+    reward          = models.BigIntegerField(default=20)
     user_data       = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship
     date            = models.DateTimeField()
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship

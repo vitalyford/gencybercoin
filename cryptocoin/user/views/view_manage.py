@@ -81,11 +81,11 @@ def submit_code_generator(request):
                 if (type == "award" or type == "custom") and request.POST.get('inputValue') != "":
                     try:
                         award_value = int(request.POST.get('inputValue'))
-                        if award_value < 0 or award_value > 1000000:
+                        if award_value < 0 or award_value > 500000000:
                             raise
                     except:
                         award_value = 0
-                        messages.warning(request, 'The award value should be between 0 and 1000000')
+                        messages.warning(request, 'The award value should be between 0 and 500000000')
             except:
                 messages.warning(request, 'Please enter a number, not a string')
             else:
