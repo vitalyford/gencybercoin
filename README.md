@@ -79,6 +79,7 @@ We also thank Andy Malinsky and Ivan Zhang, a Computer Science and Mathematics s
 A list of students from different schools who contributed to identifying security flaws on this platform (alphabetic order) and sharing those with us.
 
 1. Diego Mannikarote
-2. Logan Warren
-3. Pierce Mannikarote
-4. Ryan Glendenning
+2. Kevin Zhang
+3. Logan Warren
+4. Pierce Mannikarote
+5. Ryan Glendenning
