@@ -13,9 +13,13 @@ GenCyberCoin has been successfully deployed at Tennessee Tech's GenCyber summer 
 
 GenCyberCoin reinforces the objectives that the GenCyber program has established. It complements the existing GenCyber camp activities and facilitates building curiosity and passion to pursue cybersecurity and to solve challenges in this field.
 
-A 12-minute summary video on GenCyberCoin platform is available here:
+A 12-minute summary video on GenCyberCoin platform for instructors/admins is available here:
 
 [![Watch the video](instructions/img-readme/homepage.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=4a2d137e-e80f-4dd3-bc5e-aa1e00f7b4b7&v=1)
+
+A 2-minute summary video on GenCyberCoin platform for students is available here:
+
+[![Watch the video](instructions/img-readme/students.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=af6dc731-ca20-40e0-b386-aa6b002af746)
 
 # Bug Bounty
 
