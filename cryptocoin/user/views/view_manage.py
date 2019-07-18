@@ -3,6 +3,8 @@ from .view_market import market
 from tablib import Dataset
 from ..resources import MarketItemResource
 from django.db.models import Max
+from django.contrib.sessions.models import Session
+import datetime
 
 
 VALID_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
@@ -135,6 +137,7 @@ def code_generator(request):
             all_schools_object.se_answered = SECorrectAnswer.objects.all().count()
             all_schools_object.activities = Achievement.objects.all().count()
             all_schools_object.market_items = MarketItem.objects.all().count()
+            all_schools_object.sessions = Session.objects.filter(expire_date__gt=datetime.datetime.now()).count()
             context['all_schools_object'] = all_schools_object
             for s in schools:
                 school_object = SchoolObject()
