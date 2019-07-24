@@ -158,6 +158,8 @@ def submit_wallet(request):
                         run_bug_bounty(request, ud, 'bug#14:404_error', 'You learned about 404 errors! This is a page that is typically shown on the website when you are trying to access a page that does not exist.', 'https://en.wikipedia.org/wiki/HTTP_404')
                     elif inputCode == "$csrf-failure-takeover#":
                         run_bug_bounty(request, ud, 'bug#17:csrf_failure', 'You learned about Cross-Site Request Forgery! This is an attack that allows to send legitimate-looking requests on your behalf to banks, social websites, etc.', 'https://medium.com/@charithra/introduction-to-csrf-a329badfca49')
+                    elif inputCode == "$superuser-leak-is-danger":
+                        run_bug_bounty(request, ud, 'bug#18:github_data_exposure', 'You learned about not exposing sensitive data via public resources. Make sure that when you develop code, you do not accidentally publish keys, passwords, or your granny\'s address.', 'https://nakedsecurity.sophos.com/2019/03/25/thousands-of-coders-are-leaving-their-crown-jewels-exposed-on-github/')
                     # end bug bounty
                     else:
                         messages.warning(request, 'Wrong code!')
