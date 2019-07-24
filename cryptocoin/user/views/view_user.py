@@ -71,6 +71,9 @@ def password_recovery(request):
         # check if username exists and show questions to the user
         username = request.POST.get('inputUsername')
         ud = get_object_or_404(UserData, username=username)
+        if not ud.school:
+            context['error_message'] = "Congrats! You had to look into the source code on the GitHub page to figure out this one! Developers sometimes accidentally release passwords, and hackers diligently go through the sources to find those sensitive data leaks. You can learn more here https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure"
+            return render(request, 'user/password-recovery.html', context)
     except:
         context['error_message'] = "Username does not exist, and it is case-sensitive by the way"
     else:
