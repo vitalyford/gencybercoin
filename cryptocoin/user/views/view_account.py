@@ -345,6 +345,7 @@ def account_creation(request):
             school_id.title += " | " + code
             school_id.save()
             init_portal_settings(school_id)
+            PortalSetting.objects.filter(name="market_enabled", school=school_id).update(value="true")
             init_default_reconnaissance(school_id)
     else:
         try:
