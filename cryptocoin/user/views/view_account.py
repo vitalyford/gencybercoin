@@ -301,6 +301,26 @@ def check_fields(request):
     return True
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[-1].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+def init_default_reconnaissance(school):
+    # hardcoding the reconnaissance questions and corresponding answers
+    qa = {}
+    qa['Which cryptographic hash function has been broken by Google?'] = 'sha1'
+    qa['What was bought as the first purchase ever made using Bitcoin?'] = 'pizza'
+    qa['What online game has exposed hundreds of millions of users to being secretly recorded and hacked during play in 2019?'] = 'fortnite'
+    for question, answer in qa.items():
+        se_ques_answ = SEQuesAnsw(question=question, answer=answer, school=school)
+        se_ques_answ.save()
+
+
 def account_creation(request):
     # check if the registration code is valid
     code = str(request.POST.get('inputCode')).lower().strip()
@@ -314,15 +334,26 @@ def account_creation(request):
     a1 = request.POST.get('inputA1')
     a2 = request.POST.get('inputA2')
     a3 = request.POST.get('inputA3')
+    isTrial = (request.POST.get('trial') == 'on')
     questions = PassRecQuestions.objects.all()
     context = {'username': uname, 'password': pswd, 'first_name': fname, 'last_name': lname, 'q1': q1, 'q2': q2, 'q3': q3, 'a1': a1, 'a2': a2, 'a3': a3, 'code': code, 'questions': questions}
-    try:
-        if "#" not in code and "!" not in code:
-            raise
-        school_id = Code.objects.filter(allowed_hash=code)[0].school
-    except:
-        context['error_message'] = "Registration code is not valid! Check it again or contact the GenCyber Squad for help."
-        return render(request, 'user/register.html', context)
+    if isTrial: # assign IP addr as the code because trial is selected
+        code = get_client_ip(request)
+        # get or create a new School, if created => initialize default PortalSettings
+        school_id, created = School.objects.get_or_create(name=code)
+        if created:
+            school_id.title += " | " + code
+            school_id.save()
+            init_portal_settings(school_id)
+            init_default_reconnaissance(school_id)
+    else:
+        try:
+            if "#" not in code and "!" not in code:
+                raise
+            school_id = Code.objects.filter(allowed_hash=code)[0].school
+        except:
+            context['error_message'] = "Registration code is not valid! Check it again or contact the GenCyber Squad for help."
+            return render(request, 'user/register.html', context)
     # check for intentionally long input
     all_input = [len(uname), len(fname), len(lname), len(pswd), len(q1), len(q2), len(q3), len(a1), len(a2), len(a3)]
     if all(a < 90 for a in all_input):
@@ -347,7 +378,7 @@ def account_creation(request):
             messages.warning(request, 'Do not mess with the username, first name, last name, and password :) Try to mess with other fields, those are better')
             return HttpResponseRedirect(reverse('user:register'))
         # if the code belongs to gcadmin, else it belongs to gcstudent
-        if "!" in code:
+        if "!" in code and not isTrial:
             group, _ = Group.objects.get_or_create(name='gcadmin')
         else:
             group, _ = Group.objects.get_or_create(name='gcstudent')
@@ -377,7 +408,7 @@ def account_creation(request):
 
         if validate_on_save(request, ua):
             ua.save()
-            if not Code.objects.get(allowed_hash=code).infinite:
+            if not isTrial and not Code.objects.get(allowed_hash=code).infinite:
                 Code.objects.filter(allowed_hash=code)[0].delete()
 
             user = authenticate(username=uname, password=pswd)
