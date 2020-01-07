@@ -321,6 +321,17 @@ def init_default_reconnaissance(school):
         se_ques_answ.save()
 
 
+def init_default_market(school):
+    # hardcoding the market items
+    items = []
+
+    items.append(MarketItem(name='Rubber Ducky', description='USB drive that pretends to be a keyboard', quantity=1000000, tier=5, school=school))
+    items.append(MarketItem(name='WiFi Pineapple', description='Device to pentest WiFi', quantity=1000000, tier=10, school=school))
+
+    for item in items:
+        item.save()
+
+
 def account_creation(request):
     # check if the registration code is valid
     code = str(request.POST.get('inputCode')).lower().strip()
@@ -347,6 +358,7 @@ def account_creation(request):
             init_portal_settings(school_id)
             PortalSetting.objects.filter(name="market_enabled", school=school_id).update(value="true")
             init_default_reconnaissance(school_id)
+            init_default_market(school_id)
     else:
         try:
             if "#" not in code and "!" not in code:
