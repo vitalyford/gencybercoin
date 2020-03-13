@@ -30,6 +30,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^market/submit-cart/$', views.submit_cart, name='submit-cart'),
     url(r'^manage/change-mode-admin/$', views.change_mode_admin, name='change-mode-admin'),
     url(r'^manage/code-generator/$', views.code_generator, name='code-generator'),
+    url(r'^manage/delete-inactive-users/$', views.delete_inactive_users, name='delete-inactive-users'),
     url(r'^manage/submit-code-generator/$', views.submit_code_generator, name='submit-code-generator'),
     url(r'^manage/delete-school/$', views.delete_school, name='delete-school'),
     url(r'^manage/nominations-admin/$', views.nominations_admin, name='nominations-admin'),

@@ -5,6 +5,8 @@ from ..resources import MarketItemResource
 from django.db.models import Max
 from django.contrib.sessions.models import Session
 import datetime
+from django.utils import timezone
+import re
 
 
 VALID_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
@@ -118,6 +120,45 @@ def submit_code_generator(request):
                 Code.objects.filter(school=school_gcadmin, name='award').delete()
     return HttpResponseRedirect(reverse('user:code-generator'))
 
+def delete_inactive_users(request, num_days = 30):
+    if request.user.is_authenticated and request.user.is_superuser and 'delete' in request.POST and 'number_of_days' in request.POST:
+        #Calculate range of days to check
+        #Need to check input here using try/catch
+        try:
+            num_days = int(request.POST.get('number_of_days'))
+            if num_days < 0:
+                raise
+        except:
+            messages.warning(request, "Number of days used to delete trial students must be an integer greater than 0.")
+        else:
+            cutoff_date = timezone.now() - timezone.timedelta(days = num_days)
+            #Count users that are to be deleted
+            num_deleted = 0
+            #List of users from UserData to be deleted
+            users_to_delete=[]
+            try:
+                #Filter users based on when they were created
+                inactive_users = User.objects.filter(date_joined__lte = cutoff_date, is_superuser = False)
+                for i in inactive_users:
+                    print(inactive_users)
+                    i_user = get_object_or_404(UserData, username=i.username)
+                    #Find trial schools that have IP address as name
+                    if(re.match(r'^([0-9]{1,3}\.){3}[0-9]{1,3}$',i_user.school.name) and i_user.is_admin==False):
+                        i_user.delete()
+                        users_to_delete.append(i)
+                #Delete information from Django's User objects
+                num_deleted=len(users_to_delete)
+                for j in users_to_delete:
+                    j.delete()
+            except:
+                messages.warning(request, "Not all inactive users have been deleted")
+            else:
+                if num_deleted == 0:
+                    messages.info(request, 'No inactive users were found.')
+                else:
+                    messages.info(request, 'Successfully deleted ' + str(num_deleted) + ' inactive users.')
+
+    return HttpResponseRedirect(reverse('user:code-generator'))
 
 def code_generator(request):
     if request.user.is_authenticated:
