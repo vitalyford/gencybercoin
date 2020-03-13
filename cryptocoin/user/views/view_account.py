@@ -1,6 +1,6 @@
 from .views_global import *
 import re
-
+import csv
 
 def update_sec_questions(request):
     if request.user.is_authenticated:
@@ -310,23 +310,52 @@ def get_client_ip(request):
     return ip
 
 
-def init_default_reconnaissance(school):
-    # hardcoding the reconnaissance questions and corresponding answers
+def init_default_reconnaissance(school, request):
     qa = {}
-    qa['Which cryptographic hash function has been broken by Google?'] = 'sha1'
-    qa['What was bought as the first purchase ever made using Bitcoin?'] = 'pizza'
-    qa['What online game has exposed hundreds of millions of users to being secretly recorded and hacked during play in 2019?'] = 'fortnite'
+    has_exception = False
+    with open('trial/reconnaissance.csv', mode = 'r') as recon_csv:
+        csv_reader = csv.reader(recon_csv, delimiter = ',')
+        #Skip header line
+        next(csv_reader)
+
+        for row in csv_reader:
+            try:
+                #Check for blank lines or missing questions or answers
+                if row[0] != '' and row[1] != '':
+                    qa[row[0]] = row[1]
+            except:
+                has_exception = True
+    
+    if has_exception:
+        messages.warning(request, 'There is an error in the format of trial/reconnaissance.csv file. No big deal but it probably did not add all the questions that were supposed to be added to the Reconnaissance Module.')
+
     for question, answer in qa.items():
         se_ques_answ = SEQuesAnsw(question=question, answer=answer, school=school)
         se_ques_answ.save()
 
 
-def init_default_market(school):
-    # hardcoding the market items
+def init_default_market(school, request):
     items = []
+    #has_exception = False
 
-    items.append(MarketItem(name='Rubber Ducky', description='USB drive that pretends to be a keyboard', quantity=1000000, tier=5, school=school))
-    items.append(MarketItem(name='WiFi Pineapple', description='Device to pentest WiFi', quantity=1000000, tier=10, school=school))
+    with open('trial/market_items.csv', mode = 'r') as market_csv:
+        csv_reader = csv.reader(market_csv, delimiter = ',')
+        #Skip header line
+        next(csv_reader)
+
+        for row in csv_reader:
+            try:
+                #require name, description, quantity
+                if row[0] != '' and row[1] != '' and row[2] != '':
+                    items.append(MarketItem(name = row[0], description = row[1], quantity = int(row[2]), school = school))
+            except ValueError:
+                messages.warning(request, 'Value error: At least one of the values in trial/market_items.csv is blank or of the wrong type. Some market items might be mising from the market')
+    
+    #if has_exception:
+        #messages.warning(request, 'There is an error in the format of trial/market_item.csv file. No big deal but it probably did not add all the market items that were supposed to be added to the Market Module.')
+
+    #items.append(MarketItem(name='Rubber Ducky', description='USB drive that pretends to be a keyboard', quantity=1000000, tier=5, school=school))
+    #items.append(MarketItem(name='WiFi Pineapple', description='Device to pentest WiFi', quantity=1000000, tier=10, school=school))
 
     for item in items:
         item.save()
@@ -357,8 +386,8 @@ def account_creation(request):
             school_id.save()
             init_portal_settings(school_id)
             PortalSetting.objects.filter(name="market_enabled", school=school_id).update(value="true")
-            init_default_reconnaissance(school_id)
-            init_default_market(school_id)
+            init_default_reconnaissance(school_id, request)
+            init_default_market(school_id, request)
     else:
         try:
             if "#" not in code and "!" not in code:

@@ -156,6 +156,19 @@
                 </tbody>
             </table>
         </div>
+        <div>
+            <hr>
+            <h2 class="intro-text text-center">Delete Trial Students</h2>
+            <hr>
+            <form class="form-inline text-center">
+                {% csrf_token %}
+                <div class="normal-text text-center margin-top">
+                    <p class="lead">Delete trials students created this number of days or more ago:</p>
+                </div>
+                <input type="number" class="form-control margin-top" id="number_of_days" value="30" min = "0" size="4" required>
+                <button type="button" class="btn btn-default margin-top" name="delete" id="delete-users" data-toggle="modal" data-target="#confirmUserDeleteModal" onclick="submitTrialDays()" value="registration">Delete Trial Students</button>
+            </form>
+        </div>
 {% endif %}
 {% if is_gcadmin %}
             <table class="table table-hover table-responsive gctable">
@@ -226,6 +239,29 @@
     </div>
 </div>
 <!-- End confirm modal -->
+
+<!-- Confirm user deletion modal -->
+<div class="modal fade" id="confirmUserDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirmation
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete these users?
+            </div>
+            <div class="modal-footer">
+                <form class="form-horizontal" action="{% url 'user:delete-inactive-users' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="number_of_days" value="30">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End user deletion modal -->
 {% endif %}
 {% endblock %}
 
@@ -264,6 +300,10 @@ function updateCode(obj) {
 function submitMe(currObject) {
      $('#deleteThisSchool').text(currObject.name);
      document.getElementById('hiddenDelete').value = currObject.name;
+}
+
+function submitTrialDays() {
+     document.getElementsByName('number_of_days')[0].value = document.getElementById('number_of_days').value;
 }
 </script>
 {% endblock %}
