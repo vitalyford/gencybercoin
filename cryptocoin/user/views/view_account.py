@@ -341,7 +341,10 @@ def init_default_market(school, request):
             try:
                 # require name, description, quantity
                 if row[0] != '' and row[1] != '' and row[2] != '':
-                    items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), school=school))
+                    if len(row) > 3:  # there is an image
+                        items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), image_file=''.join(['../static/user/img/trial-market/', row[3]]), school=school))
+                    else:
+                        items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), school=school))
             except ValueError:
                 messages.warning(request, 'Value error: At least one of the values in trial/market_items.csv is blank or of the wrong type. Some market items might be mising from the market')
 

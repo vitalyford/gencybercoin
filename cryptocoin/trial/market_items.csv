@@ -1,22 +1,22 @@
-name,description,quantity
-Rubber Ducky,USB drive that pretends to be a keyboad,10000
-WiFi Pineapple,Device to pentest WiFi,10000
-Raspberry Pi,A single-board computer,10000
-Voltage tester,Measures the flow of electical current in a circuit,10000
-Tux,A small figure of the Linux mascot,10000
-Packet Squirrel,Small device designed to be a man-in-the-middle,10000
-Faraday bag,Bag used to block RF signals,10000
-USB Port Locks,Device to physically block use of USB ports,10000
-Rubber Duck,Because rubber duck debugging is a thing,10000
-Nymi Band,Uses heartbeat as a form of biometric authentication,10000
-Notebook,A standard notebook,10000
-RFID Cloning Tool,"Used for sniffing, reading, and cloning RF tags",10000
-Privacy Filter,Prevents others from reading your laptop screen in public settings,10000
-Tile Tracker,Small bluetooth tracker to help find small everyday objects,10000
-Roll-Up Keyboard,Flexible silicone keyboard,10000
-Water Bottle,Reusable receptacle for liquids,10000
-Magnetic Screwdriver,"Good for picking up small screws, but not recommended for use on  your computer",10000
-Microphone Blocker,Tricks a device into thinking a microphone is plugged in,10000
-USB Data Blocker,Protects from attacks when plugging in to public USB ports,10000
-Hard drive eraser,Device used to wipe a hard drive,10000
-SmartPhone Sanitizer,Uses UV lights to kill microbes,10000
+name,description,quantity,imagename
+Rubber Ducky,USB drive that pretends to be a keyboad,10000,rubber-ducky.png
+WiFi Pineapple,Device to pentest WiFi,10000,wifi-pineapple.png
+Raspberry Pi,A single-board computer,10000,raspberry-pi.png
+Voltage tester,Measures the flow of electical current in a circuit,10000,voltage-tester.png
+Tux,A small figure of the Linux mascot,10000,tux.png
+Packet Squirrel,Small device designed to be a man-in-the-middle,10000,packet-squirrel.png
+Faraday bag,Bag used to block RF signals,10000,faraday-bag.png
+USB Port Locks,Device to physically block use of USB ports,10000,usb-port-lock.png
+Rubber Duck,Because rubber duck debugging is a thing,10000,rubber-duck.png
+Nymi Band,Uses heartbeat as a form of biometric authentication,10000,nymi-band.png
+Notebook,A standard notebook,10000,notebook.png
+RFID Cloning Tool,"Used for sniffing, reading, and cloning RF tags",10000,rfid-cloning-tool.png
+Privacy Filter,Prevents others from reading your laptop screen in public settings,10000,privacy-filter.png
+Tile Tracker,Small bluetooth tracker to help find small everyday objects,10000,tile-tracker.png
+Roll-Up Keyboard,Flexible silicone keyboard,10000,roll-up-keyboard.png
+Water Bottle,Reusable receptacle for liquids,10000,water-bottle.png
+Magnetic Screwdriver,"Good for picking up small screws, but not recommended for use on  your computer",10000,magnetic-screwdriver.png
+Microphone Blocker,Tricks a device into thinking a microphone is plugged in,10000,microphone-blocker.png
+USB Data Blocker,Protects from attacks when plugging in to public USB ports,10000,usb-data-blocker.png
+Hard drive eraser,Device used to wipe a hard drive,10000,harddrive-eraser.png
+SmartPhone Sanitizer,Uses UV lights to kill microbes,10000,smartphone-sanitizer.png

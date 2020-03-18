@@ -131,7 +131,7 @@ class MarketItem(models.Model):
     name            = models.CharField(max_length=100, default='-')
     description     = models.CharField(max_length=400, default='-')
     cost_permanent  = models.IntegerField(default=0)
-    image_file      = models.ImageField(upload_to=image_upload_market, default='no-image.jpg')
+    image_file      = models.ImageField(upload_to=image_upload_market, default='../static/user/img/no-image.jpg')
     quantity        = models.IntegerField(default=1)
     tier            = models.IntegerField(default=10)  # default is 10 => anyone can order
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship
