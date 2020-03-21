@@ -1,4 +1,5 @@
 from .views_global import *
+import re
 
 
 def submit_cart(request):
@@ -175,6 +176,7 @@ def market(request):
         # pagination setup
         all_market_data = get_all_market_data(request, ud)
         context['available_coins'] = all_market_data['available_coins']
+        items = []
         if context['pagination_enabled'] == "true":
             paginator = Paginator(all_market_data['marketdata'], 20)
             page = request.GET.get('page')
@@ -191,11 +193,12 @@ def market(request):
             items = paginator.get_page(page)
             if program_type == 'camp':
                 set_market_prices(items, ud)
-            context['marketdata'] = items
         else:
             if program_type == 'camp':
                 set_market_prices(all_market_data['marketdata'], ud)
-            context['marketdata'] = all_market_data['marketdata']
+            items = all_market_data['marketdata']
+        convert_urls_in_trial_and_no_image(ud.school.name, items, context)
+        context['marketdata'] = items
         return render(request, 'user/market.html', context)
     return goto_login(request, "market")
 

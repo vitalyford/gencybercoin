@@ -186,7 +186,7 @@
                 <div class="col-md-3 text-center">
                   <form class="form-horizontal" enctype="multipart/form-data" action="{% url 'user:submit-market-admin' %}" method="post" id="marketItemForm{{item.id}}" name="{{item.id}}">
                       {% csrf_token %}
-                      <div class="text-center img-wrapper"><img src="{{ item.image_file.url }}" id="image{{item.id}}Preview" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
+                      <div class="text-center img-wrapper"><img src="{{ item.image_file.url_final }}" id="image{{item.id}}Preview" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
 
                       <div class="input-group col-sm-12">
                           <label class="input-group-btn">

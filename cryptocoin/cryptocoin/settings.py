@@ -5,8 +5,21 @@ Django settings for GenCyberCoin project.
 
 #import dj_database_url #dj-database-url==0.4.1
 import os
-if 'RDS_DB_NAME' in os.environ:
+
+# Static files (CSS, JavaScript, Images)
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
+if 'RDS_DB_NAME' in os.environ:  # if we run on AWS
     from cryptocoin.aws.conf import *
+else:
+    STATIC_URL = '/static/'
+
+    # File storage settiings
+    MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
+    MEDIA_URL = '/media/'
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -136,17 +149,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-STATIC_URL = '/static/'
-
-# File storage settiings
-MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
-MEDIA_URL = '/media/'
 
 CSRF_FAILURE_VIEW = 'user.views.csrf_failure'
 

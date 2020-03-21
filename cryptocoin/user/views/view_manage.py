@@ -427,6 +427,7 @@ def market_admin(request):
                 context['marketdata'] = paginator.get_page(page)
             else:
                 context = all_market_data
+            convert_urls_in_trial_and_no_image(ud.school.name, context['marketdata'], context)
             context['pagination_enabled'] = pagination_enabled.value
             return render(request, 'user/market-admin.html', context)
         return market(request)

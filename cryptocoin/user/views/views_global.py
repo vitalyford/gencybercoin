@@ -39,6 +39,17 @@ import base64
 # import for on-save object validation
 from django.core.exceptions import ValidationError
 
+import re
+
+
+# change the image url for the trial to access the static instead of media directory
+def convert_urls_in_trial_and_no_image(school_name: str, items: list, context: dict):
+    context['istrial'] = re.match(r'^([0-9]{1,3}\.){3}[0-9]{1,3}$', school_name)
+    for item in items:
+        item.image_file.url_final = item.image_file.url.replace('/media', '') if context['istrial'] else item.image_file.url
+        if 'no-image.jpg' in item.image_file.url:
+            item.image_file.url_final = '/static/user/img/no-image.jpg'
+
 
 def paginate_list(request, input, cutout_length):
     paginator = Paginator(input, cutout_length)
