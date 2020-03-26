@@ -55,10 +55,14 @@ def validate_on_save(request, obj, message_on_success=''):
         for k, v in enumerate(e.message_dict.items()):
             output += str(v)
         messages.warning(request, output)
-        ud = get_object_or_404(UserData, username=request.user.username)
-        # bug bounty
-        run_bug_bounty(request, ud, 'bug#4:overflow_max_length', 'Congrats! You found a programming bug, overflowing the maximum length allowed to be saved in the SQL database! This bug could potentially reveal sensitive information and could be exploited to crash the system.', 'https://www.owasp.org/index.php/Testing_for_Input_Validation')
-        # end bug bounty
+        try:
+            ud = get_object_or_404(UserData, username=request.user.username)
+        except:
+            pass
+        else:
+            # bug bounty
+            run_bug_bounty(request, ud, 'bug#4:overflow_max_length', 'Congrats! You found a programming bug, overflowing the maximum length allowed to be saved in the SQL database! This bug could potentially reveal sensitive information and could be exploited to crash the system.', 'https://www.owasp.org/index.php/Testing_for_Input_Validation')
+            # end bug bounty
         return False
     else:
         if message_on_success != '':

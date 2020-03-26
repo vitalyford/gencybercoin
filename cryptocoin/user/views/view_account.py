@@ -350,13 +350,6 @@ def init_default_market(school, request):
                     items.append(MarketItem(name = row[0], description = row[1], quantity = int(row[2]), school = school))
             except ValueError:
                 messages.warning(request, 'Value error: At least one of the values in trial/market_items.csv is blank or of the wrong type. Some market items might be mising from the market')
-    
-    #if has_exception:
-        #messages.warning(request, 'There is an error in the format of trial/market_item.csv file. No big deal but it probably did not add all the market items that were supposed to be added to the Market Module.')
-
-    #items.append(MarketItem(name='Rubber Ducky', description='USB drive that pretends to be a keyboard', quantity=1000000, tier=5, school=school))
-    #items.append(MarketItem(name='WiFi Pineapple', description='Device to pentest WiFi', quantity=1000000, tier=10, school=school))
-
     for item in items:
         item.save()
 
@@ -447,7 +440,7 @@ def account_creation(request):
             return HttpResponseRedirect(reverse('user:register'))
 
         ua = UserAnswers(data=ud, answer1=a1, answer2=a2, answer3=a3, question1=q1, question2=q2, question3=q3)
-
+        
         if validate_on_save(request, ua):
             ua.save()
             if not isTrial and not Code.objects.get(allowed_hash=code).infinite:
@@ -462,7 +455,6 @@ def account_creation(request):
             user.delete()
             ud.delete()
 
-        messages.warning(request, 'Trying to break stuff, huh? Well, see the messages above, they will tell you what you are doing wrong ;-)')
         return HttpResponseRedirect(reverse('user:register'))
     else:
         context['error_message'] = "Good try. Really. But you do not want to mess with the maxlength here :-)"
