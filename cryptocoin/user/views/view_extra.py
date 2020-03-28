@@ -143,7 +143,7 @@ def extras_hall_of_fame(request):
                 students_list.append({k: students[k]})
             context['students'] = students_list
         else:
-            messages.warning(request, 'Nobody found any bugs yet, you can be the first one!')
+            messages.warning(request, 'No bugs have been found yet. Maybe you can be the first to find one!')
         return render(request, 'user/extras/hall-of-fame.html', context)
     return goto_login(request, "hall of fame")
 

@@ -4,21 +4,7 @@
 <!-- Account info -->
 <div class="row">
     <div class="box">
-        <div class="col-md-3" style="margin: auto 0;">
-          <hr>
-          <h2 class="intro-text text-center">Password Management</h2>
-          <hr>
-          <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
-          {% csrf_token %}
-            <div class="form-group">
-              <input type="password" class="form-control" id="iCop" name="inputOldPassword" maxlength="90" placeholder="Your old password" style="margin: 5px;" required>
-              <input type="password" class="form-control" id="iC" name="inputNewPassword" maxlength="90" placeholder="Your new password" style="margin: 5px;" required>
-              <button type="submit" class="btn btn-primary" name="change" style="margin: 5px;" value="change">Change password</button>
-              <p class="sublead">You (and anybody else) can securely check <a href="https://haveibeenpwned.com/" target="_blank"><u>here</u></a> if your real email and password have been compromised. In a <u><a href="https://www.youtube.com/watch?v=cczlpiiu42M" target="_blank">7-min video</a></u>, you can learn about passwords and hashes.</p>
-            </div>
-          </form>
-        </div>
-        <div class="col-md-9">
+        <div class="col-md-7" style="margin: auto 0;">
             <hr>
             <h2 class="intro-text text-center">{{ request.user.first_name }}'s Account Details</h2>
             <hr>
@@ -62,6 +48,20 @@
               <p class="lead text-center">No user information is available</p>
             {% endif %}
         </div>
+        <div class="col-md-4" style="margin: auto 0;">
+          <hr>
+          <h2 class="intro-text text-center">Password Management</h2>
+          <hr>
+          <form class="form-inline text-center" action="{% url 'user:submit-account' %}" method="post">
+          {% csrf_token %}
+            <div class="form-group">
+              <input type="password" class="form-control" id="iCop" name="inputOldPassword" maxlength="90" placeholder="Your old password" style="margin: 5px;" required>
+              <input type="password" class="form-control" id="iC" name="inputNewPassword" maxlength="90" placeholder="Your new password" style="margin: 5px;" required>
+              <button type="submit" class="btn btn-primary" name="change" style="margin: 5px;" value="change">Change password</button>
+              <p class="sublead">Think your password is unique? Check out <a href="https://haveibeenpwned.com/" target="_blank"><u>this</u></a> website to see if your password has ever been compromised in a data breach. To learn more about how passwords are stored by companies in the real world, click <u><a href="https://www.youtube.com/watch?v=cczlpiiu42M" target="_blank">here</a></u>.</p>
+            </div>
+          </form>
+        </div>
     </div>
 </div>
 
@@ -70,7 +70,10 @@
     <div class="box">
         <div class="col-lg-12">
             <hr>
-            <h2 class="intro-text text-center">Activity History</h2>
+            <h2 class="intro-text text-center">Achievements</h2>                
+            <div class="normal-text text-center margin-top">
+              <p class="lead">This section lists activities that you have successfully completed.</p>
+            </div>
             <hr>
             {% if achievements %}
             <table class="table table-hover table-responsive gctable">

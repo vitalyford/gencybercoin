@@ -70,18 +70,18 @@
 
             <div class="col-lg-12">
               <p class="lead text-center">Coins Transfer</p>
-              <p class="sublead">You can transfer REWARD coins to your peers for any reason. For instance, someone may have unconditionally helped you, or you noticed that someone was a great leader in a team, or you would like to encourage someone, or maybe someone contributed the most in the team challenge. You can transfer the REWARD coin as a token of appreciation to that person. It is limited to transfering a maximum of {{ amount_allowed_to_send }} REWARD coins to every peer and you cannot transfer more than once to anyone.</p>
-              <p class="sublead">IMPORTANT: You will use REWARD coins in the market to order real items so think twice before sending your REWARD coins to anyone.</p>
-              <p class="sublead">You can also transfer your APPRECIATION coins (not REWARD) to the GenCyber Team members whom you really appreciated and enjoyed working with by selecting their names and making the transaction.</p>
-              <p class="sublead">NOTE: you can send as many APPRECIATION coins and as many times as you want to the GenCyber Team.</p>
+              <p class="sublead">You can transfer REWARD coins to your PEERS for any reason. For instance, someone may have unconditionally helped you, or maybe someone contributed the most in the team challenge. You can transfer REWARD coins as a token of appreciation to that person. You can transfer a maximum of {{ amount_allowed_to_send }} REWARD coins to every peer and you cannot transfer more than once to anyone.</p>
+              <p class="sublead">IMPORTANT: You will use REWARD coins in the market to order real items in the market; transfer these coins at you own discretion.</p>
+              <p class="sublead">You can also transfer your APPRECIATION coins to GENCYBER TEAM MEMBERS whom you really appreciated and enjoyed working with by selecting their names and making the transaction.</p>
+              <p class="sublead">NOTE: You can send as many APPRECIATION coins as many times as you want to the GENCYBER TEAM.</p>
               <p class="sublead">All transfers are captured in the Features -> Blockchain.{% if not request.user|has_group:"gcadmin" %} Every transaction is verified with your password.{% endif %}</p>
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
               {% csrf_token %}
                 <div class="form-group">
-                  <label for="iT" class="col-sm-2 control-label">Transfer to</label>
-                  <div class="input-group col-sm-10">
+                  <label for="iT" class="col-sm-offset-2 col-sm-2 control-label">Transfer to</label>
+                  <div class="input-group col-sm-5">
                     <select class="form-control" id="iT" name="inputTransfer" onchange="updateCurrency(this)">
-                      <option>Who is the lucky one?</option>
+                      <option>Select a friend</option>
                       {% for au in allusers %}
                         {% if au.username != request.user.username %}
                           <option value="{{ au.id }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
@@ -91,17 +91,17 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="iA" class="col-sm-2 control-label">Amount</label>
-                  <div class="input-group col-sm-10">
+                  <label for="iA" class="col-sm-offset-2 col-sm-2 control-label">Amount</label>
+                  <div class="input-group col-sm-5">
                     <div class="input-group-addon" id="clubs-or-hearts"></div>
-                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Choose the user you want to send the money to" disabled>
+                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Select a friend" disabled>
                     <div class="input-group-addon">.00</div>
                   </div>
                 </div>
                 {% if not request.user|has_group:"gcadmin" %}
                 <div class="form-group">
-                  <label for="iP" class="col-sm-2 control-label">Password</label>
-                  <div class="input-group col-sm-10">
+                  <label for="iP" class="col-sm-offset-2 col-sm-2 control-label">Password</label>
+                  <div class="input-group col-sm-5">
                     <input type="password" class="form-control" id="iP" name="userPassword" placeholder="Enter your password">
                   </div>
                 </div>
@@ -130,20 +130,20 @@ function updateCurrency(obj) {
     var transferTo = document.getElementById('iA');
     if (obj.selectedIndex == 0) {
         clubsOrHearts.innerHTML = "";
-        transferTo.placeholder = "Choose the user you want to send the money to";
+        transferTo.placeholder = "Choose a team member";
         transferTo.disabled = true;
     }
     else if (obj.options[obj.selectedIndex].text.includes("GenCyber Team")) {
         clubsOrHearts.innerHTML = "&clubs;";
-        transferTo.placeholder = "You can send as many " + String.fromCharCode(9827) + "coins as you want";
+        transferTo.placeholder = "No send limit on " + String.fromCharCode(9827) + "coins";
         transferTo.disabled = false;
     }
     else {
         clubsOrHearts.innerHTML = "&hearts;";
         {% if not request.user|has_group:"gcadmin" %}
-        transferTo.placeholder = "You are limited to sending up to " + String.fromCharCode(9829) + {{ amount_allowed_to_send }};
+        transferTo.placeholder = "Sending limit is " + String.fromCharCode(9829) + {{ amount_allowed_to_send }};
         {% else %}
-        transferTo.placeholder = "You can send as many " + String.fromCharCode(9829) + "coins as you want";
+        transferTo.placeholder = "No send limit on " + String.fromCharCode(9829) + "coins";
         {% endif %}
         transferTo.disabled = false;
     }
