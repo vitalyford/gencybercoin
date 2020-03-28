@@ -73,7 +73,7 @@
               <p class="sublead">You can transfer REWARD coins to your PEERS for any reason. For instance, someone may have unconditionally helped you, or maybe someone contributed the most in the team challenge. You can transfer REWARD coins as a token of appreciation to that person. You can transfer a maximum of {{ amount_allowed_to_send }} REWARD coins to every peer and you cannot transfer more than once to anyone.</p>
               <p class="sublead">IMPORTANT: You will use REWARD coins in the market to order real items in the market; transfer these coins at you own discretion.</p>
               <p class="sublead">You can also transfer your APPRECIATION coins to GENCYBER TEAM MEMBERS whom you really appreciated and enjoyed working with by selecting their names and making the transaction.</p>
-              <p class="sublead">NOTE: You can send as many APPRECIATION coins as many times as you want to the GenCyber Team.</p>
+              <p class="sublead">NOTE: You can send as many APPRECIATION coins as many times as you want to the GENCYBER TEAM.</p>
               <p class="sublead">All transfers are captured in the Features -> Blockchain.{% if not request.user|has_group:"gcadmin" %} Every transaction is verified with your password.{% endif %}</p>
               <form class="form-horizontal" action="{% url 'user:transfer' %}" method="post">
               {% csrf_token %}
@@ -81,7 +81,7 @@
                   <label for="iT" class="col-sm-offset-2 col-sm-2 control-label">Transfer to</label>
                   <div class="input-group col-sm-5">
                     <select class="form-control" id="iT" name="inputTransfer" onchange="updateCurrency(this)">
-                      <option>Select a team member</option>
+                      <option>Select a friend</option>
                       {% for au in allusers %}
                         {% if au.username != request.user.username %}
                           <option value="{{ au.id }}">{{ au.first_name }} {{ au.last_name }}{% if au.is_admin %} (GenCyber Team){% endif %}</option>
@@ -94,7 +94,7 @@
                   <label for="iA" class="col-sm-offset-2 col-sm-2 control-label">Amount</label>
                   <div class="input-group col-sm-5">
                     <div class="input-group-addon" id="clubs-or-hearts"></div>
-                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Choose a team member" disabled>
+                    <input type="text" class="form-control" id="iA" name="inputAmount" placeholder="Select a friend" disabled>
                     <div class="input-group-addon">.00</div>
                   </div>
                 </div>
