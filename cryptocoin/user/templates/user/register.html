@@ -54,10 +54,11 @@
               <div class="form-group">
                 <label for="iQ{{forloop.counter}}" class="col-sm-3 control-label">Question {{forloop.counter}}</label>
                 <div class="col-sm-6">
-                  <select class="form-control" id="iS{{forloop.counter}}" name="inputQ{{forloop.counter}}" required>
-                  {% for q in questions %}
-                    <option {% if forloop.counter == 1 and i == "x" %}selected{% elif forloop.counter == 2 and i == "y" %}selected{% elif forloop.counter == 3 and i == "z" %}selected{% endif %}>{{ q.question }}</option>
-                  {% endfor %}
+                  <select class="form-control" id="iS{{forloop.counter}}" name="inputQ{{forloop.counter}}" onChange="check()" required>
+                    <option value="">Select a question</option>
+                    {% for q in questions %}
+                    <option>{{ q.question }}</option>
+                    {% endfor %}
                   </select>
                 </div>
                 <div class="col-sm-offset-3 col-sm-6" style="padding-top: 10px;">
@@ -76,13 +77,13 @@
               </div>
 
               <div class="form-group">
-                <label for="iCode" class="col-sm-3 control-label">Enter your registration code (get it from GenCyber Team).</label>
+                <label for="iCode" class="col-sm-3 control-label">Enter your registration code (can be obtained from GenCyber Team).</label>
                 <div class="col-sm-6">
                   <input type="text" class="form-control" id="iCode" name="inputCode" placeholder="Registration Code" maxlength="90" value="{% if code %}{{ code }}{% endif %}" required>
                 </div>
               </div>
-              <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-6">
+              <div class="form-group text-center">
+                <div class="col-sm-12">
                   <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                 </div>
               </div>
@@ -98,5 +99,23 @@
         $("[data-toggle=tooltip]").tooltip({ placement: 'top'});
         $('#trial-info').tooltip();
     });
+
+    function check() {
+      d = document;
+      myArray = [];
+      for (h = 0; h < 3; h++) {
+        myArray[h] = d.getElementById('iS' + (h + 1)).value;
+      }
+      for (a = 0; a < 3; a++) {
+        for (b = 1; b < 6; b++) {
+          d.getElementById('iS' + (a + 1)).options[b].style.display = "block";
+          for (c = 0; c < 3; c++) {
+            if (d.getElementById('iS' + (a + 1)).options[b].value == myArray[c]) {
+              d.getElementById('iS' + (a + 1)).options[b].style.display = "none";
+            }
+          }
+        }
+      }
+    }
 </script>
 {% endblock %}

@@ -13,46 +13,48 @@
               {% endfor %}
             {% endif %}
             <div class="normal-text">
-                <p class="lead text-primary">The order of the words does not matter in your answers. Also, make sure that you separate the words with a space. The answers are case insensitive.</p>
-                <p class="lead">Reconnaissance in the cyber space is all about gaining knowledge about a specific target. <u><a href="https://www.webroot.com/us/en/resources/tips-articles/what-is-social-engineering" target="_blank">Social Engineering</a></u> (SE) is a part of it, being an art of retrieving information from people who are not aware of what information they share with strangers. Here, you can try to find answers to the following questions by using your Internet searching skills or figuring out a way to ask those people the right questions, in the right time, in a very specific way so that they will not "suspect" anything. You are encouraged to form groups in order to achieve your objectives.</p>
-                <p class="lead">People are the weakest link in security. Staying constantly aware of whom you communicate with, what links you click on, and what information you see in front of you is important in order to stay secure in the 21st century (and beyond).</p>
+                <p class="lead text-primary">If your answer contains multiple words, the order of the words you enter does not matter. Make sure that you separate words with a space. The answers are case insensitive (for example "apple" is equivalent to "APPLE").</p>
+                <p class="lead">Reconnaissance in the cyber space is about gaining knowledge about a specific target. <u><a href="https://www.webroot.com/us/en/resources/tips-articles/what-is-social-engineering" target="_blank">Social Engineering</a></u> (SE) is the art of retrieving information from people who are not aware that they are giving away information, and is a part of reconaissance. Here, you can try to find answers to the following questions by using your Internet searching skills or figuring out a way to ask the right people the right questions in such a way that they will not "suspect" anything. You are encouraged to form groups in order to get the information you need.</p>
+                <p class="lead">People are the weakest link in security. Staying constantly aware of who you communicate with, what links you click on, and what information you see in front of you is important in order to stay secure in the 21st century and beyond.</p>
             </div>
             {% if allquestions %}
             <div class="col-sm-2"></div>
             <div class="col-sm-8" style="padding-top: 20px;">
                 <form class="form-horizontal" action="{% url 'user:submit-social-engineering' %}" method="post">
                     {% csrf_token %}
-            {% if correctanswers %}
-                <div class="text-center"><button type="button" class="btn btn-link btn-lg" data-toggle="collapse" data-target="#admin_show_info" style="white-space: normal;">Show correctly answered challenges</button></div>
-                <div id="admin_show_info" class="collapse">
-                    {% for q in allquestions %}
-                        {% if q.id in correctanswers %}
-                            <div class="form-group{% if q.id in correctanswers %} has-success has-feedback{% endif %}">
-                                <label for="q{{ q.id }}">{{ q.question }}</label>
-                                <input type="text" class="form-control" id="q{{ q.id }}" name="{{ q.id }}" maxlength="200" value="{{ q.answer }}" aria-describedby="q{{ q.id }}Status">
-                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                                <span id="q{{ q.id }}Status" class="sr-only">(success)</span>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
+
                     {% for q in allquestions %}
                         {% if q.id not in correctanswers %}
                             <div class="form-group{% if q.id in correctanswers %} has-success has-feedback{% endif %}">
                                 <label for="q{{ q.id }}">{{ q.question }}</label>
-                                <input type="text" class="form-control" id="q{{ q.id }}" name="{{ q.id }}" maxlength="200" placeholder="Enter you answer">
+                                <input type="text" class="form-control" id="q{{ q.id }}" name="{{ q.id }}" maxlength="200" placeholder="Enter your answer">
                             </div>
                         {% endif %}
                     {% endfor %}
-                    <div class="form-group">
+
+                    {% if correctanswers %}
+                    <div class="text-center"><button type="button" class="btn btn-link btn-lg" data-toggle="collapse" data-target="#admin_show_info" style="white-space: normal;">Show correctly answered challenges</button></div>
+                    <div id="admin_show_info" class="collapse">
+                        {% for q in allquestions %}
+                            {% if q.id in correctanswers %}
+                                <div class="form-group{% if q.id in correctanswers %} has-success has-feedback{% endif %}">
+                                    <label for="q{{ q.id }}">{{ q.question }}</label>
+                                    <input type="text" class="form-control" id="q{{ q.id }}" name="{{ q.id }}" maxlength="200" value="{{ q.answer }}" aria-describedby="q{{ q.id }}Status">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                    <span id="q{{ q.id }}Status" class="sr-only">(success)</span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                    <div class="form-group text-center">
                         <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                     </div>
                 </form>
             </div>
             <div class="col-sm-2"></div>
             {% else %}
-            <p class="lead text-center text-warning">Currently, there are no questions to answer. Ask your GenCyber organizers to add social engineering questions ;)</p>
+            <p class="lead text-center text-warning">Currently, there are no questions to answer. Ask your GenCyber organizers to add social engineering questions.</p>
             {% endif %}
         </div>
     </div>

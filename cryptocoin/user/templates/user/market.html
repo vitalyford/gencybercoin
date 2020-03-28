@@ -10,7 +10,7 @@
         <hr>
         <div class="text-center">
             <button type="button" class="btn btn-link btn-lg btn-block" data-toggle="collapse" data-target="#user_cart" style="white-space: normal;">
-                <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of the items vary as the market evolves, so you may be able to remove an item and then buy it again for a smaller/larger price" id="cart-info"></i>{% endif %}</h2>
+                <h2 class="intro-text text-center">Cart{% if program_type == "camp" %} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="The prices of items vary as the market evolves, so you may be able to remove an item and then buy it again for a smaller/larger price." id="cart-info"></i>{% endif %}</h2>
             </button>
         </div>
         <hr>
@@ -54,7 +54,7 @@
         <hr>
         <div id="user_queue" class="collapse in">
 {% if market_enabled == "true" %}
-            <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top-{{ top_students_number }} from the list can order items{% if program_type == "camp" %}, please wait your turn{% endif %}{% endif %}</p>
+            <p class="lead text-center" id="queue-title" style="background-color: #00ffff;">{% if top_player == "true" %}Hurry! Order NOW!{% else %}Only top {{ top_students_number }} from the list can order items{% if program_type == "camp" %}, please wait your turn{% endif %}{% endif %}</p>
             <div id="students_list">
             {% for u in top_players %}
               <p class="lead">{{ forloop.counter }}. {{ u }}</p>
@@ -77,7 +77,7 @@
             {% endfor %}
           {% endif %}
           <p class="lead text-center">Available Coins: &hearts;{{ available_coins }}</p>
-          {% if market_enabled == "false" %}<p class="lead text-center text-warning">The market items are not currently available to order. Most likely, it will open at the end of the camp/class. Keep an eye on it.</p>{% endif %}
+          {% if market_enabled == "false" %}<p class="lead text-center text-warning">The market is currently closed! It will likely open at the end of camp/class. Ask your GenCyber team member for more details.</p>{% endif %}
 
           {% for item in marketdata %}
             {% if forloop.first %}
@@ -156,7 +156,10 @@
 <div class="row">
     <div class="box">
         <div class="col-lg-12">
-          <p class="lead text-center">No market items are available at this time. Swing by later!</p>
+          <hr>
+          <h2 class="intro-text text-center">Market</h2>
+          <hr>
+          <p class="lead text-center">No market items are currently available. Swing by later!</p>
         </div>
     </div>
 </div>
