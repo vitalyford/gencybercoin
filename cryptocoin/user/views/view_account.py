@@ -1,6 +1,7 @@
 from .views_global import *
 import re
 import csv
+import os
 
 def update_sec_questions(request):
     if request.user.is_authenticated:
@@ -312,22 +313,18 @@ def get_client_ip(request):
 
 def init_default_reconnaissance(school, request):
     qa = {}
-    has_exception = False
-    with open('trial/reconnaissance.csv', mode = 'r') as recon_csv:
-        csv_reader = csv.reader(recon_csv, delimiter = ',')
-        #Skip header line
+    with open('trial/reconnaissance.csv', mode='r') as recon_csv:
+        csv_reader = csv.reader(recon_csv, delimiter=',')
+        # skip header line
         next(csv_reader)
 
         for row in csv_reader:
             try:
-                #Check for blank lines or missing questions or answers
+                # check for blank lines or missing questions or answers
                 if row[0] != '' and row[1] != '':
                     qa[row[0]] = row[1]
             except:
-                has_exception = True
-    
-    if has_exception:
-        messages.warning(request, 'There is an error in the format of trial/reconnaissance.csv file. No big deal but it probably did not add all the questions that were supposed to be added to the Reconnaissance Module.')
+                messages.warning(request, 'There is an error in the format of trial/reconnaissance.csv file. No big deal but it probably did not add all the questions that were supposed to be added to the Reconnaissance Module.')
 
     for question, answer in qa.items():
         se_ques_answ = SEQuesAnsw(question=question, answer=answer, school=school)
@@ -336,18 +333,22 @@ def init_default_reconnaissance(school, request):
 
 def init_default_market(school, request):
     items = []
-    #has_exception = False
-
-    with open('trial/market_items.csv', mode = 'r') as market_csv:
-        csv_reader = csv.reader(market_csv, delimiter = ',')
-        #Skip header line
+    with open('trial/market_items.csv', mode='r') as market_csv:
+        csv_reader = csv.reader(market_csv, delimiter=',')
+        # skip header line
         next(csv_reader)
 
         for row in csv_reader:
             try:
-                #require name, description, quantity
+                # require name, description, quantity
                 if row[0] != '' and row[1] != '' and row[2] != '':
-                    items.append(MarketItem(name = row[0], description = row[1], quantity = int(row[2]), school = school))
+                    if len(row) > 3:  # there is an image
+                        image_path = 'static/user/img/trial-market/'
+                        if not 'RDS_DB_NAME' in os.environ:  # not running on AWS
+                            image_path = '../' + image_path
+                        items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), image_file=''.join([image_path, row[3]]), school=school))
+                    else:
+                        items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), school=school))
             except ValueError:
                 messages.warning(request, 'Value error: At least one of the values in trial/market_items.csv is blank or of the wrong type. Some market items might be mising from the market')
     for item in items:
