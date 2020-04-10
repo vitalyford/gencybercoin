@@ -14,22 +14,22 @@
                 <hr>
                 {% endif %}
                 <p class="lead">GenCyberCoin has a bug bounty program! This program will reward you with coins if you find bugs (problems and errors) on the website.</p>
-                <p class="lead">Try to do something that the website would not expect a normal user to do. When you submit something on the website, the information will be processed by the server and the result will be shown to you on the page. What if you send something that a user would usually never think to send? Maybe you can find a place where you can request a certain type of information from the server or you can try to tinker around on the page itself. If you successfully find a bug, you will see a message explaining that type of bug and you will also receive a reward!</p>
+                <p class="lead">Try to do something that the website would not expect a normal user to do. When you submit something on the website, the information will be processed by the server and the result will be shown to you on the page. What if you send something that a user would usually never think to send? Maybe you can find a place where you can request a certain type of information from the server or you can try to tinker around on the page itself. If you successfully find a bug, you will see a message explaining that type of bug and you will also receive a reward! Some rewards are given automatically. Other bugs will provide you with a reward code that you can redeem on the <u><a href='/wallet/'>Wallet</a></u> page</p>
                 <p class="lead">Bug Bounty hunting is a real practice through which people can receive monetary rewards on websites such as <u><a href="https://www.hackerone.com/" target="_blank">HackerOne</a></u> and <u><a href="https://www.bugcrowd.com/bug-bounty-list/" target="_blank">BugCrowd</a></u>. It can be quite profitable to participate in these "ethical hacking" Bug Bounty programs. For example, a 10-year-old was rewarded $10,000 by Facebook in 2016 for finding a serious bug on Instagram. Click <u><a href="https://www.theverge.com/tech/2016/5/3/11579972/facebook-10-year-old-hacking-instagram-security-bug-10k" target="_blank">here</a></u> to read about it.</p>
                 <p class="lead">ALWAYS think about ethics first when performing a cyberattack. Performing unethical cyberattacks can result in heavy penalties such as prison time and large fines. An example is <u><a href="https://krebsonsecurity.com/2019/04/marcus-malwaretech-hutchins-pleads-guilty-to-writing-selling-banking-malware/" target="_blank">MalwareTech's case</a></u>.</p>
                 <p class="lead">Bruce Schneier, a well-known cryptographer, wrote a short essay on hackers and how they can be good or bad. Click <u><a href="https://www.schneier.com/blog/archives/2006/09/what_is_a_hacke.html" target="_blank">here</a></u> to read it. If you are interested in checking out some real top-level security investigations, drop by <u><a href="https://krebsonsecurity.com/" target="_blank">KrebsOnSecurity</a></u>.</p>
-                <p class="lead">For this website, you can try to break it in any way you want! Hint: Right-click on a specific item on any page and select "Inspect" to see the underlying code. Below is a list of discoverable bugs on this website.</p>
+                <p class="lead">For this website, you can try to break it in any way you want! Hint: Right-click on a specific item on any page and select "Inspect" to see the underlying code. Below is a list of discoverable bugs on this website. You can see which bugs you and your friends have found on the <u><a href='/extras/hall-of-fame/'>Hall of Fame</a></u> page.</p>
                 <ol>
                     <li class="sublead">Sensitive data exposure (Hidden page that admin left somewhere on the home page's source code)</li>
                     <li class="sublead">Broken authentication (Find admin credentials)</li>
                     <li class="sublead">Find a proposed standard which allows websites to define security policies (Search this on the Internet)</li>
                     <li class="sublead">User data input overflow (Check out maxlength in page sources)</li>
-                    <li class="sublead">Reflected XSS (Check out wallet)</li>
-                    <li class="sublead">Stored XSS (Btw, did you leave us the feedback yet?)</li>
+                    <li class="sublead">Reflected XSS (Check out Wallet)</li>
+                    <li class="sublead">Stored XSS (Btw, did you leave us feedback yet?)</li>
                     <li class="sublead">User input validation (Wallet)</li>
                     <li class="sublead">HTML edits on social engineering page (How does the server know which question relates to which answer?)</li>
-                    <li class="sublead">Have you considered what happens if you transfer coins to yourself? (Find in the wallet's page source the numerical values that correspond to users, and replace one of them with yours. YOu can either guess it or the Blockchain page might help you)</li>
-                    <li class="sublead">Local file inclusion (Did you see that there are several pages of the items on the market?)</li>
+                    <li class="sublead">Have you considered what happens if you transfer coins to yourself? (Find in the wallet's page source the numerical values that correspond to users, and replace one of them with yours. You can either guess it or the Blockchain page might help you)</li>
+                    <li class="sublead">Local file inclusion (Did you see that there are several pages of items in market?)</li>
                 {% if market_enabled == "true" %}
                     <li class="sublead">HTML edits on market items (Can you change the price of the items so that the money will actually go to your wallet when you buy, instead of coming out of your pocket?)</li>
                     <li class="sublead">Race condition (When market is enabled, notice what changes in every item's HTML code when it is your turn. When it is not your turn, can you still try to buy something?)</li>
@@ -41,7 +41,7 @@
                 {% endif %}
                     <li class="sublead">Access a page that does not exist</li>
                     <li class="sublead">Break the hash of wonderwoman and log in to her account (You will find it when you solve bug #2)</li>
-                    <li class="sublead">Find a forgotten form on Cryptocurrency page and use it to unlock Atlantis (Check out the page source; inspect the elements on the page and look for a form for which display is none; find out how to make that form visible)</li>
+                    <li class="sublead">Find a forgotten form on the Cryptocurrency page and use it to unlock Atlantis (Check out the page source; inspect the elements on the page and look for a form for which display is none; find out how to make that form visible)</li>
                     <li class="sublead">Cause a CSRF failure (learn about CSRF; notice that the forms, where you can submit something, always have some kind of hidden field in them. What happens when you delete it and submit?)</li>
                     <li class="sublead">Try out the password recovery option for one of the most privileged accounts at GenCyberCoin platform (More privileged than school admins and your teachers; check out our GitHub repository to find the user)</li>
                 </ol>
