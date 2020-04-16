@@ -18,7 +18,7 @@
               {% endfor %}
             {% endif %}
             <div class="normal-text">
-                <p class="lead">This page reports on the Open-Source Intelligence (OSINT) ninjas who have answered the largest number of <u><a href='/extras/social-engineering/'>Reconnaissance</a></u> questions. Additionally, the chart below shows the number of times that every question has been answered correctly.</p>
+                <p class="lead">This page reports on the Open-Source Intelligence (OSINT) ninjas who have answered the largest number of <u><a href="{% url 'user:extras-social-engineering' %}">Reconnaissance</a></u> questions. Additionally, the chart below shows the number of times that every question has been answered correctly.</p>
                 <p class="lead">There is a total of {{ usercount }} OSINT ninjas at {{ school_name }} and {{ se_tasks_counts|length }} reconnaissance questions.</p>
                 <p class="lead">{{ percentage_who_answered_all_questions }}% of OSINT ninjas have answered all reconnaissance questions.</p>
                 <div id="chart" class="lead"></div>

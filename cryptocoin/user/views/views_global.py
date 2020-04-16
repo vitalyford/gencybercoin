@@ -40,7 +40,7 @@ import base64
 from django.core.exceptions import ValidationError
 
 import re
-
+import os
 
 # change the image url for the trial to access the static instead of media directory
 def convert_urls_in_trial_and_no_image(school_name: str, items: list, context: dict):
@@ -102,6 +102,31 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
                 tl = TransferLogs(sender='GenCyber Team (bugs)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                 tl.save()
             messages.warning(request, bug_message + ' We have rewarded you ' + str(bug.reward) + ' GenCyberCoins for that! One-time only :)')
+            #Hardcoding total number of bugs -- need to fix later
+            num_bugs = 18
+            reward_coins = 60
+            if Bugs.objects.filter(user_data=ud,school=ud.school).count() == num_bugs/2:
+                #get achievement by name
+                activity=get_object_or_404(Achievement,name='Bug Bounty Hunter',school=ud.school)
+                if Achievement.objects.filter(user_data=ud,name='Bug Bounty Hunter').count()==0:
+                    activity.user_data.add(ud)
+                    ud.permanent_coins = ud.permanent_coins + reward_coins/2
+                    ud.save()
+                    sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                    tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                    tl.save()
+                    messages.info(request, "You recieved the Bug Bounty Hunter Achievement for finding at least half of the bugs on the Bug Bounty page! You earned " + str(int(reward_coins/2)) + " coins. Check out your Account page to see this Achievement.")
+            if Bugs.objects.filter(user_data=ud,school=ud.school).count() == num_bugs:
+                #get achievement by name
+                activity=get_object_or_404(Achievement,name='Bug Bounty Exterminator',school=ud.school)
+                if Achievement.objects.filter(user_data=ud,name='Bug Bounty Exterminator').count()==0:
+                    activity.user_data.add(ud)
+                    ud.permanent_coins = ud.permanent_coins + reward_coins
+                    ud.save()
+                    sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                    tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                    tl.save()
+                    messages.info(request, "You recieved the Bug Bounty Exterminator Achievement for finding all of the bugs on the Bug Bounty page! You earned " + str(reward_coins) + " coins. Check out your Account page to see this Achievement.")
     except Exception as e:
         messages.warning(request, e)
         pass
@@ -174,6 +199,17 @@ def get_portal_settings(school):
         context[s.name] = s.value
     return context
 
+def init_default_achievements(school, request):
+    #Create achievements for reconnaissance questions and bug bounty when school is created
+    image_path = 'static/user/img/default-achievements/'
+    if not 'RDS_DB_NAME' in os.environ:
+        image_path = '../' + image_path
+    activity_recon = Achievement(name = 'Social Engineering Ninja', description = 'You answered all of the Reconnaissance questions!', image_file = image_path + 'recon-ninja.png', school=school)
+    activity_bug = Achievement(name = 'Bug Bounty Exterminator', description = 'You found all of the bugs on the Bug Bounty page!', image_file = image_path + 'bug.png', school=school)
+    activity_halfbug = Achievement(name = 'Bug Bounty Hunter', description = 'You found at least half of the bugs on the Bug Bounty page!', image_file = image_path + 'bug.png', school=school)
+    activity_recon.save()
+    activity_bug.save()
+    activity_halfbug.save()
 
 def get_all_market_data(request, ud):
     marketdata = MarketItem.objects.filter(school=ud.school)

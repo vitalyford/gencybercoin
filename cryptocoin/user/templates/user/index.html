@@ -41,46 +41,46 @@
             <h2 class="intro-text text-center">Features</h2>
             <hr>
         </div>
-        <table class="table table-hover gctable lead">
+        <table class="table table-hover gctable">
             <tbody>
                 <tr>
-                    <td><b><a href='/account/'>Account</a></b></td>
+                    <td><i class="fas fa-user"></i><b><a href="{% url 'user:account' %}">   Account</a></b></td>
                     <td>View your account information and update your security questions and password</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/market/'>Market</a></b></td>
+                    <td><i class="fas fa-shopping-cart"></i><b><a href="{% url 'user:market' %}">   Market</a></b></td>
                     <td>Use your coins to buy real items</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/wallet/'>Wallet</a></b></td>
+                    <td><i class="fas fa-wallet"></i><b><a href="{% url 'user:wallet' %}">   Wallet</a></b></td>
                     <td>See how many coins you have, redeem codes, and send coins to friends</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/cryptocurrency/'><b>Cryptocurrency</a></b></td>
+                    <td><i class="fab fa-bitcoin"></i><b><a href="{% url 'user:extras-cryptocurrency' %}"><b>   Cryptocurrency</a></b></td>
                     <td>Learn more about what cryptocurrency is and how it works</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/blockchain/'>Blockchain</a></b></td>
+                    <td><i class="fas fa-link"></i><b><a href="{% url 'user:extras-blockchain' %}">   Blockchain</a></b></td>
                     <td>See a ledger of all coin transactions</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/bug-bounty/'>Bug Bounty</a></b></td>
+                    <td><i class="fas fa-bug"></i><b><a href="{% url 'user:extras-bug-bounty' %}">   Bug Bounty</a></b></td>
                     <td>Learn how to be rewarded for finding bugs on the website</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/hall-of-fame/'>Hall of Fame</a></b></td>
+                    <td><i class="fab fa-jedi-order"></i><b><a href="{% url 'user:extras-hall-of-fame' %}">   Hall of Fame</a></b></td>
                     <td>See who has discovered the most bugs, and which bugs you have found</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/social-engineering/'>Reconnaissance</a></b></td>
+                    <td><i class="fab fa-searchengin"></i><b><a href="{% url 'user:extras-social-engineering' %}">   Reconnaissance</a></b></td>
                     <td>Utilize your social engineering skills to answer questions and earn coins</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/osint-ninjas/'>OSINT Ninjas</a></b></td>
+                    <td><i class="fas fa-user-ninja"></i><b><a href="{% url 'user:extras-osint-ninjas' %}">   OSINT Ninjas</a></b></td>
                     <td>See who has answered the most reconnaisance questions</td>
                 </tr>
                 <tr>
-                    <td><b><a href='/extras/feedback/'>Feedback</a></b></td>
+                    <td><i class="fas fa-comments"></i><b><a href="{% url 'user:extras-feedback' %}">   Feedback</a></b></td>
                     <td>Let us know what you think about GenCyber!</td>
                 </tr>
             </tbody>

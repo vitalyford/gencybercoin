@@ -382,6 +382,7 @@ def account_creation(request):
             PortalSetting.objects.filter(name="market_enabled", school=school_id).update(value="true")
             init_default_reconnaissance(school_id, request)
             init_default_market(school_id, request)
+            init_default_achievements(school_id, request)
     else:
         try:
             if "#" not in code and "!" not in code:
