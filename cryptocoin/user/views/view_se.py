@@ -51,7 +51,7 @@ def submit_social_engineering(request):
                             award_amount = int(get_object_or_404(PortalSetting, name='se_award_amount', school=ud.school).value)
                             ud.permanent_coins = ud.permanent_coins + award_amount
                             ud.save()
-                            messages.info(request, "You got " + str(award_amount) + " coins for your \"" + se_ques_answ.answer + "\" answer!")
+                            messages.info(request, "You got " + str(award_amount) + " coins for your \"" + answer + "\" answer!")
                             # record the SE transaction in the blockchain
                             tl = TransferLogs(sender='GenCyber Team (SE)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                             tl.save()
