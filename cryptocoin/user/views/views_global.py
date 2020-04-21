@@ -107,27 +107,35 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
             reward_coins = 2 * PortalSetting.objects.get(name="bug_bounty_award_amount", school=ud.school)
             bug_count = Bugs.objects.filter(user_data=ud, school=ud.school).count()
             if bug_count == num_bugs / 2:
-                # get achievement by name
-                activity = get_object_or_404(Achievement, name='Bug Bounty Hunter', school=ud.school)
-                if Achievement.objects.filter(user_data=ud, name='Bug Bounty Hunter').count() == 0:
-                    activity.user_data.add(ud)
-                    ud.permanent_coins = ud.permanent_coins + reward_coins / 2
-                    ud.save()
-                    sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
-                    tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
-                    tl.save()
-                    messages.info(request, "You recieved the Bug Bounty Hunter Achievement for finding at least half of the bugs on the Bug Bounty page! You earned " + str(int(reward_coins / 2)) + " coins. Check out your Account page to see this Achievement.")
+                try:
+                    # get achievement by name
+                    activity = get_object_or_404(Achievement, name='Bug Bounty Hunter', school=ud.school)
+                except:
+                    pass  # if the activity does not exist, that means the admin removed it
+                else:
+                    if Achievement.objects.filter(user_data=ud, name='Bug Bounty Hunter').count() == 0:
+                        activity.user_data.add(ud)
+                        ud.permanent_coins = ud.permanent_coins + reward_coins / 2
+                        ud.save()
+                        sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                        tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                        tl.save()
+                        messages.info(request, "You recieved the Bug Bounty Hunter Achievement for finding at least half of the bugs on the Bug Bounty page! You earned " + str(int(reward_coins / 2)) + " coins. Check out your Account page to see this Achievement.")
             elif bug_count == num_bugs:
-                # get achievement by name
-                activity = get_object_or_404(Achievement, name='Bug Bounty Exterminator', school=ud.school)
-                if Achievement.objects.filter(user_data=ud, name='Bug Bounty Exterminator').count() == 0:
-                    activity.user_data.add(ud)
-                    ud.permanent_coins = ud.permanent_coins + reward_coins
-                    ud.save()
-                    sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
-                    tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
-                    tl.save()
-                    messages.info(request, "You recieved the Bug Bounty Exterminator Achievement for finding all of the bugs on the Bug Bounty page! You earned " + str(reward_coins) + " coins. Check out your Account page to see this Achievement.")
+                try:
+                    # get achievement by name
+                    activity = get_object_or_404(Achievement, name='Bug Bounty Exterminator', school=ud.school)
+                except:
+                    pass  # if the activity does not exist, that means the admin removed it
+                else:
+                    if Achievement.objects.filter(user_data=ud, name='Bug Bounty Exterminator').count() == 0:
+                        activity.user_data.add(ud)
+                        ud.permanent_coins = ud.permanent_coins + reward_coins
+                        ud.save()
+                        sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                        tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                        tl.save()
+                        messages.info(request, "You recieved the Bug Bounty Exterminator Achievement for finding all of the bugs on the Bug Bounty page! You earned " + str(reward_coins) + " coins. Check out your Account page to see this Achievement.")
     except Exception as e:
         messages.warning(request, e)
         pass
