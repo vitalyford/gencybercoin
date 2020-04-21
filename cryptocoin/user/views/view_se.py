@@ -55,22 +55,27 @@ def submit_social_engineering(request):
                             # record the SE transaction in the blockchain
                             tl = TransferLogs(sender='GenCyber Team (SE)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                             tl.save()
-        #Check whether all questions have been answered for achievement
+        # check whether all questions have been answered for achievement
         if SECorrectAnswer.objects.filter(user_data=ud).count() == SEQuesAnsw.objects.filter(school=ud.school).count():
-            #Get activity by name
-            activity=get_object_or_404(Achievement,name='Social Engineering Ninja',school=ud.school)
-            #Check if user already has this achievement
-            if Achievement.objects.filter(user_data=ud,name='Social Engineering Ninja').count()==0: 
-                activity.user_data.add(ud)
-                #Hardcode reward amount
-                reward_coins = 30
-                ud.permanent_coins = ud.permanent_coins + reward_coins
-                ud.save()
-                messages.info(request, "You recieved the Social Engineering Ninja Achievement for answering all of the Reconnaissance questions! You earned " + str(reward_coins) + " coins. Check out your Account page to see this Achievement.")
-                # record the activity on the blockchain
-                sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
-                tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
-                tl.save()
+            # add try-except in case if admins remove this achievement, the users will not see the 404 error
+            try:
+                # get activity by name
+                activity = get_object_or_404(Achievement, name='Social Engineering Ninja', school=ud.school)
+            except:
+                pass  # the activity was removed by the admin but we are not going to show 404 to the user
+            else:
+                # check if user already has this achievement
+                if Achievement.objects.filter(user_data=ud, name='Social Engineering Ninja').count()==0: 
+                    activity.user_data.add(ud)
+                    # double the amount provided for the default social engineering answer
+                    reward_coins = 2 * int(PortalSetting.objects.get(name="se_award_amount", school=ud.school).value)
+                    ud.permanent_coins = ud.permanent_coins + reward_coins
+                    ud.save()
+                    messages.info(request, "You recieved the Social Engineering Ninja Achievement for answering all of the Reconnaissance questions! You earned " + str(reward_coins) + " coins. Check out your Account page to see this Achievement.")
+                    # record the activity on the blockchain
+                    sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
+                    tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
+                    tl.save()
         return HttpResponseRedirect(reverse('user:extras-social-engineering'))
     return goto_login(request, "social engineering")
 
