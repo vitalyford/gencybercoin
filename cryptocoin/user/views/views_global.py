@@ -102,24 +102,25 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
                 tl = TransferLogs(sender='GenCyber Team (bugs)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                 tl.save()
             messages.warning(request, bug_message + ' We have rewarded you ' + str(bug.reward) + ' GenCyberCoins for that! One-time only :)')
-            #Hardcoding total number of bugs -- need to fix later
+            # hardcoding total number of bugs TO-DO: need to automatically define it
             num_bugs = 18
-            reward_coins = 60
-            if Bugs.objects.filter(user_data=ud,school=ud.school).count() == num_bugs/2:
-                #get achievement by name
-                activity=get_object_or_404(Achievement,name='Bug Bounty Hunter',school=ud.school)
-                if Achievement.objects.filter(user_data=ud,name='Bug Bounty Hunter').count()==0:
+            reward_coins = 2 * PortalSetting.objects.get(name="bug_bounty_award_amount", school=ud.school)
+            bug_count = Bugs.objects.filter(user_data=ud, school=ud.school).count()
+            if bug_count == num_bugs / 2:
+                # get achievement by name
+                activity = get_object_or_404(Achievement, name='Bug Bounty Hunter', school=ud.school)
+                if Achievement.objects.filter(user_data=ud, name='Bug Bounty Hunter').count() == 0:
                     activity.user_data.add(ud)
-                    ud.permanent_coins = ud.permanent_coins + reward_coins/2
+                    ud.permanent_coins = ud.permanent_coins + reward_coins / 2
                     ud.save()
                     sender_name = 'GenCyber Team (activity ' + str(activity.id) + ')'
                     tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                     tl.save()
-                    messages.info(request, "You recieved the Bug Bounty Hunter Achievement for finding at least half of the bugs on the Bug Bounty page! You earned " + str(int(reward_coins/2)) + " coins. Check out your Account page to see this Achievement.")
-            if Bugs.objects.filter(user_data=ud,school=ud.school).count() == num_bugs:
-                #get achievement by name
-                activity=get_object_or_404(Achievement,name='Bug Bounty Exterminator',school=ud.school)
-                if Achievement.objects.filter(user_data=ud,name='Bug Bounty Exterminator').count()==0:
+                    messages.info(request, "You recieved the Bug Bounty Hunter Achievement for finding at least half of the bugs on the Bug Bounty page! You earned " + str(int(reward_coins / 2)) + " coins. Check out your Account page to see this Achievement.")
+            else if bug_count == num_bugs:
+                # get achievement by name
+                activity = get_object_or_404(Achievement, name='Bug Bounty Exterminator', school=ud.school)
+                if Achievement.objects.filter(user_data=ud, name='Bug Bounty Exterminator').count() == 0:
                     activity.user_data.add(ud)
                     ud.permanent_coins = ud.permanent_coins + reward_coins
                     ud.save()
