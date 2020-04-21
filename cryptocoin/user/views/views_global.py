@@ -102,9 +102,11 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
                 tl = TransferLogs(sender='GenCyber Team (bugs)', receiver=ud.username, amount=award_amount, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                 tl.save()
             messages.warning(request, bug_message + ' We have rewarded you ' + str(bug.reward) + ' GenCyberCoins for that! One-time only :)')
-            # hardcoding total number of bugs TO-DO: need to automatically define it
-            num_bugs = 18
-            reward_coins = 2 * PortalSetting.objects.get(name="bug_bounty_award_amount", school=ud.school)
+            # counting the number of bugs from extras -> bug-bounty.html
+            with open('./user/templates/user/extras/bug-bounty.html') as bug_bounty_html:
+                # -3 compensates for the extra lines that were added for not available challenges if market is off
+                num_bugs = bug_bounty_html.read().count('<li class=\"sublead\">') - 3
+            reward_coins = 2 * int(PortalSetting.objects.get(name="bug_bounty_award_amount", school=ud.school).value)
             bug_count = Bugs.objects.filter(user_data=ud, school=ud.school).count()
             if bug_count == num_bugs / 2:
                 try:
