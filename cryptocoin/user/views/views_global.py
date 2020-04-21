@@ -117,7 +117,7 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
                     tl = TransferLogs(sender=sender_name, receiver=ud.username, amount=reward_coins, school=ud.school, hash=hashlib.sha1(str(time.time()).encode()).hexdigest())
                     tl.save()
                     messages.info(request, "You recieved the Bug Bounty Hunter Achievement for finding at least half of the bugs on the Bug Bounty page! You earned " + str(int(reward_coins / 2)) + " coins. Check out your Account page to see this Achievement.")
-            else if bug_count == num_bugs:
+            elif bug_count == num_bugs:
                 # get achievement by name
                 activity = get_object_or_404(Achievement, name='Bug Bounty Exterminator', school=ud.school)
                 if Achievement.objects.filter(user_data=ud, name='Bug Bounty Exterminator').count() == 0:
