@@ -345,8 +345,6 @@ def init_default_market(school, request):
                 if row[0] != '' and row[1] != '' and row[2] != '':
                     if len(row) > 3:  # there is an image
                         image_path = 'static/user/img/trial-market/'
-                        if not 'RDS_DB_NAME' in os.environ:  # not running on AWS
-                            image_path = '../' + image_path
                         items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), image_file=''.join([image_path, row[3]]), school=school))
                     else:
                         items.append(MarketItem(name=row[0], description=row[1], quantity=int(row[2]), school=school))

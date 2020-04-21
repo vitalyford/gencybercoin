@@ -211,10 +211,7 @@ def get_portal_settings(school):
 
 def init_default_achievements(school, request):
     # create achievements for reconnaissance questions and bug bounty when school is created
-    # TO-DO: verify the path availability on AWS
     image_path = 'static/user/img/default-achievements/'
-    if not 'RDS_DB_NAME' in os.environ:
-        image_path = '../' + image_path
     activity_recon = Achievement(name='Social Engineering Ninja', description='You answered all of the Reconnaissance questions!', image_file=image_path + 'recon-ninja.png', school=school)
     activity_bug = Achievement(name='Bug Bounty Exterminator', description='You found all of the bugs on the Bug Bounty page!', image_file=image_path + 'bug.png', school=school)
     activity_halfbug = Achievement(name='Bug Bounty Hunter', description='You found at least half of the bugs on the Bug Bounty page!', image_file=image_path + 'bug.png', school=school)
