@@ -106,7 +106,7 @@ def run_bug_bounty(request, ud, bug_name, bug_message, link):
             num_bugs = 18
             reward_coins = 2 * PortalSetting.objects.get(name="bug_bounty_award_amount", school=ud.school)
             bug_count = Bugs.objects.filter(user_data=ud, school=ud.school).count()
-            if bug_count >= num_bugs / 2 and bug_count != num_bug:
+            if bug_count == num_bugs / 2:
                 # get achievement by name
                 activity = get_object_or_404(Achievement, name='Bug Bounty Hunter', school=ud.school)
                 if Achievement.objects.filter(user_data=ud, name='Bug Bounty Hunter').count() == 0:
