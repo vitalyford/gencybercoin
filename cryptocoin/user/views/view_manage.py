@@ -60,6 +60,7 @@ def submit_code_generator(request):
                 s.title = s.title + " | " + school
                 s.save()
                 init_portal_settings(s)
+                init_default_achievements(s, request)
             for i in range(count):
                 key = str(s.id) + "!" + generate_gencyber_code()
                 c = Code(allowed_hash=key, name=school, school=s, infinite=is_infinite)
