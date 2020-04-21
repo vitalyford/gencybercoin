@@ -409,6 +409,7 @@ def achievements_admin(request):
         if request.user.groups.filter(name='gcadmin').exists():
             context = {}
             achievements = Achievement.objects.filter(school=ud.school).order_by('id')
+            convert_urls_in_trial_and_no_image(ud.school.name, achievements, context)
             context['achievements'] = achievements
             return render(request, 'user/achievements-admin.html', context)
     return HttpResponseRedirect(reverse('user:index'))

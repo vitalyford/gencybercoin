@@ -89,7 +89,7 @@
                               <form class="form-horizontal" enctype="multipart/form-data" action="{% url 'user:submit-achievements-admin' %}" method="post">
                                   {% csrf_token %}
                                   <td scope="row">
-                                      <div class="text-center img-wrapper col-xs-12"><img src="{{ a.image_file.url }}" id="image{{a.id}}Preview" class="img-responsive img-rounded" alt="{{ a.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
+                                      <div class="text-center img-wrapper col-xs-12"><img src="{{ a.image_file.url_final }}" id="image{{a.id}}Preview" class="img-responsive img-rounded" alt="{{ a.name }}" style="margin: 0 auto; height: 150px; padding-bottom: 10px;" /></div>
 
                                       <div class="form-group text-center">
                                           <label class="label tool-tip" data-toggle="tooltip" id="tooltip{{a.id}}" title="Select the image before cropping">

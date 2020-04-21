@@ -79,6 +79,7 @@ def user_account(request):
                 a.reward = 0
             else:
                 a.reward = total_rewarded
+        convert_urls_in_trial_and_no_image(ud.school.name, achievements, context)
         context['achievements'] = achievements
         return render(request, 'user/account.html', context)
     return goto_login(request, "account")

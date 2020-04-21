@@ -81,7 +81,7 @@
               {% for a in achievements %}
               <small class="lead">
               <tr>
-                <td scope="row" align="center">{% if not 'no-image' in a.image_file.url %}<div class="img-wrapper"><img src="{{ a.image_file.url }}" class="img-responsive img-rounded" alt="{{ a.name }}" style="max-height: 120px;" /></div>{% endif %}</td>
+                <td scope="row" align="center">{% if not 'no-image' in a.image_file.url_final %}<div class="img-wrapper"><img src="{{ a.image_file.url_final }}" class="img-responsive img-rounded" alt="{{ a.name }}" style="max-height: 120px;" /></div>{% endif %}</td>
                 <td scope="row">
                   <p class="lead">{{ a.name }} (&hearts; {{ a.reward }})</p>
                   <hr style="margin: 0px;">
