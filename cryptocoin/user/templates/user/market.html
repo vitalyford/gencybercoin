@@ -93,7 +93,7 @@
 
                   {% if item.quantity == 0 %}
                   <div class="container-sold text-center">
-                    <img src="{{ item.image_file.url_final }}" class="img-responsive img-rounded img-sold" alt="{{ item.name }}" />
+                    <img src="{{ item.image_file.url_final }}" class="img-responsive img-rounded img-sold" alt="{{ item.name }}" style="height: 150px" />
                     <p class="text-center lead"><s>{{ item.name }}</s> [&times;{{ item.quantity }}] </p>
                     <div class="overlay-sold">
                       <div class="text-sold"><img src="{% static 'user/img/sold.png' %}" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; max-width: 150px;" /></div>
@@ -101,7 +101,7 @@
                   </div>
 
                   {% else %}
-                  <div class="text-center img-wrapper"><img src="{{ item.image_file.url_final }}" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto;" /></div>
+                  <div class="text-center img-wrapper"><img src="{{ item.image_file.url_final }}" class="img-responsive img-rounded" alt="{{ item.name }}" style="margin: 0 auto; height: 150px;" /></div>
                   <p class="text-center lead">{{ item.name }} [&times;{{ item.quantity }}]</p>
                   {% endif %}
 
