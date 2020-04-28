@@ -159,6 +159,11 @@ def market(request):
                 if "remove" in str(key):
                     remove_cart_item(request, key, ud)
                     break
+        # process ordering prevention
+        if request.method == 'POST' and "prevent-ordering" in request.POST:
+            ud.prevent_ordering = not ud.prevent_ordering
+            ud.save()
+        context["prevent_ordering"] = ud.prevent_ordering
         # get the cart
         context.update(get_cart(request, ud))
         items_in_the_cart = ud.cart.market_items.all()
@@ -217,7 +222,7 @@ def get_top_players(request, ud):
             c, created = Cart.objects.get_or_create(user_data=user)
             if created: c.save()
             # assign the top player to the current user if possible
-            if user.username == request.user.username:
+            if user.username == request.user.username and not ud.prevent_ordering:
                 context['top_player'] = "true"
                 context['player_tier'] = user.tier
         context['top_players'] = top_users
@@ -264,7 +269,7 @@ def camp_top_players(request, ud):
         for i in range(0, roof):
             top_users.append(users[i].username)
             # allow top-n students to order market items
-            if i < queue_capacity and users[i].username == request.user.username:
+            if i < queue_capacity and users[i].username == request.user.username and not users[i].prevent_ordering:
                 context['top_player'] = "true"
             # if previous top users did not order anything within X min, allow 2 more users to order
             if (i + 1) == roof and queue_capacity < total_users and not already_increased_queue_capacity and someone_started_ordering:

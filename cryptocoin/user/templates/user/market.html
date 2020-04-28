@@ -51,6 +51,12 @@
                 <h2 class="intro-text text-center">Purchase <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="People with the highest number of earned coins will have the first pick{% if program_type == 'camp' %} and then be put at the back of the queue. This number will automatically change as time goes on so you will be able to order soon.{% endif %}" id="queue-info"></i> Priority Queue</h2>
             </button>
         </div>
+        <div class="text-center">
+          <form action="{% url 'user:market' %}" method="post">
+          {% csrf_token %}
+            <button type="submit" name="prevent-ordering" class="btn btn-primary">{% if prevent_ordering %}Allow{% else %}Prevent{% endif %} Ordering</button>
+          </form>
+        </div>
         <hr>
         <div id="user_queue" class="collapse in">
 {% if market_enabled == "true" %}
@@ -114,7 +120,7 @@
                   {% endif %}
                       <p class="text-center lead">Price: &hearts;{{ item.cost_permanent }}</p>
                   {% if market_enabled == "true" %}
-                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary {% if top_player == "false" or item.quantity == 0 or item.cost_permanent > available_coins %}disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 or item.cost_permanent > available_coins %}disabled{% endif %}>Add to cart</button>
+                      <button {% if top_player == "true" %} type="submit" {% endif %} class="btn btn-primary{% if top_player == "false" or item.quantity == 0 or item.cost_permanent > available_coins %} disabled{% endif %}" name="add{{ item.id }}" value="{{ item.id }}" {% if top_player == "false" or item.quantity == 0 or item.cost_permanent > available_coins %}disabled{% endif %}>Add to cart</button>
                       <hr class="visible-xs">
                   </form>
                   {% endif %}

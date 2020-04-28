@@ -32,6 +32,7 @@ class UserData(models.Model):
     driplets_score  = models.IntegerField(default=0)
     group_number    = models.IntegerField(default=0)  # starts with 1, 0 means not grouped
     school          = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)  # one to many relationship
+    prevent_ordering = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.id:
