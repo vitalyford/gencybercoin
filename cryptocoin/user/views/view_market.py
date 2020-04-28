@@ -75,7 +75,7 @@ def submit_cart(request):
                     break
                 else:
                     # bug bounty
-                    run_bug_bounty(request, ud, 'bug#12:race_condition_when_ordering', 'Congrats! You found a programming bug on adding an item when it was not your turn! This bug would allow you to add any item regardless of your turn in the queue.', 'https://www.owasp.org/index.php/Testing_for_Race_Conditions_%28OWASP-AT-010%29')
+                    run_bug_bounty(request, ud, 'bug#12:race_condition_when_ordering', 'Congrats! You found a programming bug on adding an item when it was not your turn! This bug would allow you to add any item regardless of your turn in the queue.', 'https://medium.com/@ciph3r7r0ll/race-condition-bug-in-web-app-a-use-case-21fd4df71f0e')
                     # end bug bounty
     if 'page' in request.GET:
         return HttpResponseRedirect(reverse('user:market') + "?page=" + request.GET.get('page'))
