@@ -3,7 +3,8 @@ Django settings for GenCyberCoin project.
 
 """
 
-#import dj_database_url #dj-database-url==0.4.1
+import dj_database_url #dj-database-url==0.4.1
+import django_heroku
 import os
 
 # Static files (CSS, JavaScript, Images)
@@ -86,7 +87,14 @@ DATABASES = {
     'default': dj_database_url.config(conn_max_age=600),
 }
 '''
-if 'RDS_DB_NAME' in os.environ:
+if 'RUNNING_ON_HEROKU' in os.environ:
+    django_heroku.settings(locals())
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+    }
+    del DATABASES['default']['OPTIONS']['sslmode']
+elif 'RDS_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',

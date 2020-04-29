@@ -2,6 +2,8 @@ boto3
 botocore
 diff-match-patch
 Django>=2.1.2
+dj_database_url
+django-heroku
 django-import-export
 django-storages
 et-xmlfile
@@ -11,7 +13,8 @@ odfpy
 openpyxl
 Pillow
 pip-review
-psycopg2-binary
+# have to keep this version to make it work with django_heroku
+psycopg2==2.7.5
 pytz
 PyYAML
 # redis
