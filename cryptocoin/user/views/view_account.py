@@ -68,19 +68,21 @@ def user_account(request):
     if request.user.is_authenticated:
         ud = get_object_or_404(UserData, username=request.user.username)
         context = get_context(request, False)
-        achievements = ud.achievement_set.all()
-        for a in achievements:
-            try:
-                sender_name = 'GenCyber Team (activity ' + str(a.id) + ')'
-                total_rewarded = TransferLogs.objects.filter(sender=sender_name, receiver=ud.username).aggregate(Sum('amount'))['amount__sum']
-                if not total_rewarded:
-                    raise
-            except:
-                a.reward = 0
-            else:
-                a.reward = total_rewarded
-        convert_urls_in_trial_and_no_image(ud.school.name, achievements, context)
-        context['achievements'] = achievements
+        # no achievements for gcsuperuser
+        if not request.user.is_superuser:
+            achievements = ud.achievement_set.all()
+            for a in achievements:
+                try:
+                    sender_name = 'GenCyber Team (activity ' + str(a.id) + ')'
+                    total_rewarded = TransferLogs.objects.filter(sender=sender_name, receiver=ud.username).aggregate(Sum('amount'))['amount__sum']
+                    if not total_rewarded:
+                        raise
+                except:
+                    a.reward = 0
+                else:
+                    a.reward = total_rewarded
+            convert_urls_in_trial_and_no_image(ud.school.name, achievements, context)
+            context['achievements'] = achievements
         return render(request, 'user/account.html', context)
     return goto_login(request, "account")
 
