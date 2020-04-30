@@ -3,6 +3,8 @@ FROM python:3.7-slim
 WORKDIR /code
 
 RUN python -m pip install --upgrade pip
+RUN apt-get update
+RUN apt-get install curl -y
 
 COPY . /code/
 
