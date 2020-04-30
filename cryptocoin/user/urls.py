@@ -60,5 +60,6 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^extras/feedback/$', views.extras_feedback, name='extras-feedback'),
     url(r'^extras/submit-feedback/$', views.submit_extras_feedback, name='submit-extras-feedback'),
     url(r'^404/$', views.handler404, name='handler404'),
+    url(r'^health/$', views.health_check, name='health-check'),
     url(r'^.*$', RedirectView.as_view(permanent=False, url='/404/')),
 ]

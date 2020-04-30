@@ -1,6 +1,10 @@
 from .views_global import *
 
 
+def health_check(request):
+    return HttpResponse("OK")
+
+
 def handler404(request):
     return render(request, 'user/extras/404.html', status=404)
 
