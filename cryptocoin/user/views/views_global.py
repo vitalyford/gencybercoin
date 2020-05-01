@@ -82,9 +82,10 @@ def validate_on_save(request, obj, message_on_success=''):
 
 
 def goto_login(request, page_name):
-    return render(request, 'user/login.html', {
-        'error_message': "You need to login or register to enter the " + page_name,
-    })
+    context = {'error_message': "You need to login or register to enter the " + page_name}
+    if 'HEROKU_PUBLIC_NO_SCALE_DYNO' in os.environ:
+        context['heroku_public_no_scale_dyno'] = True
+    return render(request, 'user/login.html', context)
 
 
 def run_bug_bounty(request, ud, bug_name, bug_message, link):

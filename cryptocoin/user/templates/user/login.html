@@ -10,6 +10,11 @@
             <form class="form-horizontal" action="{% url 'user:login-process' %}" method="post">
             {% csrf_token %}
             {% if error_message %}<div class="lead text-center text-primary">{{ error_message }}</div>{% endif %}
+            {% if heroku_public_no_scale_dyno %}
+            <div class="lead text-warning box">
+              This specific server is configured on a free Heroku Dyno and, therefore, is not scalable. If you notice a slowdown, please go to the <u><a href="https://github.com/vitalyford/gencybercoin" target="_blank" rel="noopener noreferrer">repo</a></u> and deploy your own locally, on Heroku, or AWS.<br><br>If you register for a trial, you will be assigned to a "school" based on the CloudFlare's IP address alongside with other users who went for the trial.<br><br>Developer's contact info is at the bottom for questions.</p>
+            </div>
+            {% endif %}
               <div class="form-group">
                 <label for="iU" class="col-sm-offset-2 col-sm-2 control-label text-center">Username</label>
                 <div class="col-sm-5">
