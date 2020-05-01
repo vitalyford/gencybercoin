@@ -2,6 +2,13 @@
     "name": "Gen Cyber Coin",
     "description": "NSF research grant Initiative",
     "repository": "https://github.com/vitalyford/gencybercoin",
+
+    "addons": [
+        "heroku-postgresql"
+    ],
+    "scripts": {
+        "postdeploy": "./build.sh"
+    },
     "logo": "https://node-js-sample.herokuapp.com/node.svg",
     "keywords": ["django", "nginix", "docker"]
 }
