@@ -6,9 +6,6 @@
     "addons": [
         "heroku-postgresql"
     ],
-    "buildpacks": [{
-        "url": "heroku/python"
-    }],
     "scripts": {
         "postdeploy": "web /bin/sh -c /bin/bash run_server_on_heroku.sh"
     },
