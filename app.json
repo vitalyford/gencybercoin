@@ -10,7 +10,7 @@
         "url": "heroku/python"
     }],
     "scripts": {
-        "postdeploy": "web /bin/sh -c /bin/bash\ run_server_on_heroku.sh"
+        "postdeploy": "web /bin/sh -c /bin/bash run_server_on_heroku.sh"
     },
     "logo": "https://node-js-sample.herokuapp.com/node.svg",
     "keywords": ["django", "nginix", "docker"]
