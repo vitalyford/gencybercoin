@@ -26,7 +26,7 @@ A 2-minute summary video on GenCyberCoin platform for students is available here
 
 # Deploy to Heroku
  - Please ensure that you have created an account on Heroku.com
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+ - [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # Bug Bounty
 
