@@ -25,8 +25,8 @@ A 2-minute summary video on GenCyberCoin platform for students is available here
 [![Watch the video](instructions/img-readme/students.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=af6dc731-ca20-40e0-b386-aa6b002af746)
 
 # Deploy to Heroku
- - Please ensure that you have created an account on Heroku.com
- - [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+ - Please ensure that you have created an account on Heroku.com<br/>
+ [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # Bug Bounty
 
