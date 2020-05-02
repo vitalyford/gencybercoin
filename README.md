@@ -1,3 +1,6 @@
+
+
+
 # Introduction
 
 GenCyberCoin is the project developed by Dr. Vitaly Ford in collaboration with Cybersecurity Education Research and Outreach Center at Tennessee Tech University (Dr. Ambareen Siraj) as a part of the NSA/NSF GenCyber grant. GenCyberCoin is a web platform that teaches students the following concepts:
@@ -20,6 +23,9 @@ A 12-minute summary video on GenCyberCoin platform for instructors/admins is ava
 A 2-minute summary video on GenCyberCoin platform for students is available here:
 
 [![Watch the video](instructions/img-readme/students.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=af6dc731-ca20-40e0-b386-aa6b002af746)
+
+#Deploy to Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # Bug Bounty
 
