@@ -28,8 +28,9 @@ A 2-minute summary video on GenCyberCoin platform for students is available here
 - This is a free and the easiest way to deploy GenCyberCoin as your own web app.
 - Please ensure that you have created an account on [Heroku.com](https://www.heroku.com/) and you are logged in there.<br/>
   [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-- When you click on this "Deploy to Heroku" button, enter the name of the app you want your GenCyberCoin to be deployed to (must be unique across all Heroku dynos), and then click on "Deploy app". Your GenCyberCoin will be available within a minute at "https://your_app's_name.herokuapp.com"
+- When you click on this "Deploy to Heroku" button, enter the name of the app you want your GenCyberCoin to be deployed to (must be unique across all Heroku dynos), and then click on "Deploy app". Your GenCyberCoin will be available within a minute at `https://your_app's_name.herokuapp.com`
 - Next, you can go straight to [creating administrators](#creating-administrators) section and set that up on your newly deployed app.
+- Learn about [Heroku's Free Dyno Hours](https://devcenter.heroku.com/articles/free-dyno-hours) and [Heroku's Dyno Comparison](https://mikecoutermarsh.com/load-testing-heroku-1x-2x-px-dyno/) (the free dyno uses Heroku 1x Dyno and it is enough to simulteneously have up to ~200 users)
 
 # Bug Bounty
 
