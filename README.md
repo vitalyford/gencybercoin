@@ -25,8 +25,10 @@ A 2-minute summary video on GenCyberCoin platform for students is available here
 [![Watch the video](instructions/img-readme/students.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=af6dc731-ca20-40e0-b386-aa6b002af746)
 
 # Deploy to Heroku
- - Please ensure that you have created an account on Heroku.com<br/>
- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+- This is a free and the easiest way to deploy GenCyberCoin as your own web app.
+- Please ensure that you have created an account on [Heroku.com](https://www.heroku.com/) and you are logged in there.<br/>
+  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+- When you click on this "Deploy to Heroku" button, enter the name of the app you want your GenCyberCoin to be deployed to (must be unique across all Heroku dynos), and then click on "Deploy app". Your GenCyberCoin will be available within a minute at "https://your_app's_name.herokuapp.com"
 
 # Bug Bounty
 
