@@ -1,0 +1,14 @@
+{
+    "name": "GenCyberCoin",
+    "description": "Project sponsored by NSA/NSF GenCyber program to promote cybersecurity education",
+    "repository": "https://github.com/vitalyford/gencybercoin",
+    "addons": [
+        "heroku-postgresql"
+    ],
+    "scripts": {
+        "predeploy": "web /bin/sh -c /bin/bash run_server_on_heroku.sh"
+    },
+    "logo": "https://raw.githubusercontent.com/vitalyford/gencybercoin/master/cryptocoin/user/static/user/img/gencybercoin.png",
+    "stack": "container",
+    "keywords": ["gencybercoin", "cybersecurity", "education", "django", "nginx", "docker"]
+}
