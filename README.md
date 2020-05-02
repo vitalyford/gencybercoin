@@ -87,7 +87,7 @@ Contact Vitaly Ford fordv@arcadia.edu with one of the following subject lines, d
 
 We thank [NSA/NSF GenCyber program](https://www.gen-cyber.com/ "NSA/NSF GenCyber Program") for funding the implementation of this project.
 
-We also thank Anathae Wallace, Andy Malinsky, Ivan Zhang, and Muhammad Moiz Saeed, who were Computer Science and Mathematics students at Arcadia University, for bug hunting, testing the project's code, and helping with writing these instructions.
+We also thank Anathae Wallace, Andy Malinsky, Ivan Zhang, and Muhammad Moiz Saeed, who were Computer Science and Mathematics students at Arcadia University, for bug hunting, testing the project's code, adding new features, and helping with writing these instructions.
 
 # Hall of Fame
 
