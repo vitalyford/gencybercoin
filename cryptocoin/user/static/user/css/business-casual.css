@@ -15,7 +15,6 @@
     text-transform: inherit;
     transition: height 1s;
     width: 100%;
-    //-webkit-transition: height 1s;
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;

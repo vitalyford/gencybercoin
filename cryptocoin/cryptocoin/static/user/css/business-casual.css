@@ -4,18 +4,26 @@
  */
 
 .live-edit {
-    background-color:rgba(0, 0, 0, 0);
-    color:white;
+    background-color: rgba(0, 0, 0, 0);
+    color: inherit;
     border: none;
-    outline:none;
-    height:30px;
-    transition:height 1s;
-    -webkit-transition:height 1s;
+    outline: none;
+    text-align: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    transition: height 1s;
+    width: 100%;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
 }
 
-.live-edit:focus {
-    height:50px;
-    font-size:16px;
+.live-edit:hover {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
 }
 
 /* Go to the top button */
@@ -81,6 +89,7 @@
 .gccell {
     width: 130px;
     background-color: rgb(249,249,249,0.6);
+    word-wrap: break-word;
 }
 
 .margin-marketitems-admin {
