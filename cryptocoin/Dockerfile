@@ -7,3 +7,4 @@ RUN python -m pip install --upgrade pip
 COPY . /code/
 
 RUN python -m pip install -r /code/requirements.txt
+RUN python manage.py collectstatic --noinput
