@@ -15,7 +15,7 @@
                     </p>
                     <p class="lead">This Blockchain keeps track of all coin transactions and performs the necessary calculations to validate the Blockchain. Every transaction stores a virtual fingerprint in the form of a hash value of the previous transaction, which allows users to verify that a transaction has truly happened. This verification is done by recalculating the hash value.</p>
                     <p class="lead">To learn more about Blockchains, watch this <u><a href="https://www.youtube.com/watch?v=SSo_EIwHSd4" target="_blank">6-min video</a></u>. It will explain how the Blockchain works and how it is protected against different types of attacks.</p>
-                    <p class="lead">There are numerous applications for the Blockchain. You can learn about some of them in this <u><a href="https://www.youtube.com/watch?v=LsqI69jpM38" target="_blank">3-min video</a></u>.</p>
+                    <p class="lead">There are numerous applications for the Blockchain. You can learn about some of them in this <u><a href="https://www.youtube.com/watch?v=aQWflNQuP_o" target="_blank">7-min video</a></u>.</p>
                     <button id="hideOrShowButton" class="btn btn-info center-block" onclick="hideOrShow(document.querySelectorAll('.not-mine'), this);">Show Only My Transactions</button>
                 </div>
                 {% if not request.user.is_superuser and request.user.is_authenticated and request.user|is_admin %}
