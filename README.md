@@ -42,13 +42,12 @@ A Bug Bounty walk through (solution video) is available upon request.
 # Docker instructions
 
 GenCyberCoin is dockerized (runs on nginx + gunicorn + postgresql + python3.7 + Django) and to run GenCyberCoin through Docker, you would need to install:
- - Docker,
- - Docker Compose,
- - and if you have Mac or Windows, you would need to install Docker Machine.
+ - Docker (or Docker Desktop if running on Windows or Mac)
+ - Docker Compose
 
-After installing the above-mentioned software, open the Docker Terminal and navigate to this project's main directory (a place where `build.sh` is located). Then, run `build.sh` from the Docker Terminal (by typing `./build.sh`) and it will build and run the containers. Upon successful execution, the GenCyberCoin will be running on your IP address, port 80. You can navigate to it in your browser and go straight to [creating administrators](#creating-administrators) section.
+After installing the above-mentioned software, open the Docker Terminal and navigate to this project's main directory (a directory where `docker-compose.yml` is located). Then, run `docker-compose up` (or `docker compose up` if it did not work with the hyphen) from the terminal, and it will build and run the containers. Upon successful execution, the GenCyberCoin will be running on your IP address, port 80. You can navigate to it in your browser and go straight to [creating administrators](#creating-administrators) section.
 
-To stop the containers, type `docker-compose down` from the same place (where `build.sh` is located). All your data will be saved even after stopping and starting the containers back up again.
+To stop the containers, type `docker-compose down` (or `docker compose down`) from the same place (where `docker-compose.yml` is located). All your data will be saved even after stopping and starting (`docker-compose up` or `docker compose up`) the containers back up again.
 
 # Local setup instructions
 

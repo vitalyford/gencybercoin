@@ -4,7 +4,7 @@ Django settings for GenCyberCoin project.
 """
 
 import dj_database_url #dj-database-url==0.4.1
-import django_heroku
+import django_on_heroku
 import os
 
 # Static files (CSS, JavaScript, Images)
@@ -88,7 +88,7 @@ DATABASES = {
 }
 '''
 if 'RUNNING_ON_HEROKU' in os.environ:
-    django_heroku.settings(locals())
+    django_on_heroku.settings(locals())
     DATABASE_URL = os.environ.get('DATABASE_URL')
     DATABASES = {
         'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
@@ -181,3 +181,5 @@ DEFAULT_PERMANENT_COINS = 0
 SESSION_EXPIRY_TIME = 21600
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10500000
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
