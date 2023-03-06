@@ -28,7 +28,7 @@ A 2-minute summary video on GenCyberCoin platform for students is available here
 [![Watch the video](instructions/img-readme/students.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=af6dc731-ca20-40e0-b386-aa6b002af746)
 
 # Deploy to Heroku
-- This is a free and the easiest way to deploy GenCyberCoin as your own web app.
+- This is __no longer free__ (*sad_face*) but it is the easiest way to deploy GenCyberCoin as your own web app.
 - Please ensure that you have created an account on [Heroku.com](https://www.heroku.com/) and you are logged in there.<br/>
   [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 - When you click on this "Deploy to Heroku" button, enter the name of the app you want your GenCyberCoin to be deployed to (must be unique across all Heroku dynos), and then click on "Deploy app". Your GenCyberCoin will be available within a minute at `https://your_app's_name.herokuapp.com`
@@ -45,7 +45,7 @@ GenCyberCoin is dockerized (runs on nginx + gunicorn + postgresql + python3.7 + 
  - Docker (or Docker Desktop if running on Windows or Mac)
  - Docker Compose
 
-After installing the above-mentioned software, open the Docker Terminal and navigate to this project's main directory (a directory where `docker-compose.yml` is located). Then, run `docker-compose up` (or `docker compose up` if it did not work with the hyphen) from the terminal, and it will build and run the containers. Upon successful execution, the GenCyberCoin will be running on your IP address, port 80. You can navigate to it in your browser and go straight to [creating administrators](#creating-administrators) section.
+After installing the above-mentioned software, open the Docker Terminal and navigate to this project's main directory (a directory where `docker-compose.yml` is located). Then, run `docker-compose up` (or `docker compose up` if you run it directly via docker) from the terminal, and it will build and run the containers. Upon successful execution, the GenCyberCoin will be running on your IP address, port 80. You can navigate to it in your browser and go straight to [creating administrators](#creating-administrators) section.
 
 To stop the containers, type `docker-compose down` (or `docker compose down`) from the same place (where `docker-compose.yml` is located). All your data will be saved even after stopping and starting (`docker-compose up` or `docker compose up`) the containers back up again.
 
