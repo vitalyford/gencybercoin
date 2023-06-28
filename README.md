@@ -21,11 +21,11 @@ A sample lesson plan can be found [here](instructions/GenCyberCoin_Sample_Lesson
 
 A 12-minute summary video on GenCyberCoin platform for instructors/admins is available here:
 
-[![Watch the video](instructions/img-readme/homepage.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=4a2d137e-e80f-4dd3-bc5e-aa1e00f7b4b7&v=1)
+[![Watch the video](instructions/img-readme/homepage.png)](https://youtu.be/HMivgo8Tumo)
 
 A 2-minute summary video on GenCyberCoin platform for students is available here:
 
-[![Watch the video](instructions/img-readme/students.png)](https://arcadia.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=af6dc731-ca20-40e0-b386-aa6b002af746)
+[![Watch the video](instructions/img-readme/students.png)](https://youtu.be/fk7O60jSOy8)
 
 # Deploy to Heroku
 - This is __no longer free__ (*sad_face*) but it is the easiest way to deploy GenCyberCoin as your own web app.
