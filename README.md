@@ -1,3 +1,7 @@
+# UPDATE 2/16/2024
+
+I used to use Freenom for the gencybercoin.tk domain and now it's long gone, Freenom has closed. So, the sample app has been moved to [https://gencybercoin.vford.com](https://gencybercoin.vford.com)
+
 # Introduction
 
 GenCyberCoin is the project developed by Dr. Vitaly Ford in collaboration with Cybersecurity Education Research and Outreach Center at Tennessee Tech University (Dr. Ambareen Siraj) as a part of the NSA/NSF GenCyber grant. GenCyberCoin is a web platform that teaches students the following concepts:
